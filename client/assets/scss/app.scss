@@ -1,0 +1,204 @@
+@import "minty/variables";
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+@import 'minty/minty';
+
+.auth-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 32px 0;
+  background: $gray-200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: 400px;
+  max-width: 100vw;
+  margin: 0 16px;
+}
+
+.app-logo {
+  font-size: 28px;
+}
+
+.navbar {
+  border-bottom: 1px solid $gray-400;
+}
+
+.app-main-container {
+  width: 100%;
+  max-width: 1140px;
+  min-height: 100vh;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  .app-left-sidebar {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 280px;
+    padding: 0;
+    border-right: 1px solid $gray-400;
+    z-index: 998;
+    .app-left-sidebar-inner {
+      width: 280px;
+      padding: 16px;
+      .logged-user-block {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .logged-user-block-avatar {
+          flex-grow: 0;
+        }
+        .logged-user-block-username {
+          flex-grow: 1;
+          padding: 0 8px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .logged-user-block-notifications {
+          flex-grow: 0;
+          position: relative;
+          .badge {
+            position: absolute;
+            top: 0px;
+            right: -8px;
+          }
+        }
+      }
+      .app-left-sidebar-item {
+        display: block;
+        margin: 4px -16px;
+        padding: 16px;
+        font-size: 20px;
+        text-decoration: none;
+        .badge {
+          float: right;
+          margin-top: 4px;
+        }
+      }
+      .app-left-secondary-item {
+        width: 100%;
+        text-align: center;
+        margin: 16px 0;
+        font-size: 1.2rem;
+      }
+    }
+    .submit-button {
+      margin-top: 8px;
+      border-radius: 24px;
+    }
+  }
+  .app-content {
+    flex-grow: 1;
+    margin: 0 1px;
+    padding: 16px;
+    position: relative;
+  }
+  .app-right-sidebar {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 280px;
+    padding: 0;
+    border-left: 1px solid $gray-400;
+    z-index: 998;
+    .app-right-sidebar-inner {
+      width: 280px;
+      padding: 16px;
+      padding-bottom: 70px;
+    }
+  }
+}
+
+.app-content {
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+  .nav {
+    margin: 0 -16px;
+  }
+}
+
+span > .feather,
+label > .feather {
+  width: 1.2rem;
+  height: 1.2rem;
+  position: relative;
+  top: -1.5px;
+}
+
+.nav-tabs {
+  margin-bottom: 0;
+  border-bottom: 1px solid $gray-400;
+  overflow-x: auto;
+  overflow-y:hidden;
+  flex-wrap: nowrap;
+  .nav-item {
+    display: block;
+    .nav-link:hover,
+    .nav-link:focus {
+      border: none;
+    }
+    .nav-link.active {
+      font-weight:bold;
+      background-color: transparent;
+      border-bottom:3px solid $primary;
+      border-right: none;
+      border-left: none;
+      border-top: none;
+    }
+  }
+}
+
+/* TODO: use mixins for avatas sizes */
+.avatar {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  border-radius: 50%;
+  text-align: center;
+  background-color: $primary;
+  color: $white;
+  img {
+    display: block;
+    width: 100;
+    height: 100%;
+    border-radius: 50%;
+  }
+  &[data-initial]::before {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: $white;
+    content: attr(data-initial);
+    z-index: 0;
+  }
+}
+
+.avatar.avatar-md {
+  width: 32px;
+  height: 32px;
+  &[data-initial]::before {
+    font-size: 16px; /* 50% of parent */
+  }
+}
+
+.avatar.avatar-lg {
+  width: 48px;
+  height: 48px;
+  &[data-initial]::before {
+    font-size: 24px; /* 50% of parent */
+  }
+}
+
+.avatar.avatar-xl {
+  width: 200px;
+  height: 200px;
+  &[data-initial]::before {
+    font-size: 100px; /* 50% of parent */
+  }
+}
