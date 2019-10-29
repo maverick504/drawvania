@@ -30,6 +30,10 @@
                 <settings-icon size="1.5x"/>
                 Settings
               </nuxt-link>
+              <router-link :to="{ name: 'upload' }" class="btn btn-primary btn-lg btn-block submit-button">
+                <plus-icon size="1.5x"/>
+                <span style="vertical-align: middle;">Submit</span>
+              </router-link>
               <div class="app-left-secondary-item">
                 <a href="#" @click.prevent="logout">Logout</a>
               </div>
@@ -45,10 +49,11 @@
             </template>
             <hr>
             <div style="margin: 16px 0; text-align: center;">
-              <a href="#" style="color: #888; margin-right: 8px;">Feedback</a>
-              <a href="#" target="_blank" style="color: #888; margin-right: 8px;">Donate/Premium</a>
-              <a href="#" target="_blank" style="color: #888; margin-right: 8px;">Supporters</a>
-              <a href="#" target="_blank" style="color: #888; margin-right: 8px;">Help</a>
+              <!--
+              <a href="http://localhost:3333/support" target="_blank" style="color: #888; margin-right: 8px;">Donate/Premium</a>
+              <a href="http://localhost:3333/supporters" target="_blank" style="color: #888; margin-right: 8px;">Supporters</a>
+              <a href="http://localhost:3333/help" target="_blank" style="color: #888; margin-right: 8px;">Help</a>
+              -->
             </div>
           </affix>
         </no-ssr>
@@ -69,7 +74,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
-import { LogInIcon, LogOutIcon, BellIcon, SettingsIcon } from 'vue-feather-icons'
+import { LogInIcon, LogOutIcon, BellIcon, PlusIcon, SettingsIcon } from 'vue-feather-icons'
 
 export default {
   components: {
@@ -77,6 +82,7 @@ export default {
     LogInIcon,
     LogOutIcon,
     BellIcon,
+    PlusIcon,
     SettingsIcon
   },
 

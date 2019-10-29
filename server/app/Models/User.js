@@ -10,6 +10,8 @@ class User extends Model {
   static boot () {
     super.boot()
 
+    this.addTrait('@provider:Adonis/Acl/HasRole')
+    this.addTrait('@provider:Adonis/Acl/HasPermission')
     this.addTrait('@provider:CastAttributes')
     this.addTrait('HasMedia', {
       modelFolderName: 'users',

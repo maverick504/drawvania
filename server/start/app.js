@@ -19,7 +19,10 @@ const providers = [
   '@adonisjs/validator/providers/ValidatorProvider',
   '@adonisjs/drive/providers/DriveProvider',
   'adonis-lucid-polymorphic/providers/PolymorphicProvider',
-  'adonis-cast-attributes/providers/CastAttributesProvider'
+  'adonis-cast-attributes/providers/CastAttributesProvider',
+  '@adonisjs/framework/providers/ViewProvider',
+  '@adonisjs/session/providers/SessionProvider',
+  'adonis-acl/providers/AclProvider'
 ]
 
 /*
@@ -32,7 +35,8 @@ const providers = [
 |
 */
 const aceProviders = [
-  '@adonisjs/lucid/providers/MigrationsProvider'
+  '@adonisjs/lucid/providers/MigrationsProvider',
+  'adonis-acl/providers/CommandsProvider'
 ]
 
 /*
@@ -47,7 +51,10 @@ const aceProviders = [
 |   { Route: 'Adonis/Src/Route' }
 |
 */
-const aliases = {}
+const aliases = {
+  Role: 'Adonis/Acl/Role',
+  Permission: 'Adonis/Acl/Permission'
+}
 
 /*
 |--------------------------------------------------------------------------

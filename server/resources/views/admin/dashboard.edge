@@ -1,0 +1,26 @@
+@layout('layouts.admin')
+
+@section('content')
+  <h1 class="h2">Dashboard</h1>
+  <p>Total users: {{ totalUsers }}</p>
+  <p>Total posts: TODO</p>
+  <p>Latest registered users: </p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Username</th>
+        <th scope="col">Member since</th>
+      </tr>
+    </thead>
+    <tbody>
+      @each(user in latestRegisteredUsers.rows)
+        <tr>
+          <th scope="row">{{ user.id }}</th>
+          <td>{{ user.username }}</td>
+          <td>{{ user.created_at }}</td>
+        </tr>
+      @endeach
+    </tbody>
+  </table>
+@endsection

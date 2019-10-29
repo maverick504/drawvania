@@ -47,20 +47,18 @@ class HasMedia {
       if (variation.height !== null) { resizeOptions.height = variation.height }
 
       // Resize the image.
-      var transform = await sharp().resize(resizeOptions).jpeg({ quality: 90 }).toFormat('jpg')
-
-      // Pipe the file
-      const data = file.stream.pipe(transform)
-
-      // Get image metadata
-      const buffer = await transform.toBuffer()
-      const metadata = await sharp(buffer).metadata()
+      const transform = sharp().resize(resizeOptions).jpeg({ quality: 90 }).toFormat('jpg')
+      file.stream.pipe(transform)
+      const output = await transform.toBuffer()
 
       // Save the image on the file system.
-      await Drive.disk('spaces').put(path, data, {
+      await Drive.disk('spaces').put(path, output, {
         ACL: 'public-read',
         ContentType: 'image/jpg'
       })
+
+      // Get image metadata
+      const metadata = await sharp(output).metadata()
 
       return {
         driver: 'spaces',

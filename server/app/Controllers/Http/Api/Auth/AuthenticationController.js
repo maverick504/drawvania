@@ -19,7 +19,7 @@ class AuthenticationController {
     if (!validation.fails()) {
       try {
         const user = await User.create({ username, email, password })
-        const token = await auth.generate(user)
+        const token = await auth.authenticator('jwt').generate(user)
 
         return response.json({
           status: 'success',
@@ -48,7 +48,7 @@ class AuthenticationController {
 
     if (!validation.fails()) {
       try {
-        const token = await auth.attempt(email, password)
+        const token = await auth.authenticator('jwt').attempt(email, password)
         return response.json({
           status: 'success',
           data: token
@@ -67,7 +67,7 @@ class AuthenticationController {
   async me({ auth, response }) {
     return response.json({
       status: 'success',
-      data: auth.user
+      data: auth.authenticator('jwt').user
     })
   }
 

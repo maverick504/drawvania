@@ -18,7 +18,9 @@ const routes = [
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
       { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
     ]
-  }
+  },
+
+  { path: '/upload', name: 'upload', component: page('upload.vue') }
 ]
 
 
