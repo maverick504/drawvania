@@ -21,8 +21,6 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async handle (error, { request, response }) {
-    console.log(error)
-
     if(error.name === 'HttpException' && error.message.startsWith('E_ROUTE_NOT_FOUND')) {
       if(!request.request.url.startsWith('/api/')) {
         return response.redirect('/404')
