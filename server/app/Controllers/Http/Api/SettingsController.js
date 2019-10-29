@@ -9,7 +9,7 @@ class SettingsController {
   async updateProfile({ request, auth, response }) {
     const rules = {
       username: `required|username|unique:users,username,id,${auth.user.id}`,
-      gender: `in:M,F`,
+      gender: `in:male,female`,
       location: `max:100`,
       about: `max:250`
     }

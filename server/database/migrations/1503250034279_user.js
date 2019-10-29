@@ -11,7 +11,7 @@ class UserSchema extends Schema {
       table.string('username', 80).notNullable().unique().index()
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()
-      table.specificType('gender', 'CHAR(2) DEFAULT NULL')
+      table.enum('gender', ['male', 'female']).nullable()
       table.string('location').nullable()
       table.text('about').nullable()
       table.json('metadata').nullable()

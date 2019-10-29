@@ -21,7 +21,7 @@
       <b-form-group horizontal label="Sex">
         <b-form-select
           v-model="form.gender"
-          :options="[ { value: null, text: 'Sex' }, { value: 'M', text: 'Male' }, { value: 'F', text: 'Female' } ]"
+          :options="[ { value: null, text: 'Sex' }, { value: 'male', text: 'Male' }, { value: 'female', text: 'Female' } ]"
         />
         <has-error :form="form" field="gender"/>
       </b-form-group>
@@ -48,7 +48,7 @@
       </b-form-group>
 
       <b-form-group horizontal>
-        <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary" @click.prevent="update">
+        <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
           Update
         </b-button>
       </b-form-group>
@@ -139,8 +139,9 @@ export default {
           location: this.form.location,
           about: this.form.about
         })
+        const user = response.data.data
 
-        this.$store.dispatch('updateUser', { user: response.data.data })
+        this.$store.dispatch('updateUser', { user: user })
 
         swal.fire({
           type: 'success',

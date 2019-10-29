@@ -34,7 +34,7 @@
     </b-form-group>
 
     <b-form-group horizontal>
-      <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary" @click.prevent="update">
+      <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
         Update
       </b-button>
     </b-form-group>

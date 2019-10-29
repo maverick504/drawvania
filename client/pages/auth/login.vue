@@ -17,7 +17,7 @@
       </b-form-group>
 
       <b-form-group horizontal>
-        <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary" block @click.prevent="login">
+        <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary" block>
           Login
         </b-button>
       </b-form-group>

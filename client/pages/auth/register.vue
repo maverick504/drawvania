@@ -22,7 +22,7 @@
       </b-form-group>
 
       <b-form-group horizontal>
-        <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary" block @click.prevent="register">
+        <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary" block>
           Register
         </b-button>
       </b-form-group>
