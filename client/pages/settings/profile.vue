@@ -65,7 +65,7 @@ import Avatar from '@/components/Avatar.vue'
 
 export default {
   head () {
-    return { title: 'Settings' }
+    return { title: 'Settings - Profile' }
   },
 
   components: {

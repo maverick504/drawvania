@@ -47,6 +47,10 @@ import Form from '@/plugins/adonis-form'
 import swal from 'sweetalert2'
 
 export default {
+  head () {
+    return { title: 'Settings - Password' }
+  },
+
   data: function () {
     return {
       form: new Form({
