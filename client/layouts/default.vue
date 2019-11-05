@@ -75,7 +75,7 @@
         </no-ssr>
       </aside>
       <main class="app-content" id="content">
-        <nuxt ref="page"/>
+        <nuxt/>
       </main>
       <aside class="d-none d-lg-block app-right-sidebar">
         <no-ssr>
@@ -133,7 +133,6 @@ export default {
     const canvasConfetti = require('canvas-confetti')
     this.confetti = canvasConfetti.create(this.$refs.confettiCanvas, { resize: true })
 
-    this.$bus.$on('foceUpdate', this.$refs.page.$forceUpdate())
     this.$bus.$on('fireConfetti', this.fireConfetti)
     this.$bus.$on('createPost', this.createPost)
     this.$bus.$on('editPost', this.editPost)
