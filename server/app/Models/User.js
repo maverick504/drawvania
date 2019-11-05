@@ -19,7 +19,7 @@ class User extends Model {
         avatar: {
           columnName: 'avatar',
           variations: {
-            '50X50': { width: 50, height: 50 },
+            '50x50': { width: 50, height: 50 },
             '300x300': { width: 300, height: 300 }
           }
         }
@@ -40,7 +40,7 @@ class User extends Model {
    */
   static get casts () {
     return {
-      avatar: 'json',
+      avatar: 'json'
     }
   }
 
@@ -63,6 +63,20 @@ class User extends Model {
    */
   static get hidden () {
     return ['password']
+  }
+
+  async likedPost (id) {
+    const post = await this.likedPosts().where('posts.id', '=', id).first()
+    return post ? 1 : 0
+  }
+
+  posts () {
+    return this.hasMany('App/Models/Post', 'id', 'author_id')
+  }
+
+  likedPosts () {
+    return this.belongsToMany('App/Models/Post')
+    .pivotModel('App/Models/PostLike')
   }
 }
 

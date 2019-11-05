@@ -59,7 +59,7 @@ hooks.after.providersBooted(() => {
     }
 
     const values = args
-    if(values.includes(args)) {
+    if(!values.includes(value)) {
       throw message
     }
   }
@@ -74,8 +74,25 @@ hooks.after.providersBooted(() => {
     }
   }
 
+  const redrawablePostFn = async (data, field, message, args, get) => {
+    const value = get(data, field)
+    if (!value) {
+      /**
+       * skip validation if value is not defined. `required` rule
+       * should take care of it.
+       */
+      return
+    }
+
+    const post = await Database.table('posts').where('id', '=', value).first()
+    if(!post || !post.redrawable) {
+      throw message
+    }
+  }
+
   Validator.extend('min', minFn)
   Validator.extend('max', maxFn)
   Validator.extend('in', inFn)
   Validator.extend('username', usernameFn)
+  Validator.extend('redrawablePost', redrawablePostFn)
 })

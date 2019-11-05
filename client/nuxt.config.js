@@ -21,7 +21,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '##45aaf2' },
 
   /*
   ** Global CSS
@@ -34,7 +34,9 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~plugins/event-bus', ssr: true },
     { src: '~plugins/global-components', ssr: true },
+    { src: '~plugins/vue-moment', ssr: true },
     { src: '~plugins/axios', ssr: true },
     { src: '~plugins/vue-affix', ssr: false }
   ],

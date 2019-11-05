@@ -10,26 +10,33 @@ class HasMedia {
     const defaultOptions = {}
     const options = Object.assign(defaultOptions, customOptions)
 
-    Model.prototype.setMedia = async function (file, collectionName) {
+    Model.prototype.storeVariations = async function (collectionName, stream, save = true) {
       const collection = options.collections[collectionName]
       const variationNames = Object.keys(collection.variations)
 
-      // Delete all the previous variations for this collection in this model
+      // Delete all the previous variations for this collection in this model.
       await Drive.disk('spaces').delete(`${options.modelFolderName}/${this.id}/${collectionName}/`)
 
       // Store all the variations for the new file.
-      const storedVariations = await Promise.all(
+      var variationsObject = {}
+      await Promise.all(
         variationNames.map(
-          (variationName) => this.storeVariation(file, collectionName, variationName)
+          (variationName) => this.storeVariation(variationsObject, stream, collectionName, variationName)
         )
       )
 
-      // Update the model.
-      this[collection.columnName] = storedVariations
-      await this.save()
+      // Set the stored variations data to the model.
+      this[collection.columnName] = variationsObject
+
+      if(save) {
+        // Update the model.
+        await this.save()
+      }
+
+      return variationsObject
     }
 
-    Model.prototype.storeVariation = async function (file, collectionName, variationName) {
+    Model.prototype.storeVariation = async function (variationsObject, stream, collectionName, variationName) {
       const collection = options.collections[collectionName]
       const variation = collection.variations[variationName]
 
@@ -48,10 +55,10 @@ class HasMedia {
 
       // Resize the image.
       const transform = sharp().resize(resizeOptions).jpeg({ quality: 90 }).toFormat('jpg')
-      file.stream.pipe(transform)
+      stream.pipe(transform)
       const output = await transform.toBuffer()
 
-      // Save the image on the file system.
+      // Save the image on the drive.
       await Drive.disk('spaces').put(path, output, {
         ACL: 'public-read',
         ContentType: 'image/jpg'
@@ -60,7 +67,7 @@ class HasMedia {
       // Get image metadata
       const metadata = await sharp(output).metadata()
 
-      return {
+      variationsObject[variationName] = {
         driver: 'spaces',
         path: path,
         url: url,
@@ -68,6 +75,18 @@ class HasMedia {
         height: metadata.height,
         size: metadata.size
       }
+    }
+
+    Model.prototype.deleteVariations = async function (collectionName) {
+      // Delete all the previous variations for this collection in this model.
+      await Drive.disk('spaces').delete(`${options.modelFolderName}/${this.id}/${collectionName}/`)
+    }
+
+    /*
+     * Returns the sumatory of the sizes of the specified collection.
+     */
+    Model.prototype.calculateCollectionSize = function (collectionName) {
+      return 999
     }
   }
 }

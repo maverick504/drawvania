@@ -1,6 +1,6 @@
 <template>
   <figure :class="{ [`avatar-${size}`]: true }" :data-initial="user.avatar===null?user.username.substr(0, 2):''" class="avatar">
-    <img v-if="user.avatar!==null" :src="user.avatar[1].url" :alt="user.username">
+    <img v-if="user.avatar!==null" :src="imageUrl" :alt="user.username">
   </figure>
 </template>
 
@@ -9,6 +9,16 @@ export default {
   props: {
     user: { type: Object, required: true },
     size: { type: String, default: 'md' }
+  },
+
+  computed: {
+    imageUrl () {
+      if(this.size === 'xl') {
+        return this.user.avatar['300x300'].url
+      }
+
+      return this.user.avatar['50x50'].url
+    }
   }
 }
 </script>

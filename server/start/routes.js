@@ -26,6 +26,10 @@ Route.group(() => {
 // API ROUTES
 
 Route.group(() => {
+  Route.get('/', () => {
+    return { app_name: 'drawvania', version: '0.1' }
+  })
+
   Route.post('login', 'Api/Auth/AuthenticationController.login')
   Route.post('register', 'Api/Auth/AuthenticationController.register')
   Route.get('me', 'Api/Auth/AuthenticationController.me').middleware(['auth:jwt'])
@@ -34,11 +38,22 @@ Route.group(() => {
   Route.patch('settings/avatar', 'Api/SettingsController.updateAvatar').middleware(['auth:jwt'])
   Route.patch('settings/password', 'Api/SettingsController.updatePassword').middleware(['auth:jwt'])
 
+  Route.get('feed/global', 'Api/FeedController.global')
+
+  Route.post('posts', 'Api/PostController.store').middleware(['auth:jwt'])
+  Route.get('posts/:id', 'Api/PostController.show')
+  Route.patch('posts/:id', 'Api/PostController.update').middleware(['auth:jwt'])
+  Route.delete('posts/:id', 'Api/PostController.destroy').middleware(['auth:jwt'])
+
+  Route.get('posts/:id/likes', 'Api/PostController.likes')
+  Route.post('posts/:id/like', 'Api/PostController.like').middleware(['auth:jwt'])
+  Route.post('posts/:id/unlike', 'Api/PostController.unlike').middleware(['auth:jwt'])
+
+  Route.get('posts/:id/redraws', 'Api/PostController.redraws')
+
   Route.get('users/:username', 'Api/UserController.show')
 
-  Route.get('/', () => {
-    return { app_name: 'drawvania', version: '0.1' }
-  })
+  Route.get('miscellaneous/weekly-ranking', 'Api/MiscellaneousController.weeklyRanking')
 }).prefix('api')
 
 // NORMAL ROUTES
@@ -47,7 +62,7 @@ Route.get('/', ({ view }) => view.render('home'))
 
 Route.get('login', 'AuthenticationController.showLoginForm').middleware(['guest:session'])
 Route.post('login', 'AuthenticationController.login').middleware(['guest:session'])
-Route.get('logout', 'AuthenticationController.logout')
+Route.get('logout', 'AuthenticationController.logout').middleware(['auth:session'])
 
 // ERROR PAGES
 

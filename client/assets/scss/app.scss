@@ -3,6 +3,18 @@
 @import 'node_modules/bootstrap-vue/src/index.scss';
 @import 'minty/minty';
 
+span > .feather,
+label > .feather {
+  width: 1.2rem;
+  height: 1.2rem;
+  position: relative;
+  top: -1.5px;
+}
+
+.feather.filled {
+  fill: currentColor;
+}
+
 .auth-page {
   width: 100%;
   min-height: 100vh;
@@ -19,12 +31,13 @@
   margin: 0 16px;
 }
 
-.app-logo {
-  font-size: 28px;
-}
-
 .navbar {
   border-bottom: 1px solid $gray-400;
+  z-index: 998;
+  .container {
+    width: 100%;
+    max-width: 1140px;
+  }
 }
 
 .app-main-container {
@@ -34,81 +47,33 @@
   margin: auto;
   display: flex;
   flex-direction: row;
-  .app-left-sidebar {
-    flex-grow: 0;
-    flex-shrink: 0;
-    width: 280px;
-    padding: 0;
-    border-right: 1px solid $gray-400;
-    z-index: 998;
-    .app-left-sidebar-inner {
-      width: 280px;
-      padding: 16px;
-      .logged-user-block {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        .logged-user-block-avatar {
-          flex-grow: 0;
-        }
-        .logged-user-block-username {
-          flex-grow: 1;
-          padding: 0 8px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .logged-user-block-notifications {
-          flex-grow: 0;
-          position: relative;
-          .badge {
-            position: absolute;
-            top: 0px;
-            right: -8px;
-          }
-        }
-      }
-      .app-left-sidebar-item {
-        display: block;
-        margin: 4px -16px;
-        padding: 16px;
-        font-size: 20px;
-        text-decoration: none;
-        .badge {
-          float: right;
-          margin-top: 4px;
-        }
-      }
-      .app-left-secondary-item {
-        width: 100%;
-        text-align: center;
-        margin: 16px 0;
-        font-size: 1.2rem;
-      }
-    }
-    .submit-button {
-      margin-top: 8px;
-      border-radius: 24px;
-    }
-  }
-  .app-content {
-    flex-grow: 1;
-    margin: 0 1px;
-    padding: 16px;
-    position: relative;
-  }
+  .app-left-sidebar,
   .app-right-sidebar {
     flex-grow: 0;
     flex-shrink: 0;
     width: 280px;
     padding: 0;
-    border-left: 1px solid $gray-400;
-    z-index: 998;
+    z-index: 997;
+    .app-left-sidebar-inner,
     .app-right-sidebar-inner {
       width: 280px;
       padding: 16px;
+    }
+  }
+  .app-left-sidebar {
+    border-right: 1px solid $gray-400;
+  }
+  .app-right-sidebar {
+    border-left: 1px solid $gray-400;
+    .app-right-sidebar-inner {
       padding-bottom: 70px;
     }
+  }
+  .app-content {
+    flex-grow: 1;
+    padding: 16px;
+    position: relative;
+    background: $white;
   }
 }
 
@@ -122,12 +87,16 @@
   }
 }
 
-span > .feather,
-label > .feather {
-  width: 1.2rem;
-  height: 1.2rem;
-  position: relative;
-  top: -1.5px;
+.infinite-scroll {
+  .spinner-container {
+    margin: 32px 0;
+    text-align: center;
+  }
+  .end-of-results {
+    margin: 32px 0;
+    text-align: center;
+    text-transform: uppercase;
+  }
 }
 
 .nav-tabs {
@@ -153,7 +122,6 @@ label > .feather {
   }
 }
 
-/* TODO: use mixins for avatas sizes */
 .avatar {
   display: inline-block;
   position: relative;
@@ -180,8 +148,8 @@ label > .feather {
 }
 
 .avatar.avatar-md {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   &[data-initial]::before {
     font-size: 16px; /* 50% of parent */
   }
@@ -201,4 +169,100 @@ label > .feather {
   &[data-initial]::before {
     font-size: 100px; /* 50% of parent */
   }
+}
+
+input[type=text].form-control,
+input[type=email].form-control,
+input[type=password].form-control,
+textarea.form-control,
+select.form-control,
+select.custom-select {
+  background-color: $gray-100;
+  border: none;
+  border-radius: 0;
+  border-bottom: .2rem solid $gray-400;
+}
+
+input[type=text].form-control:focus,
+input[type=email].form-control:focus,
+input[type=password].form-control:focus,
+textarea.form-control:focus,
+select.form-control:focus,
+select.custom-select:focus, {
+  border-bottom: .2rem solid $primary;
+  box-shadow: none;
+}
+
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent !important;
+
+  &:after {
+    animation: spinAround 500ms infinite linear;
+    border: 2px solid #dbdbdb;
+    border-radius: 50%;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    content: "";
+    display: block;
+    height: 1em;
+    width: 1em;
+    position: absolute;
+    left: calc(50% - (1em / 2));
+    top: calc(50% - (1em / 2));
+  }
+}
+
+@keyframes spinAround {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
+}
+
+span > .feather,
+label > .feather {
+  width: 1.2rem;
+  height: 1.2rem;
+  position: relative;
+  top: -1.5px;
+}
+
+.like-overlay {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  left: 0;
+  width: 100vw;
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, .1);
+  color: $red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  .like-overlay-inner {
+    -webkit-animation-name: grow;
+    -webkit-animation-duration: 1s;
+    animation-name: grow;
+    animation-duration: 1s;
+  }
+}
+
+@-webkit-keyframes grow {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+.medium-zoom-overlay,
+.medium-zoom-image {
+  z-index: 999;
 }

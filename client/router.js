@@ -11,18 +11,18 @@ const routes = [
 
   { path: '/', name: 'home', component: page('home.vue') },
 
+  { path: '/posts/:id', name: 'posts.show', component: page('posts/show.vue') },
+
   { path: '/settings',
     component: page('settings/index.vue'),
     children: [
       { path: '', redirect: { name: 'settings.profile' } },
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
-      { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
+      { path: 'password', name: 'settings.password', component: page('settings/password.vue') },
+      { path: 'notifications', name: 'settings.notifications', component: page('settings/notifications.vue') }
     ]
-  },
-
-  { path: '/upload', name: 'upload', component: page('upload.vue') }
+  }
 ]
-
 
 export function createRouter () {
   return new Router({

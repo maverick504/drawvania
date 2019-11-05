@@ -22,7 +22,8 @@ const providers = [
   'adonis-cast-attributes/providers/CastAttributesProvider',
   '@adonisjs/framework/providers/ViewProvider',
   '@adonisjs/session/providers/SessionProvider',
-  'adonis-acl/providers/AclProvider'
+  'adonis-acl/providers/AclProvider',
+  '@radmen/adonis-lucid-soft-deletes/providers/SoftDeletesProvider'
 ]
 
 /*

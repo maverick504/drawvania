@@ -1,5 +1,5 @@
 <template>
-  <b-form @submit.prevent="update" @keydown="form.onKeydown($event)">
+  <b-form @submit.prevent="update">
 
     <error-alert :form="form"/>
 

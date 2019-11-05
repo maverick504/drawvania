@@ -4,7 +4,7 @@
       <avatar v-if="loggedInUser" :user="loggedInUser" size="xl" style="cursor: pointer;" @click.native="$refs.avatarFile.click()"/>
       <input ref="avatarFile" class="d-none" type="file" @change="avatarFileChanged()">
     </div>
-    <b-form @submit.prevent="update" @keydown="form.onKeydown($event)">
+    <b-form @submit.prevent="update">
 
       <error-alert :form="form"/>
 
@@ -42,7 +42,6 @@
           v-model="form.about"
           placeholder="Enter something about you..."
           rows="3"
-          max-rows="6"
         ></b-form-textarea>
         <has-error :form="form" field="about"/>
       </b-form-group>
@@ -90,9 +89,10 @@ export default {
   mounted () {
     this.$nextTick(() => {
       // Fill the form with user data.
-      this.form.keys().forEach((key) => {
-        this.form[key] = this.loggedInUser[key]
-      })
+      this.form.username = this.loggedInUser.username
+      this.form.gender = this.loggedInUser.gender
+      this.form.location = this.loggedInUser.location
+      this.form.about = this.loggedInUser.about
     })
   },
 

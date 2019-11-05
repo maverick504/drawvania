@@ -48,7 +48,7 @@ class SettingsController {
     })
 
     request.multipart.file('image', {}, async file => {
-      await auth.user.setMedia(file, 'avatar')
+      await auth.user.storeVariations('avatar', file.stream)
     })
 
     await request.multipart.process()

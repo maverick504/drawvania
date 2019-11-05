@@ -1,96 +1,167 @@
 <template>
-  <div>
-    <b-navbar variant="faded" type="light" class="text-center">
-      <b-navbar-brand class="mx-auto" to="/">
-        Drawvania
-      </b-navbar-brand>
+  <div class="bg-light">
+    <b-navbar toggleable="md" variant="white" type="light" fixed="top">
+      <div class="container">
+        <b-navbar-brand :to="{ name: 'home' }">
+          Drawvania <small class="text-primary">Beta</small>
+        </b-navbar-brand>
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item v-if="isAuthenticated" @click="createPost()">
+              <span class="text-primary">
+                <plus-icon/> Submit
+              </span>
+            </b-nav-item>
+            <b-nav-item :to="{ name: 'home' }">
+              <compass-icon/> Explore
+            </b-nav-item>
+            <b-nav-item v-if="isAuthenticated" href="#">
+              <bell-icon/>
+              <small class="badge badge-pill badge-primary">99</small>
+            </b-nav-item>
+            <b-nav-item-dropdown v-if="isAuthenticated" right>
+              <template slot="button-content">
+                <user-icon/> maverick504
+              </template>
+              <b-dropdown-item to="/">Profile</b-dropdown-item>
+              <b-dropdown-divider/>
+              <b-dropdown-item :to="{ name: 'settings.profile' }">Profile settings</b-dropdown-item>
+              <b-dropdown-item :to="{ name: 'settings.password' }">Change password</b-dropdown-item>
+              <b-dropdown-item :to="{ name: 'settings.notifications' }">Notification settings</b-dropdown-item>
+              <b-dropdown-divider/>
+              <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
+            </b-nav-item-dropdown>
+            <b-nav-item v-if="!isAuthenticated" :to="{ name: 'auth.login' }">
+              <log-in-icon/> Login
+            </b-nav-item>
+            <b-nav-item v-if="!isAuthenticated" :to="{ name: 'auth.register' }">
+              <span class="text-primary">
+                <user-plus-icon/> Register
+              </span>
+            </b-nav-item>
+          </b-navbar-nav>
+        </b-collapse>
+      </div>
     </b-navbar>
+    <div style="height: 58px;"></div>
     <div class="app-main-container">
       <aside class="d-none d-md-block app-left-sidebar">
         <no-ssr>
-          <affix class="app-left-sidebar-inner" relative-element-selector="#content" :offset="{ top: 0, bottom: 0 }">
-            <div v-if="isAuthenticated" class="logged-user-block mb-3">
-              <div class="logged-user-block-avatar">
-                <nuxt-link to="/">
-                  <avatar :user="loggedInUser" size="lg" class="d-block"/>
-                </nuxt-link>
-              </div>
-              <div class="logged-user-block-username">
-                <nuxt-link to="/" :title="`@${loggedInUser.username}`">@{{ loggedInUser.username }}</nuxt-link>
-              </div>
-              <div class="logged-user-block-notifications">
-                <router-link to="/" class="text-muted">
-                  <bell-icon size="2x"/>
-                </router-link>
-                <small class="badge badge-pill badge-primary">99</small>
-              </div>
+          <affix class="app-left-sidebar-inner" relative-element-selector="#content" :offset="{ top: 58, bottom: 0 }">
+            <h2 class="h5 text-center mb-3">🏆 Weekly ranking 🏆</h2>
+            <div class="list-group">
+              <router-link
+                v-for="(post, index) in weeklyRanking"
+                :key="index"
+                :to="{ name: 'posts.show', params: { id: post.id } }"
+                class="list-group-item list-group-item-action"
+                style="display: flex; flex-direction: row; align-items: center; padding: 0;"
+              >
+                <img style="flex-grow: 0; width: 80px; height: 80px; margin-right: 12px;" :src="post.media[0].variations['100x100'].url">
+                <div style="flex-grow: 1; margin-right: 12px;">
+                  <div style="white-space: nowrap; width: 142px; overflow: hidden; text-overflow: ellipsis;">by @{{ post.author.username }}</div>
+                  <div style="display: flex; align-items: center;"><heart-icon style="margin-right: 4px;"/> {{ post.total_likes }}</div>
+                </div>
+              </router-link>
             </div>
-            <template v-if="isAuthenticated">
-              <nuxt-link :to="{ name: 'settings.profile' }" class="app-left-sidebar-item text-muted">
-                <settings-icon size="1.5x"/>
-                Settings
-              </nuxt-link>
-              <router-link :to="{ name: 'upload' }" class="btn btn-primary btn-lg btn-block submit-button">
-                <plus-icon size="1.5x"/>
-                <span style="vertical-align: middle;">Submit</span>
-              </router-link>
-              <div class="app-left-secondary-item">
-                <a href="#" @click.prevent="logout">Logout</a>
-              </div>
-            </template>
-            <template v-else>
-              <router-link :to="{ name: 'auth.register' }" class="btn btn-primary btn-lg btn-block" style="margin-top: 8px; border-radius: 24px; color: #fff;">
-                <log-in-icon size="1.5x"/>
-                <span style="vertical-align: middle;">Register</span>
-              </router-link>
-              <div class="app-left-secondary-item">
-                <router-link :to="{ name: 'auth.login' }">Login</router-link>
-              </div>
-            </template>
-            <hr>
             <div style="margin: 16px 0; text-align: center;">
-              <!--
-              <a href="http://localhost:3333/support" target="_blank" style="color: #888; margin-right: 8px;">Donate/Premium</a>
-              <a href="http://localhost:3333/supporters" target="_blank" style="color: #888; margin-right: 8px;">Supporters</a>
-              <a href="http://localhost:3333/help" target="_blank" style="color: #888; margin-right: 8px;">Help</a>
-              -->
+              <a v-if="isAuthenticated" href="#" target="_blank" style="white-space: nowrap; color: #888; margin-right: 8px;">Donate/Become Premium</a>
+              <a v-if="isAuthenticated" href="#" target="_blank" style="white-space: nowrap; color: #888; margin-right: 8px;">List of supporters</a>
+              <a v-if="isAuthenticated" href="#" target="_blank" style="white-space: nowrap; color: #888; margin-right: 8px;">Discord Chat</a>
+              <a href="#" target="_blank" style="white-space: nowrap; color: #888; margin-right: 8px;">Help Center</a>
             </div>
           </affix>
         </no-ssr>
       </aside>
       <main class="app-content" id="content">
-        <router-view :key="$route.fullPath"/>
+        <nuxt ref="page"/>
       </main>
       <aside class="d-none d-lg-block app-right-sidebar">
         <no-ssr>
-          <affix class="app-right-sidebar-inner" relative-element-selector="#content" :offset="{ top: 0, bottom: 0 }" :scroll-affix="true">
+          <affix class="app-right-sidebar-inner" relative-element-selector="#content" :offset="{ top: 58, bottom: 0 }" :scroll-affix="true">
+            <h2 class="h5 text-center mb-3">📣 Announcements 📣</h2>
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Hola mundo</h5>
+                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
           </affix>
         </no-ssr>
       </aside>
     </div>
+    <canvas ref="confettiCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events:none;"></canvas>
+    <create-post-modal ref="createPostModal"/>
+    <edit-post-modal ref="editPostModal"/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
-import { LogInIcon, LogOutIcon, BellIcon, PlusIcon, SettingsIcon } from 'vue-feather-icons'
+import CreatePostModal from '@/components/CreatePostModal.vue'
+import EditPostModal from '@/components/EditPostModal.vue'
+import { PlusIcon, CompassIcon, UserIcon, BellIcon, LogInIcon, UserPlusIcon, HeartIcon } from 'vue-feather-icons'
 
 export default {
   components: {
     Avatar,
-    LogInIcon,
-    LogOutIcon,
-    BellIcon,
+    CreatePostModal,
+    EditPostModal,
     PlusIcon,
-    SettingsIcon
+    CompassIcon,
+    UserIcon,
+    BellIcon,
+    LogInIcon,
+    UserPlusIcon,
+    HeartIcon
+  },
+
+  data: function () {
+    return {
+      weeklyRanking: [],
+      confetti: null
+    }
   },
 
   computed: {
     ...mapGetters(['isAuthenticated', 'loggedInUser'])
   },
 
+  async mounted () {
+    const canvasConfetti = require('canvas-confetti')
+    this.confetti = canvasConfetti.create(this.$refs.confettiCanvas, { resize: true })
+
+    this.$bus.$on('foceUpdate', this.$refs.page.$forceUpdate())
+    this.$bus.$on('fireConfetti', this.fireConfetti)
+    this.$bus.$on('createPost', this.createPost)
+    this.$bus.$on('editPost', this.editPost)
+
+    this.loadweeklyRanking()
+  },
+
   methods: {
+    async loadweeklyRanking () {
+      const response = await this.$axios.get(`/miscellaneous/weekly-ranking`)
+      this.weeklyRanking = response.data
+    },
+
+    fireConfetti () {
+      this.confetti({
+        particleCount: 150,
+        spread: 160
+      })
+    },
+
+    createPost (parentPostId = null) {
+      this.$refs.createPostModal.open(parentPostId)
+    },
+
+    editPost (postId) {
+      this.$refs.editPostModal.open(postId)
+    },
+
     logout () {
       this.$auth.logout()
     }
