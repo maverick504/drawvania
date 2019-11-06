@@ -59,8 +59,8 @@
                 style="display: flex; flex-direction: row; align-items: center; padding: 0;"
               >
                 <img style="flex-grow: 0; width: 80px; height: 80px; margin-right: 12px;" :src="post.media[0].variations['100x100'].url">
-                <div style="flex-grow: 1; margin-right: 12px;">
-                  <div style="white-space: nowrap; width: 142px; overflow: hidden; text-overflow: ellipsis;">by @{{ post.author.username }}</div>
+                <div style="flex-grow: 1; margin-right: 12px; overflow: hidden; text-overflow: ellipsis;">
+                  <div style="display: inline; white-space: nowrap;">by @{{ post.author.username }}</div>
                   <div style="display: flex; align-items: center;"><heart-icon style="margin-right: 4px;"/> {{ post.total_likes }}</div>
                 </div>
               </router-link>
