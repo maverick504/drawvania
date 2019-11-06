@@ -67,7 +67,7 @@ hooks.after.providersBooted(() => {
   const usernameFn = async (data, field, message, args, get) => {
     const value = get(data, field)
 
-    const validUsername = /^[a-zA-Z0-9_]{1,25}$/.test(value)
+    const validUsername = /^[a-zA-Z0-9_]{1,20}$/.test(value)
 
     if(!validUsername) {
       throw message
