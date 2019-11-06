@@ -33,7 +33,7 @@ label > .feather {
 
 .navbar {
   border-bottom: 1px solid $gray-400;
-  z-index: 998;
+  z-index: 1;
   .container {
     width: 100%;
     max-width: 1140px;
@@ -53,7 +53,6 @@ label > .feather {
     flex-shrink: 0;
     width: 280px;
     padding: 0;
-    z-index: 997;
     .app-left-sidebar-inner,
     .app-right-sidebar-inner {
       width: 280px;
@@ -177,7 +176,7 @@ input[type=password].form-control,
 textarea.form-control,
 select.form-control,
 select.custom-select {
-  background-color: $gray-100;
+  background-color: $gray-200;
   border: none;
   border-radius: 0;
   border-bottom: .2rem solid $gray-400;
@@ -190,6 +189,16 @@ textarea.form-control:focus,
 select.form-control:focus,
 select.custom-select:focus, {
   border-bottom: .2rem solid $primary;
+  box-shadow: none;
+}
+
+input[type=text].form-control.is-invalid,
+input[type=email].form-control.is-invalid,
+input[type=password].form-control.is-invalid,
+textarea.form-control.is-invalid,
+select.form-control.is-invalid,
+select.custom-select.is-invalid, {
+  border-bottom: .2rem solid $danger;
   box-shadow: none;
 }
 
@@ -227,42 +236,48 @@ label > .feather {
   top: -1.5px;
 }
 
-.like-overlay {
-  position: fixed;
-  top: 0;
-  height: 100vh;
-  left: 0;
-  width: 100vw;
-  pointer-events: none;
-  background-color: rgba(255, 255, 255, .1);
-  color: $red;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  .like-overlay-inner {
+.like-button {
+  .feather {
+    color: $red;
+  }
+  .feather.filled {
     -webkit-animation-name: grow;
-    -webkit-animation-duration: 1s;
+    -webkit-animation-duration: .5s;
     animation-name: grow;
-    animation-duration: 1s;
+    animation-duration: .5s;
   }
 }
 
 @-webkit-keyframes grow {
   from {
-    opacity: 0;
-    transform: scale(0);
+    transform: scale(1);
+    color: $red;
   }
   50% {
-    opacity: 1;
+    transform: scale(1.5);
+    color: lighten($red, 20%);
   }
   to {
-    opacity: 0;
-    transform: scale(3);
+    transform: scale(1);
+    color: $red;
   }
 }
 
 .medium-zoom-overlay,
 .medium-zoom-image {
-  z-index: 999;
+  z-index: 2;
+}
+
+.to-top-button {
+  position: fixed;
+  top: 74px;
+  left: 50%;
+  background: #222;
+  color: #fff;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #111;
+  transform: translateX(-50%);
+  z-index: 1;
 }

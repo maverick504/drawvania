@@ -1,6 +1,11 @@
 <template>
   <b-modal id="redraws-modal" centered :title="total!==null ? `Redrawed ${total} times` : 'Loading...'" hide-footer @show="onShow">
-    <div id="redraws-modal-content" style="max-height: 300px; overflow-y: auto; margin: -16px;">
+    <div v-if="loading && redraws.length === 0" class="text-primary text-center py-5">
+      <div class="spinner-grow" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div v-else id="redraws-modal-content" style="max-height: 300px; overflow-y: auto; margin: -16px;">
       <div style="margin: 16px;">
         <div class="list-group">
           <router-link

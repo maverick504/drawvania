@@ -6,18 +6,33 @@
 
       <error-alert :form="form"/>
 
-      <b-form-group horizontal label="User name">
-        <b-form-input v-model="form.username" type="text" required></b-form-input>
-        <has-error :form="form" field="username"/>
+      <b-form-group horizontal label="Username">
+        <b-form-input
+          :class="{ 'is-invalid': form.hasErrors('username') }"
+          v-model="form.username"
+          type="text"
+          placeholder="Username"
+        />
+        <has-error :form="form" field="email"/>
       </b-form-group>
 
       <b-form-group horizontal label="Email">
-        <b-form-input v-model="form.email" type="email" required></b-form-input>
+        <b-form-input
+          :class="{ 'is-invalid': form.hasErrors('email') }"
+          v-model="form.email"
+          type="email"
+          placeholder="Email"
+        />
         <has-error :form="form" field="email"/>
       </b-form-group>
 
       <b-form-group horizontal label="Password">
-        <b-form-input v-model="form.password" type="password" required></b-form-input>
+        <b-form-input
+          :class="{ 'is-invalid': form.hasErrors('password') }"
+          v-model="form.password"
+          type="password"
+          placeholder="Password"
+        />
         <has-error :form="form" field="password"/>
       </b-form-group>
 

@@ -22,7 +22,7 @@
             </b-nav-item>
             <b-nav-item-dropdown v-if="isAuthenticated" right>
               <template slot="button-content">
-                <user-icon/> maverick504
+                <user-icon/> {{ loggedInUser.username }}
               </template>
               <b-dropdown-item to="/">Profile</b-dropdown-item>
               <b-dropdown-divider/>
@@ -32,7 +32,7 @@
               <b-dropdown-divider/>
               <b-dropdown-item @click.prevent="logout">Logout</b-dropdown-item>
             </b-nav-item-dropdown>
-            <b-nav-item v-if="!isAuthenticated" :to="{ name: 'auth.login' }">
+            <b-nav-item v-if="!isAuthenticated" @click="showLoginModal">
               <log-in-icon/> Login
             </b-nav-item>
             <b-nav-item v-if="!isAuthenticated" :to="{ name: 'auth.register' }">
@@ -94,6 +94,7 @@
     <canvas ref="confettiCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events:none;"></canvas>
     <create-post-modal ref="createPostModal"/>
     <edit-post-modal ref="editPostModal"/>
+    <login-modal v-if="!isAuthenticated" ref="loginModal"/>
   </div>
 </template>
 
@@ -102,6 +103,7 @@ import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import CreatePostModal from '@/components/CreatePostModal.vue'
 import EditPostModal from '@/components/EditPostModal.vue'
+import LoginModal from '@/components/LoginModal.vue'
 import { PlusIcon, CompassIcon, UserIcon, BellIcon, LogInIcon, UserPlusIcon, HeartIcon } from 'vue-feather-icons'
 
 export default {
@@ -109,6 +111,7 @@ export default {
     Avatar,
     CreatePostModal,
     EditPostModal,
+    LoginModal,
     PlusIcon,
     CompassIcon,
     UserIcon,
@@ -129,13 +132,14 @@ export default {
     ...mapGetters(['isAuthenticated', 'loggedInUser'])
   },
 
-  async mounted () {
+  mounted () {
     const canvasConfetti = require('canvas-confetti')
     this.confetti = canvasConfetti.create(this.$refs.confettiCanvas, { resize: true })
 
     this.$bus.$on('fireConfetti', this.fireConfetti)
     this.$bus.$on('createPost', this.createPost)
     this.$bus.$on('editPost', this.editPost)
+    this.$bus.$on('showLoginModal', this.showLoginModal)
 
     this.loadweeklyRanking()
   },
@@ -159,6 +163,10 @@ export default {
 
     editPost (postId) {
       this.$refs.editPostModal.open(postId)
+    },
+
+    showLoginModal () {
+      this.$refs.loginModal.open()
     },
 
     logout () {

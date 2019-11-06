@@ -64,28 +64,30 @@
         <p v-if="post.description" style="margin: 0; margin-bottom: 16px;">
           {{ post.description }}
         </p>
-        <a v-if="totalLikes > 0" href="#" style="display: inline-block; margin-bottom: 16px; margin-right: 4px;" @click.prevent="$emit('showLikesModal')">{{ totalLikes }} likes</a>
+        <a v-if="post.total_likes > 0" href="#" style="display: inline-block; margin-bottom: 16px; margin-right: 4px;" @click.prevent="$emit('showLikesModal')">{{ post.total_likes }} likes</a>
         <a v-if="post.total_comments > 0" href="#" style="display: inline-block; margin-bottom: 16px; margin-right: 4px;">{{ post.total_comments }} comments</a>
         <a v-if="post.total_direct_children_posts > 0" href="#" style="display: inline-block; margin-bottom: 16px; margin-left: 4px;" @click.prevent="$emit('showRedrawsModal')">{{ post.total_direct_children_posts }} redraws</a>
         <div>
-          <b-button variant="link" @click="toggleLike()" v-b-tooltip.hover title="Like" style="display: inline-block; margin-right: 12px; padding: 0; color: #FF7851;">
-            <heart-icon size="2x" :class="{ 'filled': userLiked }"/>
-          </b-button>
+          <!-- Like button -->
+          <like-button
+            :userLiked.sync="post.user_liked"
+            :totalLikes.sync="post.total_likes"
+            :likeEndpoint="`/posts/${post.id}/like`"
+            :unlikeEndpoint="`/posts/${post.id}/unlike`"
+            style="margin-right: 12px;"
+          />
+          <!-- Comment button -->
           <b-button variant="link" v-b-tooltip.hover title="Comment" style="display: inline-block; margin-right: 12px; padding: 0;">
             <message-circle-icon size="2x"/>
           </b-button>
-          <b-button variant="link" @click="$bus.$emit('createPost', post.id)" v-b-tooltip.hover title="Redraw" style="display: inline-block; margin-right: 12px; padding: 0;">
+          <!-- Redraw button -->
+          <b-button variant="link" @click="redraw()" v-b-tooltip.hover title="Redraw" style="display: inline-block; margin-right: 12px; padding: 0;">
             <edit-3-icon size="2x"/>
           </b-button>
         </div>
       </div>
       <div class="card-footer">
         Comments...
-      </div>
-    </div>
-    <div v-if="showingLikeOverlay" class="like-overlay">
-      <div class="like-overlay-inner">
-        <heart-icon size="5x" class="filled"/>
       </div>
     </div>
   </div>
@@ -96,28 +98,21 @@ import swal from 'sweetalert2'
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import VImage from '@/components/Image.vue'
-import { MoreHorizontalIcon, HeartIcon, MessageCircleIcon, Edit3Icon } from 'vue-feather-icons'
+import LikeButton from '@/components/LikeButton.vue'
+import { MoreHorizontalIcon, MessageCircleIcon, Edit3Icon } from 'vue-feather-icons'
 
 export default {
   components: {
     Avatar,
     VImage,
+    LikeButton,
     MoreHorizontalIcon,
-    HeartIcon,
     MessageCircleIcon,
     Edit3Icon
   },
 
   props: {
     post: { type: Object, required: true }
-  },
-
-  data: function () {
-    return {
-      userLiked: false,
-      totalLikes: 1,
-      showingLikeOverlay: false
-    }
   },
 
   computed: {
@@ -169,31 +164,14 @@ export default {
     }
   },
 
-  created () {
-    this.userLiked = this.post.user_liked
-    this.totalLikes = this.post.total_likes
-  },
-
   methods: {
-    async toggleLike () {
-      if (!this.userLiked) {
-        await this.$axios.post(`/posts/${this.post.id}/like`)
-
-        this.userLiked = true
-        this.totalLikes++
-        this.showLikeOverlay()
-      } else {
-        await this.$axios.post(`/posts/${this.post.id}/unlike`)
-
-        this.userLiked = false
-        this.totalLikes--
+    redraw () {
+      if(!this.isAuthenticated) {
+        this.$bus.$emit('showLoginModal')
+        return
       }
-    },
 
-    showLikeOverlay () {
-      this.showingLikeOverlay = true
-      const self = this
-      setTimeout(() => { self.showingLikeOverlay = false }, 1000)
+      this.$bus.$emit('createPost', this.post.id)
     },
 
     async confirmDelete () {

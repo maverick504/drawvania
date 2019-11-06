@@ -1,6 +1,11 @@
 <template>
   <b-modal id="likes-modal" centered :title="total!==null ? `Liked by ${total} users` : 'Loading...'" hide-footer @show="onShow" @hide="onHide">
-    <div id="likes-modal-content" style="max-height: 300px; overflow-y: auto; margin: -16px;">
+    <div v-if="loading && likes.length === 0" class="text-primary text-center py-5">
+      <div class="spinner-grow" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <div v-else id="likes-modal-content" style="max-height: 300px; overflow-y: auto; margin: -16px;">
       <div style="margin: 16px;">
         <div v-for="(like, index) in likes" :key="index" style="display: flex; flex-direction: row; align-items: center; padding: 4px 0;">
           <a href="#" style="flex-grow: 0; margin-right: 12px;">

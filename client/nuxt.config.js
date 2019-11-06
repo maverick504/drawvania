@@ -21,7 +21,10 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '##45aaf2' },
+  loading: {
+    color: '#45aaf2',
+    height: '5px'
+  },
 
   /*
   ** Global CSS
@@ -64,6 +67,14 @@ module.exports = {
   ** Auth module configuration
   */
   auth: {
+    redirect: {
+      // WARNING: Do not use objects to define these routes, it gives the following error: 'nuxt a.split is not a function'.
+      login: '/login',
+      logout: '/login',
+      callback: '/login',
+      home: '/'
+    },
+    watchLoggedIn: true,
     strategies: {
       local: {
         endpoints: {
@@ -79,6 +90,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    extractCSS: true,
     /*
     ** You can extend webpack config here
     */

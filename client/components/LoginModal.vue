@@ -1,7 +1,6 @@
 <template>
-  <b-card class="auth-card">
-    <h1 class="h1 text-center">Drawvania</h1>
-    <p class="text-center mb-3">Log-in</p>
+  <b-modal id="login-modal" size="sm" centered title="Login" title-class="w-100 text-center" hide-footer>
+
     <b-form method="post" @submit.prevent="login">
 
       <error-alert :form="form"/>
@@ -38,17 +37,14 @@
       </div>
 
     </b-form>
-  </b-card>
+
+  </b-modal>
 </template>
 
 <script>
 import Form from '@/plugins/adonis-form'
 
 export default {
-  middleware: 'guest',
-
-  layout: 'auth',
-
   data () {
     return {
       form: new Form({
@@ -59,6 +55,10 @@ export default {
   },
 
   methods: {
+    open () {
+      this.$bvModal.show('login-modal')
+    },
+
     async login() {
       this.form.clearErrors()
       this.form.busy = true
