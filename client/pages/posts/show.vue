@@ -1,8 +1,7 @@
 <template>
-  <div>
-    <post
+  <div style="margin-bottom: 96px;">
+    <post-item
       :post="post"
-      class="mb-3"
       @showLikesModal="showLikesModal()"
       @showRedrawsModal="showRedrawsModal()"
     />
@@ -13,13 +12,13 @@
 
 <script>
 import mediumZoom from 'medium-zoom'
-import Post from '@/components/Post.vue'
+import PostItem from '@/components/post/PostItem.vue'
 import LikesModal from '@/components/LikesModal.vue'
 import RedrawsModal from '@/components/RedrawsModal.vue'
 
 export default {
   components: {
-    Post,
+    PostItem,
     LikesModal,
     RedrawsModal
   },

@@ -49,11 +49,17 @@ Route.group(() => {
   Route.post('posts/:id/like', 'Api/PostController.like').middleware(['auth:jwt'])
   Route.post('posts/:id/unlike', 'Api/PostController.unlike').middleware(['auth:jwt'])
 
+  Route.get('posts/:id/comments', 'Api/CommentController.postIndex')
+  Route.post('comments', 'Api/CommentController.store').middleware(['auth:jwt'])
+  Route.patch('comments/:id', 'Api/CommentController.update').middleware(['auth:jwt'])
+  Route.delete('comments/:id', 'Api/CommentController.destroy').middleware(['auth:jwt'])
+  Route.post('comments/:id/reply', 'Api/CommentController.reply').middleware(['auth:jwt'])
+
   Route.get('posts/:id/redraws', 'Api/PostController.redraws')
 
   Route.get('users/:username', 'Api/UserController.show')
 
-  Route.get('miscellaneous/weekly-ranking', 'Api/MiscellaneousController.weeklyRanking')
+  Route.get('miscellaneous/weeklyRanking', 'Api/MiscellaneousController.weeklyRanking')
 }).prefix('api')
 
 // NORMAL ROUTES

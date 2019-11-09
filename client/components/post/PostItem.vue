@@ -53,42 +53,46 @@
         </div>
       </div>
       <v-image
-        class="card-img"
+        class="card-img-top"
         v-if="post.media && post.media.length > 0"
         :src="post.media[0].variations['600w'].url"
         :zoomSrc="post.media[0].variations['900w'].url"
         :ratioWidth="post.media[0].variations['600w'].width"
         :ratioHeight="post.media[0].variations['600w'].height"
       />
-      <div class="card-body">
+      <div class="card-body" style="border-top: 1px solid rgba(0,0,0,0.125);">
         <p v-if="post.description" style="margin: 0; margin-bottom: 16px;">
           {{ post.description }}
         </p>
-        <a v-if="post.total_likes > 0" href="#" style="display: inline-block; margin-bottom: 16px; margin-right: 4px;" @click.prevent="$emit('showLikesModal')">{{ post.total_likes }} likes</a>
-        <a v-if="post.total_comments > 0" href="#" style="display: inline-block; margin-bottom: 16px; margin-right: 4px;">{{ post.total_comments }} comments</a>
-        <a v-if="post.total_direct_children_posts > 0" href="#" style="display: inline-block; margin-bottom: 16px; margin-left: 4px;" @click.prevent="$emit('showRedrawsModal')">{{ post.total_direct_children_posts }} redraws</a>
-        <div>
-          <!-- Like button -->
-          <like-button
+        <div style="display: flex;">
+          <div style="flex-grow: 1;">
+            <a v-if="post.total_likes > 0" href="#" style="display: inline-block; margin-bottom: 16px;" @click.prevent="$emit('showLikesModal')">{{ post.total_likes }} likes</a>
+          </div>
+          <div style="flex-grow: 0;">
+            <a v-if="post.total_comments > 0" href="#" style="display: inline-block; margin-bottom: 16px;" @click.prevent="showComments = true">{{ post.total_comments }} comments</a><!--
+         --><a v-if="post.total_direct_children_posts > 0" href="#" style="display: inline-block; margin-bottom: 16px; margin-left: 8px;" @click.prevent="$emit('showRedrawsModal')">{{ post.total_direct_children_posts }} redraws</a>
+          </div>
+        </div>
+        <div><!--
+          Like button
+       --><like-button
             :userLiked.sync="post.user_liked"
             :totalLikes.sync="post.total_likes"
             :likeEndpoint="`/posts/${post.id}/like`"
             :unlikeEndpoint="`/posts/${post.id}/unlike`"
             style="margin-right: 12px;"
-          />
-          <!-- Comment button -->
-          <b-button variant="link" v-b-tooltip.hover title="Comment" style="display: inline-block; margin-right: 12px; padding: 0;">
+          /><!--
+          Comment button
+       --><b-button variant="link" v-b-tooltip.hover title="Comment" style="display: inline-block; margin-right: 12px; padding: 0;" @click="showComments = true">
             <message-circle-icon size="2x"/>
-          </b-button>
-          <!-- Redraw button -->
-          <b-button variant="link" @click="redraw()" v-b-tooltip.hover title="Redraw" style="display: inline-block; margin-right: 12px; padding: 0;">
+          </b-button><!--
+          Redraw button
+       --><b-button variant="link" @click="redraw()" v-b-tooltip.hover title="Redraw" style="display: inline-block; margin-right: 12px; padding: 0;">
             <edit-3-icon size="2x"/>
           </b-button>
         </div>
       </div>
-      <div class="card-footer">
-        Comments...
-      </div>
+      <comments-footer v-if="showComments" :post="post"/>
     </div>
   </div>
 </template>
@@ -99,6 +103,7 @@ import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import VImage from '@/components/Image.vue'
 import LikeButton from '@/components/LikeButton.vue'
+import CommentsFooter from '@/components/post/comments/CommentsFooter.vue'
 import { MoreHorizontalIcon, MessageCircleIcon, Edit3Icon } from 'vue-feather-icons'
 
 export default {
@@ -106,6 +111,7 @@ export default {
     Avatar,
     VImage,
     LikeButton,
+    CommentsFooter,
     MoreHorizontalIcon,
     MessageCircleIcon,
     Edit3Icon
@@ -113,6 +119,12 @@ export default {
 
   props: {
     post: { type: Object, required: true }
+  },
+
+  data: function () {
+    return {
+      showComments: false
+    }
   },
 
   computed: {
@@ -139,7 +151,7 @@ export default {
         })
         items.push({
           to: null,
-          onclick: this.confirmDelete,
+          onclick: this.askDelete,
           text: 'Delete post',
           variant: 'danger'
         })
@@ -150,12 +162,6 @@ export default {
           to: {},
           onclick: () => {},
           text: 'Report post',
-          variant: 'danger'
-        })
-        items.push({
-          to: {},
-          onclick: () => {},
-          text: 'Report user',
           variant: 'danger'
         })
       }
@@ -174,7 +180,7 @@ export default {
       this.$bus.$emit('createPost', this.post.id)
     },
 
-    async confirmDelete () {
+    async askDelete () {
       const result = await swal.fire({
         title: "Are you sure?",
         text: "The post will be permanently deleted!",

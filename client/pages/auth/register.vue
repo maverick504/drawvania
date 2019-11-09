@@ -13,14 +13,14 @@
           type="text"
           placeholder="Username"
         />
-        <has-error :form="form" field="email"/>
+        <has-error :form="form" field="username"/>
       </b-form-group>
 
       <b-form-group horizontal label="Email">
         <b-form-input
           :class="{ 'is-invalid': form.hasErrors('email') }"
           v-model="form.email"
-          type="email"
+          type="text"
           placeholder="Email"
         />
         <has-error :form="form" field="email"/>

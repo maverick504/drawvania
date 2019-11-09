@@ -101,7 +101,6 @@ class PostController {
           data: post
         })
       } catch(error) {
-        console.log(error)
         trx.rollback()
 
         return response.status(400).json({
@@ -122,7 +121,7 @@ class PostController {
     if(post.author_id !== auth.user.id) {
       return response.status(400).json({
         status: 'error',
-        message: "You cannot delete this post because you are not its author."
+        message: "You cannot modify this post because you are not its author."
       })
     }
 

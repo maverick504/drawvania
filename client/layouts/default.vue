@@ -81,12 +81,11 @@
         <no-ssr>
           <affix class="app-right-sidebar-inner" relative-element-selector="#content" :offset="{ top: 58, bottom: 0 }" :scroll-affix="true">
             <h2 class="h5 text-center mb-3">📣 Announcements 📣</h2>
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Hola mundo</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-              </div>
-            </div>
+            <ul class="list-group">
+              <li class="list-group-item">Cras justo odio</li>
+              <li class="list-group-item">Dapibus ac facilisis in</li>
+              <li class="list-group-item">Morbi leo risus</li>
+            </ul>
           </affix>
         </no-ssr>
       </aside>
@@ -146,7 +145,7 @@ export default {
 
   methods: {
     async loadweeklyRanking () {
-      const response = await this.$axios.get(`/miscellaneous/weekly-ranking`)
+      const response = await this.$axios.get(`/miscellaneous/weeklyRanking`)
       this.weeklyRanking = response.data
     },
 

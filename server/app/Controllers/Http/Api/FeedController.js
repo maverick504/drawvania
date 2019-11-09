@@ -5,7 +5,7 @@ const Post = use('App/Models/Post')
 
 class FeedController {
 
-  async global({ request, auth, response }) {
+  async global({ request, auth }) {
     var query = Post.query()
 
     if(auth.user) {

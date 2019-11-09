@@ -57,6 +57,15 @@ class Post extends Model {
     await this.save()
   }
 
+  async countComments () {
+    const query = await this.comments().count()
+    const total = query[0]['count(*)']
+
+    this.total_comments = total
+
+    await this.save()
+  }
+
   author () {
     return this.belongsTo('App/Models/User', 'author_id', 'id')
   }
@@ -80,6 +89,10 @@ class Post extends Model {
   likers () {
     return this.belongsToMany('App/Models/User')
     .pivotModel('App/Models/PostLike')
+  }
+
+  comments () {
+    return this.hasMany('App/Models/PostComment')
   }
 }
 

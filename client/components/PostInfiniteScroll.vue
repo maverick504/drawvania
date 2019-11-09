@@ -1,6 +1,6 @@
 <template>
   <div class="infinite-scroll">
-    <post
+    <post-item
       v-for="(post, index) in posts"
       :key="index"
       :post="post"
@@ -23,13 +23,13 @@
 
 <script>
 import mediumZoom from 'medium-zoom'
-import Post from '@/components/Post.vue'
+import PostItem from '@/components/post/PostItem.vue'
 import LikesModal from '@/components/LikesModal.vue'
 import RedrawsModal from '@/components/RedrawsModal.vue'
 
 export default {
   components: {
-    Post,
+    PostItem,
     LikesModal,
     RedrawsModal
   },
