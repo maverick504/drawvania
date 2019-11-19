@@ -7,18 +7,15 @@
         </router-link>
       </div>
       <div class="flex-grow block text-right">
-        <router-link :to="{ name: 'feed.global' }" class="inline-block px-6 py-4">
-          <compass-icon size="1.5x" class="inline mr-1"/>
-          <span class="align-middle">Explore</span>
-        </router-link><!--
-     --><template v-if="isAuthenticated">
-          <router-link :to="{ name: 'notifications' }" class="inline-block px-6 py-4">
+        <template v-if="isAuthenticated">
+          <router-link :to="{ name: 'notifications' }" class="inline-block p-4">
             <bell-icon size="1.5x" class="inline"/>
           </router-link><!--
        --><t-dropdown
             class="inline-block text-left"
             :button-props="{
-              baseClass: 'inline-block px-6 py-4',
+              baseClass: 'inline-block',
+              defaultSizeClass: 'p-4',
               to: { name: 'users.show', params: { username: loggedInUser.username } }
             }"
             :visible-arrow="false"
@@ -46,16 +43,16 @@
               </a></li>
             </ul>
           </t-dropdown><!--
-       --><a href="#" class="inline-block px-6 py-4 text-primary" @click.prevent="$bus.$emit('createPost')">
+       --><t-button baseClass="inline-block text-primary" defaultSizeClass="p-4" @click.prevent="$bus.$emit('createPost')">
             <plus-icon size="1.5x" class="inline mr-1"/>
             <span class="align-middle">Submit</span>
-          </a>
+          </t-button>
         </template><!--
      --><template v-if="!isAuthenticated">
-          <a href="#" class="inline-block px-6 py-4" @click="$bus.$emit('showLoginModal')">
+          <t-button baseClass="inline-block" defaultSizeClass="p-4" @click="$bus.$emit('showLoginModal')">
             <log-in-icon size="1.5x" class="inline mr-1"/><span class="align-middle">Log in</span>
-          </a><!--
-       --><router-link :to="{ name: 'auth.register' }" class="inline-block px-6 py-4 text-primary">
+          </t-button><!--
+       --><router-link :to="{ name: 'auth.register' }" class="inline-block p-4 text-primary">
             <user-plus-icon size="1.5x" class="inline mr-1"/><span class="align-middle">Register</span>
           </router-link>
         </template>
@@ -66,12 +63,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { PlusIcon, CompassIcon, BellIcon, UserIcon, LogInIcon, UserPlusIcon } from 'vue-feather-icons'
+import { PlusIcon, BellIcon, UserIcon, LogInIcon, UserPlusIcon } from 'vue-feather-icons'
 
 export default {
   components: {
     PlusIcon,
-    CompassIcon,
     BellIcon,
     UserIcon,
     LogInIcon,
