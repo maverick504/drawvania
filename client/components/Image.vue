@@ -1,21 +1,26 @@
 <template>
-  <div class="image" style="background: #eee;">
-    <template v-if="!loaded">
-      <div :style="style"></div>
-      <div class="image-spinner">
-        <div class="spinner-grow text-primary" role="status">
-          <span class="sr-only">Loading...</span>
-        </div>
-      </div>
-    </template>
+  <div class="image">
+    <div
+      v-if="!loaded"
+      :style="style"
+    ></div>
     <img
+      v-if="zoomSrc"
       v-show="loaded"
       :src="src"
       :data-zoom-src="zoomSrc"
       :alt="alt"
-      class="img-responsive"
-      @load="loaded=true"
       data-zoomable
+      class="img-responsive"
+      @load="loaded = true"
+    >
+    <img
+      v-else
+      v-show="loaded"
+      :src="src"
+      :alt="alt"
+      class="img-responsive"
+      @load="loaded = true"
     >
     <slot v-show="loaded"/>
   </div>
@@ -29,8 +34,8 @@ export default {
     src: { default: null, type: String, required: true },
     zoomSrc: { default: null, type: String, required: false },
     alt: { default: null, type: String, required: false },
-    ratioWidth: { default: null, type: Number, required: true },
-    ratioHeight: { default: null, type: Number, required: true }
+    width: { default: null, type: Number, required: true },
+    height: { default: null, type: Number, required: true }
   },
 
   data: () => ({
@@ -42,29 +47,19 @@ export default {
       return {
         'width': '100%',
         'height': '0px',
-        'padding-top': (this.ratioHeight / this.ratioWidth * 100).toFixed(2) + '%'
+        'padding-top': (this.height / this.width * 100).toFixed(2) + '%'
       }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 .image {
-  position: relative;
-  .image-spinner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  img {
-    width: 100%;
-    height: auto;
-  }
+  background: #e0e0e0;
+}
+.image img {
+  width: 100%;
+  height: auto;
 }
 </style>

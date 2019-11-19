@@ -1,0 +1,125 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+  @apply bg-gray-100 text-black;
+  min-width: 1024px;
+}
+
+.feather.filled {
+  fill: currentColor;
+}
+
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent !important;
+}
+
+.btn-loading:after {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  width: 1em;
+  position: absolute;
+  left: calc(50% - (1em / 2));
+  top: calc(50% - (1em / 2));
+}
+
+.spinner {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #7158e2;
+  border-radius: 50%;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  margin: 0 auto;
+  height: 2em;
+  width: 2em;
+  left: calc(50% - (2em / 2));
+  top: calc(50% - (2em / 4));
+}
+
+@keyframes spinAround {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
+}
+
+.illustration-thumbnail {
+  @apply block relative bg-black rounded overflow-hidden;
+}
+
+.illustration-thumbnail .image {
+  @apply block w-full h-full;
+  opacity: 1;
+}
+
+.illustration-thumbnail .overlay {
+  @apply absolute inset-0 text-white;
+  opacity: 0;
+}
+
+.illustration-thumbnail .overlay .overlay-content {
+  @apply absolute text-right;
+  right: 12px;
+  bottom: 12px;
+}
+
+.illustration-thumbnail:hover .image {
+  opacity: 0.5;
+}
+
+.illustration-thumbnail:hover .overlay {
+  opacity: 1;
+}
+
+form .form-group {
+  margin-bottom: 16px;
+}
+
+form .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.navbar-space {
+  height: 57px;
+}
+
+.medium-zoom-overlay,
+.medium-zoom-image {
+  z-index: 100;
+}
+
+/* CHECKBOX TOGGLE SWITCH */
+.form-switch {
+  @apply relative select-none w-12 mr-2 leading-normal;
+}
+.form-switch-checkbox {
+  @apply hidden;
+}
+.form-switch-label {
+  @apply block overflow-hidden cursor-pointer bg-white border rounded-full h-6  shadow-inner;
+  transition: background-color 0.2s ease-in;
+}
+.form-switch-label:before {
+  @apply absolute block bg-white w-6 border rounded-full -ml-1;
+  top: 0;
+  bottom: 0;
+
+  right: 50%;
+  content: "";
+  transition: all 0.2s ease-in;
+}
+.form-switch-checkbox:checked + .form-switch-label {
+  @apply bg-primary shadow-none;
+}
+.form-switch-checkbox:checked + .form-switch-label:before {
+  right: 0;
+}

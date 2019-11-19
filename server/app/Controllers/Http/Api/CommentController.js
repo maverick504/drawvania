@@ -72,7 +72,7 @@ class CommentController {
     }
 
     const rules = {
-      comment: `string|max:280`
+      comment: `required|string|max:280`
     }
 
     const { comment } = request.only([ 'comment' ])

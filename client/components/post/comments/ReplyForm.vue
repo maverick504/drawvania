@@ -1,22 +1,28 @@
 <template>
-  <div class="reply-form">
-    <div class="reply-form-avatar-wrap">
-      <avatar :user="loggedInUser" size="sm"/>
+  <div class="flex pb-4">
+    <div class="flex-shrink-0">
+      <avatar :user="loggedInUser" size="8" class="mr-2"/>
     </div>
-    <div class="reply-form-body">
-      <b-form-input
+    <div class="flex-grow">
+      <t-input
         ref="commentInput"
-        v-model="comment"
+        :status="error ? 'error' : null"
+        baseClass="w-full border-b-2 border-gray-200 focus:border-primary"
+        defaultSizeClass="px-2 pt-1 pb-1"
+        errorStatusClass="border-danger focus:border-danger"
+        v-model="content"
         placeholder="Write a reply to this conversation..."
         autocomplete="off"
         @keyup.enter="submit"
       />
-      <div v-if="error" class="comment-error-wrap form-text text-danger">
+      <span v-if="error" class="text-danger text-sm">
         {{ error }}
+      </span>
+      <div class="text-sm pt-1">
+        <button class="text-primary mr-2" @click.prevent="cancel()">
+          Cancel
+        </button>
       </div>
-      <button class="btn btn-link" @click.prevent="cancel">
-        Cancel
-      </button>
     </div>
   </div>
 </template>
@@ -36,18 +42,20 @@ export default {
 
   data: function () {
     return {
-      comment: '',
+      content: '',
       busy: false,
       error: null
     }
   },
 
   computed: {
-    ...mapGetters(['loggedInUser']),
+    ...mapGetters([ 'loggedInUser' ]),
   },
 
   mounted () {
-    this.$refs.commentInput.$el.focus()
+    this.$nextTick(() => {
+      this.$refs.commentInput.$el.focus()
+    })
   },
 
   methods: {
@@ -56,12 +64,12 @@ export default {
         return
       }
 
-      this.error = ''
+      this.error = null
       this.busy = true
 
       try {
         const response = await this.$axios.post(`comments/${this.parentComment.id}/reply`, {
-          comment: this.comment
+          comment: this.content
         })
         const reply = response.data.data
 
@@ -85,29 +93,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.reply-form {
-  margin-top: 8px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  .reply-form-avatar-wrap {
-    flex-grow: 0;
-    margin-right: 12px;
-    .avatar {
-      display: block;
-    }
-  }
-  .reply-form-body {
-    flex-grow: 1;
-    padding: 1px 0;
-    .form-control {
-      padding: 0;
-      height: 32px;
-      border: none;
-      box-shadow: none;
-    }
-  }
-}
-</style>

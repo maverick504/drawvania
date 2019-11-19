@@ -1,12 +1,7 @@
 <template>
-  <b-button
-    variant="link"
-    v-b-tooltip.hover title="Like"
-    class="like-button" style="display: inline-block; padding: 0;"
-    @click="toggleLike()"
-  >
-    <heart-icon size="2x" :class="{ 'filled': userLiked }"/>
-  </b-button>
+  <button class="text-red" @click="toggleLike()">
+    <heart-icon size="2x" :class="{ 'filled': loggedInUserLiked }"/>
+  </button>
 </template>
 
 <script>
@@ -21,7 +16,7 @@ export default {
   props: {
     likeEndpoint: { type: String, required: true },
     unlikeEndpoint: { type: String, required: true },
-    userLiked: { type: Boolean, default: false, required: false },
+    loggedInUserLiked: { type: Boolean, default: false, required: false },
     totalLikes: { type: Number, required: true }
   },
 
@@ -32,7 +27,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isAuthenticated']),
+    ...mapGetters([ 'isAuthenticated' ]),
   },
 
   methods: {
@@ -46,7 +41,7 @@ export default {
         return
       }
 
-      if (!this.userLiked) {
+      if (!this.loggedInUserLiked) {
         await this.like()
       } else {
         await this.unlike()
@@ -56,13 +51,13 @@ export default {
     async like () {
       this.busy = true
 
-      this.$emit('update:userLiked', true)
+      this.$emit('update:loggedInUserLiked', true)
       this.$emit('update:totalLikes', this.totalLikes + 1)
 
       try {
         await this.$axios.post(this.likeEndpoint)
       } catch(error) {
-        this.$emit('update:userLiked', false)
+        this.$emit('update:loggedInUserLiked', false)
         this.$emit('update:totalLikes', this.totalLikes - 1)
       }
 
@@ -72,13 +67,13 @@ export default {
     async unlike () {
       this.busy = true
 
-      this.$emit('update:userLiked', false)
+      this.$emit('update:loggedInUserLiked', false)
       this.$emit('update:totalLikes', this.totalLikes - 1)
 
       try {
         await this.$axios.post(this.unlikeEndpoint)
       } catch(error) {
-        this.$emit('update:userLiked', true)
+        this.$emit('update:loggedInUserLiked', true)
         this.$emit('update:totalLikes', this.totalLikes + 1)
       }
 

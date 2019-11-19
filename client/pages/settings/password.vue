@@ -1,45 +1,46 @@
 <template>
-  <b-form @submit.prevent="update">
+  <form method="post" @submit.prevent="update">
 
     <error-alert :form="form"/>
 
-    <b-form-group horizontal label="Current password">
-      <b-form-input
-        :class="{ 'is-invalid': form.hasErrors('current_password') }"
+    <form-group label="Current password">
+      <t-input
         v-model="form.current_password"
+        :class="{ 'border-danger': form.hasErrors('current_password') }"
         type="password"
         placeholder="Current password"
       />
       <has-error :form="form" field="current_password"/>
-    </b-form-group>
+    </form-group>
 
-    <b-form-group horizontal label="New password">
-      <b-form-input
-        :class="{ 'is-invalid': form.hasErrors('new_password') }"
+    <form-group label="New password">
+      <t-input
         v-model="form.new_password"
+        :class="{ 'border-danger': form.hasErrors('new_password') }"
         type="password"
         placeholder="New password"
       />
       <has-error :form="form" field="new_password"/>
-    </b-form-group>
+    </form-group>
 
-    <b-form-group horizontal label="New password confirmation">
-      <b-form-input
-        :class="{ 'is-invalid': form.hasErrors('new_password_confirmation') }"
+    <form-group label="New password confirmation">
+      <t-input
+        :class="{ 'border-danger': form.hasErrors('new_password_confirmation') }"
         v-model="form.new_password_confirmation"
         type="password"
+        id="new_password_confirmation"
         placeholder="New password confirmation"
       />
       <has-error :form="form" field="new_password_confirmation"/>
-    </b-form-group>
+    </form-group>
 
-    <b-form-group horizontal>
-      <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
+    <div class="form-group">
+      <t-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
         Update
-      </b-button>
-    </b-form-group>
+      </t-button>
+    </div>
 
-  </b-form>
+  </form>
 </template>
 
 <script>

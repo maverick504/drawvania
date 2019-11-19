@@ -1,15 +1,15 @@
 <template>
-  <b-form @submit.prevent="update">
+  <form method="post" @submit.prevent="update">
 
     <error-alert :form="form"/>
 
-    <b-form-group horizontal>
-      <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
+    <div class="form-group">
+      <t-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
         Update
-      </b-button>
-    </b-form-group>
+      </t-button>
+    </div>
 
-  </b-form>
+  </form>
 </template>
 
 <script>

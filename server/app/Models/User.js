@@ -19,8 +19,8 @@ class User extends Model {
         avatar: {
           columnName: 'avatar',
           variations: {
-            '50x50': { width: 50, height: 50 },
-            '300x300': { width: 300, height: 300 }
+            'small': { width: 50, height: 50 },
+            'large': { width: 300, height: 300 }
           }
         }
       }
@@ -65,9 +65,28 @@ class User extends Model {
     return ['password']
   }
 
+  async countFollowings () {
+    const query = await this.followings().count()
+    this.total_followings = query[0]['count(*)']
+
+    await this.save()
+  }
+
+  async countFollowers () {
+    const query = await this.followers().count()
+    this.total_followers = query[0]['count(*)']
+
+    await this.save()
+  }
+
   async likedPost (id) {
-    const post = await this.likedPosts().where('posts.id', '=', id).first()
-    return post ? 1 : 0
+    const post = await this.likedPosts().where('post_id', '=', id).first()
+    return post ? true : false
+  }
+
+  async following (id) {
+    const user = await this.followings().where('followed_id', '=', id).first()
+    return user ? true : false
   }
 
   posts () {
@@ -77,6 +96,16 @@ class User extends Model {
   likedPosts () {
     return this.belongsToMany('App/Models/Post')
     .pivotModel('App/Models/PostLike')
+  }
+
+  followers () {
+    return this.belongsToMany('App/Models/User', 'followed_id', 'follower_id', 'id', 'id')
+    .pivotModel('App/Models/UserFollowing')
+  }
+
+  followings () {
+    return this.belongsToMany('App/Models/User', 'follower_id', 'followed_id', 'id', 'id')
+    .pivotModel('App/Models/UserFollowing')
   }
 }
 

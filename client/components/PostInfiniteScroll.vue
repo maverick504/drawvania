@@ -1,31 +1,29 @@
 <template>
-  <div class="infinite-scroll">
-    <post-item
-      v-for="(post, index) in posts"
-      :key="index"
-      :post="post"
-      class="mb-3"
-      @showLikesModal="showLikesModal(post.id)"
-      @showRedrawsModal="showRedrawsModal(post.id)"
-    />
-    <div v-if="loading" class="spinner-container text-primary">
-      <div class="spinner-grow" role="status">
-        <span class="sr-only">Loading...</span>
+  <div>
+    <template v-if="!loading && posts.length === 0">
+      <slot name="empty-state"></slot>
+    </template>
+    <template v-else>
+      <post-item v-for="(post, index) in posts" :key="index" :post="post"/>
+      <div v-if="loading" class="py-4 text-center text-primary">
+        <div class="spinner" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
       </div>
-    </div>
-    <div v-if="page >= lastPage" class="end-of-results">
-      end of results
-    </div>
-    <likes-modal ref="likesModal" :endpoint="likesEndpoint"/>
-    <redraws-modal ref="RedrawsModal" :endpoint="redrawsEndpoint"/>
+      <div v-if="posts.length > 0 && page >= lastPage" class="py-6 text-center text-gray-600 uppercase">
+        end of results
+      </div>
+      <likes-modal/>
+      <redraws-modal/>
+    </template>
   </div>
 </template>
 
 <script>
 import mediumZoom from 'medium-zoom'
 import PostItem from '@/components/post/PostItem.vue'
-import LikesModal from '@/components/LikesModal.vue'
-import RedrawsModal from '@/components/RedrawsModal.vue'
+import LikesModal from '@/components/modals/LikesModal.vue'
+import RedrawsModal from '@/components/modals/RedrawsModal.vue'
 
 export default {
   components: {
@@ -46,9 +44,7 @@ export default {
       posts: [],
       loading: false,
       page: 1,
-      lastPage: 2,
-      likesEndpoint: null,
-      redrawsEndpoint: null
+      lastPage: 2
     }
   },
 
@@ -64,7 +60,7 @@ export default {
   methods: {
     onScroll (event) {
       const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight
-      if (bottomOfWindow && !this.loading && (this.page !== this.lastPage)) {
+      if (bottomOfWindow && !this.loading && (this.page < this.lastPage)) {
         this.page++
         this.loadMore()
       }
@@ -86,20 +82,6 @@ export default {
       }, 100)
 
       this.loading = false
-    },
-
-    showLikesModal (postId) {
-      this.likesEndpoint = `/posts/${postId}/likes`
-      this.$nextTick(() => {
-        this.$bvModal.show('likes-modal')
-      })
-    },
-
-    showRedrawsModal (postId) {
-      this.redrawsEndpoint = `/posts/${postId}/redraws`
-      this.$nextTick(() => {
-        this.$bvModal.show('redraws-modal')
-      })
     }
   }
 }

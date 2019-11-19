@@ -1,5 +1,5 @@
 <template>
-  <span v-if="form.hasErrors(field)" class="form-text text-danger">
+  <span v-if="form.hasErrors(field)" class="text-danger text-sm">
     {{ form.getFirstError(field) }}
   </span>
 </template>

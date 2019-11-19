@@ -1,6 +1,6 @@
 <template>
-  <figure :class="{ [`avatar-${size}`]: true }" :data-initial="user.avatar===null?user.username.substr(0, 2):''" class="avatar">
-    <img v-if="user.avatar!==null" :src="imageUrl" :alt="user.username">
+  <figure :class="{ [`w-${size}`]: true, [`h-${size}`]: true }" class="rounded-full overflow-hidden">
+    <img :src="imageUrl" :alt="`Avatar of ${user.username}`" class="w-full h-full">
   </figure>
 </template>
 
@@ -8,16 +8,20 @@
 export default {
   props: {
     user: { type: Object, required: true },
-    size: { type: String, default: 'md' }
+    size: { type: String, default: '10' }
   },
 
   computed: {
     imageUrl () {
-      if(this.size === 'xl') {
-        return this.user.avatar['300x300'].url
+      if(this.user.avatar) {
+        if(parseInt(this.size) >= 16) {
+          return this.user.avatar['large'].url
+        }
+
+        return this.user.avatar['small'].url
       }
 
-      return this.user.avatar['50x50'].url
+      return 'https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif'
     }
   }
 }

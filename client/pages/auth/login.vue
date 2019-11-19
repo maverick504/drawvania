@@ -1,44 +1,45 @@
 <template>
-  <b-card class="auth-card">
-    <h1 class="h1 text-center">Drawvania</h1>
-    <p class="text-center mb-3">Log-in</p>
-    <b-form method="post" @submit.prevent="login">
+  <div>
+    <h1 class="text-2xl text-center mb-4">Log in</h1>
+    <form method="post" @submit.prevent="login">
 
       <error-alert :form="form"/>
 
-      <b-form-group horizontal label="Email">
-        <b-form-input
-          :class="{ 'is-invalid': form.hasErrors('email') }"
+      <div class="form-group">
+        <label class="block text-gray-700 mb-2" for="email">Email</label>
+        <t-input
+          :class="{ 'border-danger': form.hasErrors('email') }"
           v-model="form.email"
-          type="email"
+          id="email"
           placeholder="Email"
         />
         <has-error :form="form" field="email"/>
-      </b-form-group>
+      </div>
 
-      <b-form-group horizontal label="Password">
-        <b-form-input
-          :class="{ 'is-invalid': form.hasErrors('password') }"
+      <div class="form-group">
+        <label class="block text-gray-700 mb-2" for="password">Password</label>
+        <t-input
+          :class="{ 'border-danger': form.hasErrors('password') }"
           v-model="form.password"
+          id="password"
           type="password"
           placeholder="Password"
         />
         <has-error :form="form" field="password"/>
-      </b-form-group>
-
-      <b-form-group horizontal>
-        <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary" block>
-          Login
-        </b-button>
-      </b-form-group>
-
-      <div class="text-center">
-        Don't have an account?
-        <nuxt-link :to="{ name: 'auth.register' }">Register</nuxt-link>
       </div>
 
-    </b-form>
-  </b-card>
+      <div class="form-group">
+        <t-button :class="{ 'btn-loading': form.busy }" class="block w-full" type="submit" variant="primary">
+          Login
+        </t-button>
+      </div>
+
+      <div class="text-center">
+        Don't have an account? <nuxt-link :to="{ name: 'auth.register' }" class="text-primary">Register</nuxt-link>
+      </div>
+
+    </form>
+  </div>
 </template>
 
 <script>
@@ -60,7 +61,6 @@ export default {
 
   methods: {
     async login() {
-      this.form.clearErrors()
       this.form.busy = true
 
       try {

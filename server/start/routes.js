@@ -39,9 +39,18 @@ Route.group(() => {
   Route.patch('settings/password', 'Api/SettingsController.updatePassword').middleware(['auth:jwt'])
 
   Route.get('feed/global', 'Api/FeedController.global')
+  Route.get('feed/followings', 'Api/FeedController.followings')
 
+  Route.get('users/:username', 'Api/UserController.show')
+  Route.get('users/:username/followers', 'Api/UserController.followers')
+  Route.get('users/:username/followings', 'Api/UserController.followings')
+  Route.post('users/:username/follow', 'Api/UserController.follow')
+  Route.post('users/:username/unfollow', 'Api/UserController.unfollow')
+
+  Route.get('users/:username/posts', 'Api/PostController.userIndex')
   Route.post('posts', 'Api/PostController.store').middleware(['auth:jwt'])
   Route.get('posts/:id', 'Api/PostController.show')
+  Route.get('posts/:id/redraws', 'Api/PostController.redraws')
   Route.patch('posts/:id', 'Api/PostController.update').middleware(['auth:jwt'])
   Route.delete('posts/:id', 'Api/PostController.destroy').middleware(['auth:jwt'])
 
@@ -54,10 +63,6 @@ Route.group(() => {
   Route.patch('comments/:id', 'Api/CommentController.update').middleware(['auth:jwt'])
   Route.delete('comments/:id', 'Api/CommentController.destroy').middleware(['auth:jwt'])
   Route.post('comments/:id/reply', 'Api/CommentController.reply').middleware(['auth:jwt'])
-
-  Route.get('posts/:id/redraws', 'Api/PostController.redraws')
-
-  Route.get('users/:username', 'Api/UserController.show')
 
   Route.get('miscellaneous/weeklyRanking', 'Api/MiscellaneousController.weeklyRanking')
 }).prefix('api')

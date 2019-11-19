@@ -17,6 +17,7 @@ class PostMedia extends Model {
             '900w': { width: 900 },
             '600w': { width: 600 },
             '300w': { width: 300 },
+            '300x300': { width: 300, height: 300 },
             '100x100': { width: 100, height: 100 },
             '50x50': { width: 50, height: 50 }
           }

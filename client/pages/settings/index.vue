@@ -1,25 +1,22 @@
 <template>
-  <div>
-    <h1 class="title">Settings</h1>
-    <ul class="nav nav-tabs nav-justified" style="max-width: calc(100vw - 4px); overflow-x: auto;">
-      <li class="nav-item">
-        <router-link :to="{ name: 'settings.profile' }" active-class="active" class="nav-link">
-          Profile
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link :to="{ name: 'settings.password' }" active-class="active" class="nav-link">
-          Password
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link :to="{ name: 'settings.notifications' }" active-class="active" class="nav-link">
-          Notifications
-        </router-link>
-      </li>
-    </ul>
-    <div class="py-3">
-      <nuxt-child/>
+  <div class="py-16">
+    <div class="container mx-auto bg-white border rounded overflow-hidden">
+      <div class="flex">
+        <div class="w-1/4 border-r">
+          <router-link :to="{ name: 'settings.profile' }" active-class="border-l-4 border-primary" class="block p-4 hover:bg-gray-100 hover:text-primary">
+            Edit Profile
+          </router-link>
+          <router-link :to="{ name: 'settings.password' }" active-class="border-l-4 border-primary" class="block p-4 hover:bg-gray-100 hover:text-primary">
+            Change Password
+          </router-link>
+          <router-link :to="{ name: 'settings.notifications' }" active-class="border-l-4 border-primary" class="block p-4 hover:bg-gray-100 hover:text-primary">
+            Notifications Settings
+          </router-link>
+        </div>
+        <div class="w-3/4 px-4 py-8">
+          <nuxt-child/>
+        </div>
+      </div>
     </div>
   </div>
 </template>

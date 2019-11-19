@@ -1,58 +1,59 @@
 <template>
   <div>
     <div class="text-center mb-3">
-      <avatar v-if="loggedInUser" :user="loggedInUser" size="xl" style="cursor: pointer;" @click.native="$refs.avatarFile.click()"/>
-      <input ref="avatarFile" class="d-none" type="file" @change="avatarFileChanged()">
+      <avatar v-if="loggedInUser" :user="loggedInUser" size="40" class="mx-auto cursor-pointer" @click.native="$refs.avatarFile.click()"/>
+      <input ref="avatarFile" class="hidden" type="file" @change="avatarFileChanged()">
     </div>
-    <b-form @submit.prevent="update">
+
+    <form method="post" @submit.prevent="update">
 
       <error-alert :form="form"/>
 
-      <b-form-group horizontal label="Username">
-        <b-form-input
-          :class="{ 'is-invalid': form.hasErrors('username') }"
+      <form-group label="Username">
+        <t-input
           v-model="form.username"
-          type="text"
+          :class="{ 'border-danger': form.hasErrors('username') }"
           placeholder="Username"
         />
         <has-error :form="form" field="username"/>
-      </b-form-group>
+      </form-group>
 
-      <b-form-group horizontal label="Sex">
-        <b-form-select
+      <form-group label="Gender">
+        <t-select
           v-model="form.gender"
-          :options="[ { value: null, text: 'Sex' }, { value: 'male', text: 'Male' }, { value: 'female', text: 'Female' } ]"
+          :options="[
+            { value: 'male', text: 'Male' },
+            { value: 'female', text: 'Female' }
+          ]"
         />
         <has-error :form="form" field="gender"/>
-      </b-form-group>
+      </form-group>
 
-      <b-form-group horizontal label="Location">
-        <b-form-input
-          :class="{ 'is-invalid': form.hasErrors('location') }"
+      <form-group label="Location">
+        <t-input
           v-model="form.location"
-          type="text"
+          :class="{ 'border-danger': form.hasErrors('location') }"
           placeholder="Location"
         />
         <has-error :form="form" field="location"/>
-      </b-form-group>
+      </form-group>
 
-      <b-form-group horizontal label="About">
-        <b-form-textarea
-          :class="{ 'is-invalid': form.hasErrors('about') }"
+      <form-group label="About">
+        <t-textarea
           v-model="form.about"
-          placeholder="Enter something about you..."
-          rows="3"
-        ></b-form-textarea>
+          :class="{ 'border-danger': form.hasErrors('about') }"
+          placeholder="About"
+        />
         <has-error :form="form" field="about"/>
-      </b-form-group>
+      </form-group>
 
-      <b-form-group horizontal>
-        <b-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
+      <div class="form-group">
+        <t-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
           Update
-        </b-button>
-      </b-form-group>
+        </t-button>
+      </div>
 
-    </b-form>
+    </form>
   </div>
 </template>
 

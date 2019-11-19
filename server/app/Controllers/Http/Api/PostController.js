@@ -4,11 +4,43 @@ const { validateAll } = use('Validator')
 const Helpers = use('Helpers')
 const Drive = use('Drive')
 const Database = use('Database')
+const User = use('App/Models/User')
 const Post = use('App/Models/Post')
 const PostMedia = use('App/Models/PostMedia')
 const PostLike = use('App/Models/PostLike')
 
 class PostController {
+  async userIndex({ request, params, auth, response }) {
+    const user = await User.query().where('username', '=', params.username).firstOrFail()
+
+    var query = Post.query()
+
+    if(auth.user) {
+      query
+      .select([ 'posts.*' ])
+      query
+      .select([ 'posts.*', Database.raw("IF((`post_likes`.`id` IS NOT NULL AND `post_likes`.`deleted_at` IS NULL), 1, 0) AS logged_in_user_liked") ])
+      .leftJoin('post_likes', function () {
+        this
+        .on('post_id', 'posts.id')
+        .on('user_id', auth.user.id)
+      })
+    } else {
+      query
+      .select([ 'posts.*' ])
+    }
+
+    return await query
+    .with('author')
+    .with('media')
+    .with('parentPost.author')
+    .with('parentPost.media')
+    .where('posts.date', '<=', new Date())
+    .where('posts.author_id', '=', user.id)
+    .orderBy('posts.created_at', 'desc')
+    .paginate(request.get().page, 9)
+  }
+
   async store({ request, auth, response }) {
     const rules = {
       description: `string|max:280`,
@@ -210,7 +242,7 @@ class PostController {
 
     // Check if the authenticated user liked this post
     if(auth.user) {
-      post.user_liked = await auth.user.likedPost(post.id)
+      post.logged_in_user_liked = await auth.user.likedPost(post.id)
     }
 
     return post

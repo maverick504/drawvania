@@ -33,7 +33,8 @@ class Post extends Model {
   static get casts () {
     return {
       redrawable: 'boolean',
-      user_liked: 'boolean'
+      logged_in_user_liked: 'boolean',
+      logged_in_user_is_follower: 'boolean'
     }
   }
 

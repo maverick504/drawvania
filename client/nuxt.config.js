@@ -22,21 +22,15 @@ module.exports = {
   ** Customize the progress-bar color
   */
   loading: {
-    color: '#45aaf2',
-    height: '5px'
+    color: '#7158e2',
+    height: '4px'
   },
-
-  /*
-  ** Global CSS
-  */
-  css: [
-    { src: '~assets/scss/app.scss', lang: 'scss' }
-  ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~plugins/vue-tailwind', ssr: true },
     { src: '~plugins/event-bus', ssr: true },
     { src: '~plugins/global-components', ssr: true },
     { src: '~plugins/vue-moment', ssr: true },
@@ -52,7 +46,7 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/router',
-    'bootstrap-vue/nuxt',
+    '@nuxtjs/tailwindcss'
   ],
 
   /*

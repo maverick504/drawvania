@@ -1,34 +1,34 @@
 <template>
-  <div>
-    <div v-if="loading && comments.length === 0" class="card-footer bg-white py-5 text-center text-primary">
-      <div class="spinner-grow" role="status">
+  <div class="border-t">
+    <div v-if="loading && comments.length === 0" class="text-primary text-center py-5">
+      <div class="spinner" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </div>
     <template v-else>
-      <div v-if="isAuthenticated" class="card-footer">
-        <comment-form
-          :post="post"
-          @commentPosted="onCommentPosted"
-        />
-      </div>
+      <comment-form v-if="isAuthenticated" :post="post" @commentPosted="onCommentPosted"/>
       <template v-if="comments.length > 0">
-        <div class="card-footer bg-white">
+        <div class="mt-4">
           <comment-item
-            v-for="(comment, index) in comments"
-            :key="index" :post="post"
+            v-for="comment in comments"
+            :key="comment.id"
+            :post="post"
             :comment="comment"
             @commentDeleted="onCommentDeleted"
           />
         </div>
-        <div v-if="loading" class="card-footer bg-white py-5 text-center text-primary">
-          <div class="spinner-grow" role="status">
+        <div v-if="loading" class="text-primary text-center py-5">
+          <div class="spinner" role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </div>
-        <div v-else class="card-footer d-flex">
-          <a v-if="page < lastPage" href="#" @click.prevent="loadNextPage()">Show more comments</a>
-          <span class="ml-auto">{{ comments.length }} of {{ total }}</span>
+        <div class="flex border-t border-gray-300 p-4">
+          <div class="flex-grow">
+            <button v-if="page < lastPage" type="button" class="text-primary">Show more comments</button>
+          </div>
+          <div class="flex-initial">
+            <span class="text-gray-600">{{ comments.length }} of {{ total }}</span>
+          </div>
         </div>
       </template>
     </template>
@@ -61,7 +61,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isAuthenticated', 'loggedInUser']),
+    ...mapGetters([ 'isAuthenticated', 'loggedInUser' ]),
   },
 
   mounted () {

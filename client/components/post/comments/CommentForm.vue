@@ -1,16 +1,20 @@
 <template>
-  <div class="comment-form">
-    <div class="comment-form-avatar-wrap">
-      <avatar :user="loggedInUser" size="md"/>
+  <div class="flex p-4">
+    <div class="flex-shrink-0">
+      <avatar :user="loggedInUser" size="10" class="mr-2"/>
     </div>
-    <div class="comment-form-body">
-      <b-form-input
+    <div class="flex-grow">
+      <t-input
+        :status="error ? 'error' : null"
+        baseClass="w-full border-b-2 border-gray-200 focus:border-primary"
+        defaultSizeClass="px-2 py-2"
+        errorStatusClass="border-danger focus:border-danger"
         v-model="content"
         placeholder="Write a comment about this..."
         autocomplete="off"
         @keyup.enter="submit"
       />
-      <span v-if="error" class="form-text text-danger">
+      <span v-if="error" class="text-danger text-sm">
         {{ error }}
       </span>
     </div>
@@ -40,7 +44,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['loggedInUser'])
+    ...mapGetters([ 'loggedInUser' ])
   },
 
   methods: {
@@ -49,7 +53,7 @@ export default {
         return
       }
 
-      this.error = ''
+      this.error = null
       this.busy = true
 
       try {
@@ -78,22 +82,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.comment-form {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  .comment-form-avatar-wrap {
-    flex-grow: 0;
-    margin-right: 12px;
-    .avatar {
-      display: block;
-    }
-  }
-  .comment-form-body {
-    flex-grow: 1;
-    padding: 1px 0;
-  }
-}
-</style>

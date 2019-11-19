@@ -1,67 +1,75 @@
 <template>
-  <div class="comment-item">
-    <div class="comment-avatar-wrap">
-      <a href="#">
-        <avatar :user="comment.author" size="md"/>
-      </a>
+  <div class="flex px-4 mb-4">
+    <div class="flex-shrink-0">
+      <router-link :to="{ name: 'users.show', params: { username: comment.author.username } }" class="block mr-2">
+        <avatar :user="comment.author" size="10"/>
+      </router-link>
     </div>
-    <div class="comment-body">
+    <div class="flex-grow">
       <div v-show="!editing">
-        <div class="comment-header">
-          <a href="#" class="comment-header-username">{{ '@' + comment.author.username }}</a> &bull;
-          <span v-if="comment.updated_at > comment.created_at"><abbr :title="`Originally created on ${comment.created_at}`">edited</abbr> {{ comment.updated_at | moment("from", "now") }}</span>
-          <span v-else class="comment-header-date">{{ comment.created_at | moment("from", "now") }}</span>
+        <div class="block">
+          <router-link :to="{ name: 'users.show', params: { username: comment.author.username } }" class="font-bold mr-1">
+            {{ comment.author.username }}
+          </router-link>
+          <span class="inline-block text-sm gray-600">
+            {{ comment.created_at | moment("from", "now") }}
+            <abbr v-if="comment.updated_at > comment.created_at" :title="`Edited on ${comment.updated_at}`">(edited)</abbr>
+          </span>
         </div>
-        <div class="comment-content">
-          {{ comment.comment }}
-        </div>
+        <p>{{ comment.comment }}</p>
       </div>
-      <div v-if="editing" class="comment-edit-box">
-        <b-form-input
-          ref="editCommentInput"
-          v-model="newContent"
-          placeholder="Write a comment about this..."
-          autocomplete="off"
-          @keyup.enter="confirmEditing"
-        />
-      </div>
-      <div v-if="error" class="comment-error-wrap form-text text-danger">
+      <t-input
+        v-if="editing"
+        ref="editCommentInput"
+        :status="error ? 'error' : null"
+        baseClass="w-full border-b-2 border-gray-200 focus:border-primary"
+        defaultSizeClass="px-2 pt-2 pb-1"
+        errorStatusClass="border-danger focus:border-danger"
+        v-model="newContent"
+        placeholder="Write a comment about this..."
+        autocomplete="off"
+        @keyup.enter="confirmEditing"
+      />
+      <div v-if="error" class="text-danger text-sm">
         {{ error }}
       </div>
-      <div class="comment-action-box">
+      <div class="text-sm pt-1">
         <template v-if="editing">
-          <a href="#" @click.prevent="cancelEditing">Cancel</a>
+          <button class="text-primary mr-2" @click.prevent="cancelEditing()">
+            Cancel
+          </button>
         </template>
         <template v-else-if="isAuthenticated">
-          <button v-if="comment.replies.length === 0 && !showingReplyForm" class="btn btn-link" @click.prevent="showingReplyForm = true">
+          <button v-if="comment.replies.length === 0 && !showReplyForm" class="text-primary mr-2" @click.prevent="replyButtonClicked">
             Reply
-          </button><!--
-       --><button v-if="comment.author_id === loggedInUser.id" class="btn btn-link" @click.prevent="startEditing">
+          </button>
+          <button v-if="comment.author_id === loggedInUser.id" class="text-primary mr-2" @click.prevent="editButtonClicked">
             Edit
-          </button><!--
-       --><button v-if="post.author_id === loggedInUser.id || comment.author_id === loggedInUser.id" class="btn btn-link" @click.prevent="askDelete">
+          </button>
+          <button v-if="post.author_id === loggedInUser.id || comment.author_id === loggedInUser.id" class="text-primary mr-2" @click.prevent="deleteButtonClicked">
             Delete
           </button>
         </template>
       </div>
-      <div class="comment-replies">
+      <div v-if="comment.replies.length > 0" class="mt-4">
         <reply-item
-          v-for="(reply, index) in comment.replies"
-          :key="index"
+          v-for="reply in comment.replies"
+          :key="reply.id"
           :post="post"
           :comment="reply"
           @replyDeleted="onReplyDeleted"
         />
-        <button v-if="comment.replies.length > 0 && !showingReplyForm && isAuthenticated" class="btn btn-link" @click.prevent="showingReplyForm = true">
-          Reply to this conversation
-        </button>
-        <reply-form
-          v-if="showingReplyForm"
-          :parentComment="comment"
-          @cancelled="showingReplyForm = false"
-          @replyPosted="onReplyPosted"
-        />
       </div>
+      <button v-if="comment.replies.length > 0 && !showReplyForm && isAuthenticated" class="text-primary text-sm mt-4" @click.prevent="replyButtonClicked">
+        Reply to this conversation
+      </button>
+      <reply-form
+        v-if="showReplyForm"
+        :parentComment="comment"
+        class="mt-4"
+        @cancelled="showReplyForm = false"
+        @replyPosted="onReplyPosted"
+      />
     </div>
   </div>
 </template>
@@ -87,7 +95,7 @@ export default {
 
   data: function () {
     return {
-      showingReplyForm: false,
+      showReplyForm: false,
       editing: false,
       newContent: '',
       busy: false,
@@ -96,12 +104,21 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isAuthenticated', 'loggedInUser']),
+    ...mapGetters([ 'isAuthenticated', 'loggedInUser' ]),
   },
 
   methods: {
+    replyButtonClicked () {
+      this.showReplyForm = true
+    },
+
+    editButtonClicked () {
+      this.startEditing()
+    },
+
     startEditing () {
       this.newContent = this.comment.comment
+      this.error = null
       this.editing = true
 
       this.$nextTick(() => {
@@ -114,7 +131,7 @@ export default {
         return
       }
 
-      this.error = ''
+      this.error = null
       this.busy = true
 
       try {
@@ -145,7 +162,7 @@ export default {
     },
 
     onReplyPosted (reply) {
-      this.showingReplyForm = false
+      this.showReplyForm = false
 
       this.comment.replies.push(reply)
       this.comment.total_replies++
@@ -161,7 +178,7 @@ export default {
       this.comment.total_replies--
     },
 
-    async askDelete () {
+    async deleteButtonClicked () {
       const result = await swal.fire({
         title: "Are you sure?",
         text: "The comment will be permanently deleted!",
@@ -189,49 +206,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.comment-item {
-  margin: 8px 0;
-  display: flex;
-  flex-direction: row;
-  .comment-avatar-wrap {
-    flex-grow: 0;
-    margin-right: 12px;
-    .avatar {
-      display: block;
-    }
-  }
-  .comment-body {
-    flex-grow: 1;
-    padding: 1px 0;
-    .comment-header {
-      margin-bottom: 4px;
-      .comment-header-username {
-        color: #343a40;
-        font-weight: bold;
-        text-decoration: none;
-      }
-    }
-    .comment-content {
-      margin-bottom: 4px;
-    }
-    .comment-edit-box {
-      .form-control {
-        padding-left: 0;
-        padding-right: 0;
-        border: none;
-        box-shadow: none;
-      }
-    }
-    .comment-error-wrap {
-      font-size: 0.9rem;
-    }
-    .btn-link {
-      font-size: 0.9rem;
-      padding: 0;
-      margin-right: 4px;
-    }
-  }
-}
-</style>
