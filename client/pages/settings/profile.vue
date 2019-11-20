@@ -22,6 +22,7 @@
         <t-select
           v-model="form.gender"
           :options="[
+            { value: '', text: '' },
             { value: 'male', text: 'Male' },
             { value: 'female', text: 'Female' }
           ]"

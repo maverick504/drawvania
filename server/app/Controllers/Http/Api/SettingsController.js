@@ -21,7 +21,7 @@ class SettingsController {
     if (!validation.fails()) {
       try {
         auth.user.username = username
-        auth.user.gender = gender
+        auth.user.gender = gender === '' ? null : gender
         auth.user.location = location
         auth.user.about = about
         await auth.user.save()
@@ -31,6 +31,7 @@ class SettingsController {
           data: auth.user
         })
       } catch(error) {
+        console.log(error)
         return response.status(400).json({
           status: 'error',
           message: 'Something went wrong, please try again.'
