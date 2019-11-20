@@ -65,6 +65,13 @@ class User extends Model {
     return ['password']
   }
 
+  async countPosts () {
+    const query = await this.posts().count()
+    this.total_posts = query[0]['count(*)']
+
+    await this.save()
+  }
+
   async countFollowings () {
     const query = await this.followings().count()
     this.total_followings = query[0]['count(*)']

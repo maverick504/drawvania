@@ -122,6 +122,9 @@ class PostController {
 
         trx.commit()
 
+        // Count posts on the author.
+        await auth.user.countPosts()
+
         // Count redraws on the parent post.
         if(parent_post_id) {
           await parentPost.countDirectChildrenPosts()

@@ -20,6 +20,11 @@ class Post extends Model {
       * Recount childrens on the parent post after the post is deleted.
       */
     this.addHook('afterDelete', async (postInstance) => {
+      // Count posts on the author.
+      const author = await postInstance.author().first()
+      await author.countPosts()
+
+      // Count redraws on the parent post.
       if(postInstance.parent_post_id) {
         const parentPost = await postInstance.parentPost().first()
         await parentPost.countDirectChildrenPosts()
