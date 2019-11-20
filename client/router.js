@@ -17,6 +17,8 @@ const routes = [
 
   { path: '/:username', name: 'users.show', component: page('users/show/index.vue') },
 
+  { path: '/notifications', name: 'notifications', component: page('notifications/index.vue') },
+
   { path: '/settings',
     component: page('settings/index.vue'),
     children: [

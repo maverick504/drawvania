@@ -22,8 +22,6 @@ class UserSchema extends Schema {
       table.integer('total_posts').unsigned().default(0)
       table.integer('total_followings').unsigned().default(0)
       table.integer('total_followers').unsigned().default(0)
-      table.integer('total_subscriptions').unsigned().default(0)
-      table.integer('total_lists').unsigned().default(0)
       table.timestamps()
     })
   }

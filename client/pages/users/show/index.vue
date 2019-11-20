@@ -8,7 +8,7 @@
         <div class="flex-grow">
           <div class="inline-flex items-center">
             <h1 class="inline-block text-3xl font-bold">{{ user.username }}</h1>
-            <t-button v-if="user.id === loggedInUser.id" :to="{ name: 'settings.profile' }" defaultSizeClass="px-4 py-1" class="ml-4">Edit Profile</t-button>
+            <t-button v-if="isAuthenticated && user.id === loggedInUser.id" :to="{ name: 'settings.profile' }" defaultSizeClass="px-4 py-1" class="ml-4">Edit Profile</t-button>
             <follow-button
               v-else
               :loggedInUserIsFollower.sync="user.logged_in_user_is_follower"
@@ -33,8 +33,7 @@
     <div class="border-t">
       <div class="container mx-auto">
         <div class="block text-center">
-          <a href="#" class="inline-block text-gray-900 border-t-4 border-primary hover:text-primary px-6 py-4"><b class="mr-1">{{ user.total_posts }}</b>Posts</a><!--
-       --><a href="#" class="inline-block text-gray-900 border-t-4 hover:text-primary px-6 py-4"><b class="mr-1">{{ user.total_lists }}</b>Lists</a>
+          <router-link :to="{ name: 'users.show', params: { username: user.username } }" class="inline-block text-gray-900 border-t-4 border-primary hover:text-primary px-6 py-4"><b class="mr-1">{{ user.total_posts }}</b>Posts</router-link>
         </div>
       </div>
     </div>
@@ -104,7 +103,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([ 'loggedInUser' ])
+    ...mapGetters([ 'isAuthenticated', 'loggedInUser' ])
   },
 
   async asyncData ({ $axios, params, error }) {
