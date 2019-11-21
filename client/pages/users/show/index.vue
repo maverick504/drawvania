@@ -8,7 +8,13 @@
         <div class="flex-grow">
           <div class="inline-flex items-center">
             <h1 class="inline-block text-3xl font-bold">{{ user.username }}</h1>
-            <t-button v-if="isAuthenticated && user.id === loggedInUser.id" :to="{ name: 'settings.profile' }" defaultSizeClass="px-4 py-1" class="ml-4">Edit Profile</t-button>
+            <router-link
+              v-if="isAuthenticated && user.id === loggedInUser.id"
+              :to="{ name: 'settings.profile' }"
+              class="ml-4 t-button t-button-size-default inline-block rounded border inline-flex justify-center items-center px-4 py-1 bg-white border-gray-400 hover:bg-gray-100 hover:border-gray-500"
+            >
+              Edit Profile
+            </router-link>
             <follow-button
               v-else
               :loggedInUserIsFollower.sync="user.logged_in_user_is_follower"
