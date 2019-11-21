@@ -21,8 +21,10 @@
           />
         </div>
         <div class="text-gray-600">
-          <span>{{ post.date | moment("from", "now") }}</span> &bull;
-          <span v-if="post.updated_at > post.date">edited {{ post.updated_at | moment("from", "now") }}</span>
+          <span>{{ post.date | moment("from", "now") }}</span>
+          <template v-if="post.updated_at > post.date">
+            &bull; <span>edited {{ post.updated_at | moment("from", "now") }}</span>
+          </template>
         </div>
       </div>
       <div class="flex-initial pl-2">
