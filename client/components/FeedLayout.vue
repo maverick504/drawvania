@@ -39,7 +39,9 @@
               </a>
               <div class="text-center text-sm text-gray-600">
                 <a href="#" class="whitespace-no-wrap mx-1">Support/Premium</a>
-                <a href="#" class="whitespace-no-wrap mx-1">Supporters</a>
+                <!--
+                <a href="#" class="whitespace-no-wrap mx-1">Patron List</a>
+                -->
               </div>
             </div>
           </affix>
