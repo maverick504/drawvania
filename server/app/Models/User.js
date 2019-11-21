@@ -67,22 +67,22 @@ class User extends Model {
 
   async countPostsAndStorageUsage () {
     const query = await this.posts().count('id AS total_posts').sum('total_storage_usage AS total_storage_usage')
-    this.total_posts = query[0]['total_posts']
-    this.total_storage_usage = query[0]['total_storage_usage']
+    this.total_posts = query[0]['total_posts'] || 0
+    this.total_storage_usage = query[0]['total_storage_usage'] || 0
 
     await this.save()
   }
 
   async countFollowings () {
     const query = await this.followings().count()
-    this.total_followings = query[0]['count(*)']
+    this.total_followings = query[0]['count(*)'] || 0
 
     await this.save()
   }
 
   async countFollowers () {
     const query = await this.followers().count()
-    this.total_followers = query[0]['count(*)']
+    this.total_followers = query[0]['count(*)'] || 0
 
     await this.save()
   }

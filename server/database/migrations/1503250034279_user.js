@@ -19,10 +19,10 @@ class UserSchema extends Schema {
       table.string('location').nullable()
       table.text('about').nullable()
       table.json('metadata').nullable()
-      table.integer('total_posts').unsigned().default(0)
-      table.integer('total_storage_usage').unsigned().default(0) // The sumatory of the storage usage of the posts created by this user.
-      table.integer('total_followings').unsigned().default(0)
-      table.integer('total_followers').unsigned().default(0)
+      table.integer('total_posts').notNullable().unsigned().default(0)
+      table.integer('total_storage_usage').notNullable().unsigned().default(0) // The sumatory of the storage usage of the posts created by this user.
+      table.integer('total_followings').notNullable().unsigned().default(0)
+      table.integer('total_followers').notNullable().unsigned().default(0)
       table.timestamps()
     })
   }

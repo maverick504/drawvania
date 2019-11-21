@@ -13,12 +13,12 @@ class PostSchema extends Schema {
       table.date('date').notNullable()
       table.string('description', 280).nullable()
       table.enum('restriction', ['no-restriction', 'moderate-mature-content', 'strict-mature-content']).nullable()
-      table.boolean('redrawable').default(false)
-      table.integer('total_media').unsigned().default(0)
-      table.integer('total_storage_usage').unsigned().default(0) // The sumatory of the storage usage of all the media associated to this post.
-      table.integer('total_likes').unsigned().default(0)
-      table.integer('total_comments').unsigned().default(0)
-      table.integer('total_direct_children_posts').unsigned().default(0)
+      table.boolean('redrawable').notNullable().default(false)
+      table.integer('total_media').notNullable().unsigned().default(0)
+      table.integer('total_storage_usage').notNullable().unsigned().default(0) // The sumatory of the storage usage of all the media associated to this post.
+      table.integer('total_likes').notNullable().unsigned().default(0)
+      table.integer('total_comments').notNullable().unsigned().default(0)
+      table.integer('total_direct_children_posts').notNullable().unsigned().default(0)
       table.timestamps()
 
       table.foreign('author_id').references('id').on('users').onDelete('cascade')

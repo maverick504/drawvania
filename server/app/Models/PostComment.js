@@ -36,7 +36,7 @@ class PostComment extends Model {
 
   async countReplies () {
     const query = await this.replies().count()
-    this.total_replies = query[0]['count(*)']
+    this.total_replies = query[0]['count(*)'] || 0
 
     await this.save()
   }

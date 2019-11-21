@@ -49,14 +49,14 @@ class Post extends Model {
 
   async countLikes () {
     const query = await this.likers().count()
-    this.total_likes = query[0]['count(*)']
+    this.total_likes = query[0]['count(*)'] || 0
 
     await this.save()
   }
 
   async countDirectChildrenPosts () {
     const query = await this.childrenPosts().count()
-    const total = query[0]['count(*)']
+    const total = query[0]['count(*)'] || 0
 
     this.total_direct_children_posts = total
 
@@ -65,7 +65,7 @@ class Post extends Model {
 
   async countComments () {
     const query = await this.comments().count()
-    const total = query[0]['count(*)']
+    const total = query[0]['count(*)'] || 0
 
     this.total_comments = total
 

@@ -11,7 +11,7 @@ class PostCommentsSchema extends Schema {
       table.bigInteger('post_id').unsigned().notNullable()
       table.bigInteger('parent_comment_id').unsigned().nullable() // If the comment has a commend_id, then it is a response.
       table.text('comment')
-      table.integer('total_replies').unsigned().default(0)
+      table.integer('total_replies').notNullable().unsigned().default(0)
       table.timestamps()
       table.timestamp('deleted_at').nullable()
 
