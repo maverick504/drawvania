@@ -15,7 +15,7 @@ class PostSchema extends Schema {
       table.enum('restriction', ['no-restriction', 'moderate-mature-content', 'strict-mature-content']).nullable()
       table.boolean('redrawable').default(false)
       table.integer('total_media').unsigned().default(0)
-      table.integer('total_size').unsigned().default(0) // The size of all the media associated to this post.
+      table.integer('total_storage_usage').unsigned().default(0) // The sumatory of the storage usage of all the media associated to this post.
       table.integer('total_likes').unsigned().default(0)
       table.integer('total_comments').unsigned().default(0)
       table.integer('total_direct_children_posts').unsigned().default(0)

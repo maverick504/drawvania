@@ -10,7 +10,7 @@ class PostMediaSchema extends Schema {
       table.bigInteger('post_id').unsigned().nullable()
       table.integer('order').unsigned().nullable()
       table.json('variations').nullable()
-      table.integer('total_size').unsigned().default(0) // The size of all the media variations.
+      table.integer('total_storage_usage').unsigned().default(0) // The size of all the media variations.
       table.timestamps()
 
       table.foreign('post_id').references('id').on('posts').onDelete('cascade')

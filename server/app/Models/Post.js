@@ -22,7 +22,7 @@ class Post extends Model {
     this.addHook('afterDelete', async (postInstance) => {
       // Count posts on the author.
       const author = await postInstance.author().first()
-      await author.countPosts()
+      await author.countPostsAndStorageUsage()
 
       // Count redraws on the parent post.
       if(postInstance.parent_post_id) {

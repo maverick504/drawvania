@@ -1,6 +1,7 @@
 'use strict'
 
 const { validateAll } = use('Validator')
+const Config = use('Config')
 const Helpers = use('Helpers')
 const Drive = use('Drive')
 const Database = use('Database')
@@ -42,6 +43,13 @@ class PostController {
   }
 
   async store({ request, auth, response }) {
+    if(auth.user.total_storage_usage > Config.get('drawvania.maximumStorage.common')) {
+      return response.status(400).json({
+        status: 'error',
+        message: 'Maximum storage usage for this account has been exceeded.'
+      })
+    }
+
     const rules = {
       description: `string|max:280`,
       restriction: `required|in:no-restriction,moderate-mature-content,strict-mature-content`,
@@ -117,13 +125,18 @@ class PostController {
         // Store the image variations the media item on the cloud.
         const stream = Drive.disk('local').getStream(tmpPath)
         await media.storeVariations('media', stream, false)
-        media.total_size = media.calculateCollectionSize('media')
+        media.total_storage_usage = media.calculateCollectionStorageUsage('media')
         await media.save(trx)
+
+        // Update the posts's total media items and total storage usage.
+        post.total_media = 1
+        post.total_storage_usage = media.total_storage_usage
+        await post.save(trx)
 
         trx.commit()
 
         // Count posts on the author.
-        await auth.user.countPosts()
+        await auth.user.countPostsAndStorageUsage()
 
         // Count redraws on the parent post.
         if(parent_post_id) {

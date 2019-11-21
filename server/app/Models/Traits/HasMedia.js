@@ -73,7 +73,7 @@ class HasMedia {
         url: url,
         width: metadata.width,
         height: metadata.height,
-        size: metadata.size
+        storage_usage: metadata.size
       }
     }
 
@@ -83,10 +83,29 @@ class HasMedia {
     }
 
     /*
-     * Returns the sumatory of the sizes of the specified collection.
+     * Returns the storage usage by the specified collection.
      */
-    Model.prototype.calculateCollectionSize = function (collectionName) {
-      return 999
+    Model.prototype.calculateCollectionStorageUsage = function (collectionName) {
+      const collection = options.collections[collectionName]
+
+      var storedVariations
+
+      // Try to parse the JSON from the column where the variations information is
+      // stored, if it fails(for example, the column is null), then return 0.
+      try {
+        storedVariations = JSON.parse(this[`${collection.columnName}`])
+      } catch(e) {
+        return 0
+      }
+
+      // Calculate the sumatory of the stored variations,
+      var totalStorageUsage = 0
+
+      for(var variation in storedVariations) {
+        totalStorageUsage += storedVariations[variation].storage_usage
+      }
+
+      return totalStorageUsage
     }
   }
 }

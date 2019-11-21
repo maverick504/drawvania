@@ -65,9 +65,10 @@ class User extends Model {
     return ['password']
   }
 
-  async countPosts () {
-    const query = await this.posts().count()
-    this.total_posts = query[0]['count(*)']
+  async countPostsAndStorageUsage () {
+    const query = await this.posts().count('id AS total_posts').sum('total_storage_usage AS total_storage_usage')
+    this.total_posts = query[0]['total_posts']
+    this.total_storage_usage = query[0]['total_storage_usage']
 
     await this.save()
   }
