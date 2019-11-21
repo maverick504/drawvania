@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mb-32">
     <template v-if="!loading && posts.length === 0">
       <slot name="empty-state"></slot>
     </template>
@@ -9,9 +9,6 @@
         <div class="spinner" role="status">
           <span class="sr-only">Loading...</span>
         </div>
-      </div>
-      <div v-if="posts.length > 0 && page >= lastPage" class="py-6 text-center text-gray-600 uppercase">
-        end of results
       </div>
       <likes-modal/>
       <redraws-modal/>
