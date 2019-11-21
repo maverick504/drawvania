@@ -24,7 +24,7 @@
       <div class="form-group">
         <div class="bg-gray-900 py-4 text-center -mx-4">
           <div class="relative w-full h-auto mx-auto" style="max-width: 400px;">
-            <img :src="post.media[0].variations['900w'].url" alt="Preview" class="w-full h-auto shadow-lg">
+            <img :src="post.media[0].variations['1280w'].url" alt="Preview" class="w-full h-auto shadow-lg">
           </div>
         </div>
       </div>
