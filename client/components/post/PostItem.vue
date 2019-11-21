@@ -248,7 +248,7 @@ export default {
         await this.$axios.delete(`posts/${this.post.id}`)
 
         // Redirect to home.
-        this.$router.push({ name: 'feed.global' })
+        window.location.replace('/')
       }
     }
   }
