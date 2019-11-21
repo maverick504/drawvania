@@ -5,7 +5,7 @@
         <div v-for="(post, index) in redraws" :key="index" class="flex items-center text-sm">
           <div class="flex-initial pr-2">
             <router-link :to="{ name: 'posts.show', params: { id: post.id } }">
-              <img class="w-16 h-16 rounded" :src="post.media[0].variations['100x100'].url">
+              <img class="w-16 h-16 rounded" :src="post.media[0].variations['100x100f'].url">
             </router-link>
           </div>
           <div class="flex-grow">

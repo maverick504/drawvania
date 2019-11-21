@@ -19,7 +19,6 @@
             :unfollowEndpoint="`/users/${post.author.username}/unfollow`"
             class="mr-4"
           />
-
         </div>
         <div class="text-gray-600">
           <span>{{ post.date | moment("from", "now") }}</span> &bull;
@@ -64,7 +63,7 @@
     <div v-if="post.parentPost" class="flex items-center text-sm px-4 mb-4">
       <div class="flex-initial pr-2">
         <router-link :to="{ name: 'posts.show', params: { id: post.parentPost.id } }">
-          <img class="w-10 h-10 rounded" :src="post.parentPost.media[0].variations['50x50'].url">
+          <img class="w-10 h-10 rounded" :src="post.parentPost.media[0].variations['50x50f'].url">
         </router-link>
       </div>
       <div class="flex-grow">
@@ -76,10 +75,10 @@
     <div class="bg-gray-100">
       <v-image
         v-if="post.media && post.media.length > 0"
-        :src="post.media[0].variations['600w'].url"
-        :zoom-src="post.media[0].variations['900w'].url"
-        :width="post.media[0].variations['600w'].width"
-        :height="post.media[0].variations['600w'].height"
+        :src="post.media[0].variations['640wf'].url"
+        :zoom-src="post.media[0].variations['1280w'].url"
+        :width="post.media[0].variations['640wf'].width"
+        :height="post.media[0].variations['640wf'].height"
         alt="Post's image"
       />
     </div>

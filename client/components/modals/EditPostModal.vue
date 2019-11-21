@@ -13,7 +13,7 @@
       <div v-if="post.parentPost" class="form-group mt-4">
         <div class="flex items-center text-sm">
           <div class="flex-initial pr-2">
-            <img :src="post.parentPost.media[0].variations['50x50'].url" width="50" height="50" class="w-10 h-10 rounded">
+            <img :src="post.parentPost.media[0].variations['50x50f'].url" width="50" height="50" class="w-10 h-10 rounded">
           </div>
           <div class="flex-grow">
             redraw to a post of <b>{{ post.parentPost.author.username }}</b>

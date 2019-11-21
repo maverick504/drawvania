@@ -19,8 +19,8 @@ class User extends Model {
         avatar: {
           columnName: 'avatar',
           variations: {
-            'small': { width: 50, height: 50 },
-            'large': { width: 300, height: 300 }
+            'small': { width: 50, height: 50, force: true },
+            'large': { width: 300, height: 300, force: true }
           }
         }
       }

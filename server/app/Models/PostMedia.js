@@ -14,12 +14,11 @@ class PostMedia extends Model {
         media: {
           columnName: 'variations',
           variations: {
-            '900w': { width: 900 },
-            '600w': { width: 600 },
-            '300w': { width: 300 },
-            '300x300': { width: 300, height: 300 },
-            '100x100': { width: 100, height: 100 },
-            '50x50': { width: 50, height: 50 }
+            '1280w': { width: 1280, force: false },
+            '640wf': { width: 640, force: true },
+            '300x300f': { width: 300, height: 300, force: true },
+            '100x100f': { width: 100, height: 100, force: true },
+            '50x50f': { width: 50, height: 50, force: true }
           }
         }
       }

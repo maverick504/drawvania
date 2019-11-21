@@ -52,6 +52,7 @@ class HasMedia {
       var resizeOptions = {}
       if (variation.width !== null) { resizeOptions.width = variation.width }
       if (variation.height !== null) { resizeOptions.height = variation.height }
+      resizeOptions.withoutEnlargement = !variation.force
 
       // Resize the image.
       const transform = sharp().resize(resizeOptions).jpeg({ quality: 90 }).toFormat('jpg')

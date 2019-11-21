@@ -50,7 +50,7 @@
             <nuxt-link :to="{ name: 'posts.show', params: { id: post.id } }" class="illustration-thumbnail">
               <v-image
                 v-if="post.media && post.media.length > 0"
-                :src="post.media[0].variations['300x300'].url"
+                :src="post.media[0].variations['300x300f'].url"
                 :width="300"
                 :height="300"
                 alt="Post's image"
