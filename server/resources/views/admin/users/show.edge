@@ -1,0 +1,54 @@
+@layout('layouts.admin')
+
+@section('content')
+  <h1 class="h2">{{ user.username }}</h1>
+  <div class="row no-gutters">
+    <div class="col-3">
+      <b>username</b>
+    </div>
+    <div class="col-9">
+      {{ user.username }}
+    </div>
+    <div class="col-3">
+      <b>premium member</b>
+    </div>
+    <div class="col-9">
+      {{ user.premium_member }}
+    </div>
+    <div class="col-3">
+      <b>total posts</b>
+    </div>
+    <div class="col-9">
+      {{ user.total_posts }}
+    </div>
+    <div class="col-3">
+      <b>total storage usage</b>
+    </div>
+    <div class="col-9">
+      {{ user.storage_usage_mb }}
+    </div>
+    <div class="col-3">
+      <b>total followings</b>
+    </div>
+    <div class="col-9">
+      {{ user.total_followings }}
+    </div>
+    <div class="col-3">
+      <b>total followers</b>
+    </div>
+    <div class="col-9">
+      {{ user.total_followers }}
+    </div>
+  </div>
+  <div class="mt-2">
+    @if(user.upgraded_premium_at === null)
+      <form action="{{ 'http://localhost:3333/admin/users/' + user.id + '/upgradeToPremium?_method=PATCH' }}" method="POST">
+        <button type="submit" class="btn btn-primary">Add Premium</button>
+      </form>
+    @else
+      <form action="{{ '/admin/users/' + user.id + '/removePremium?_method=PATCH' }}" method="POST">
+        <button type="submit" class="btn btn-danger">Remove Premium</button>
+      </form>
+    @endif
+  </div>
+@endsection

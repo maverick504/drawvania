@@ -2,19 +2,21 @@
 
 @section('content')
   <h1 class="h2">Dashboard</h1>
-  <p>Total users: {{ totalUsers }}</p>
-  <p>Total posts: TODO</p>
-  <p>Latest registered users: </p>
+  <div>Total users: {{ totalUsers || 0 }}</div>
+  <div>Total premium users: {{ totalPremiumUsers || 0 }}</div>
+  <div>Total normal users: {{ (totalUsers - totalPremiumUsers) || 0 }}</div>
+  <div>Total posts: {{ totalPosts || 0 }}</div>
+  <div class="mt-2">Latest registered users: </div>
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">#</th>
+        <th scope="col" style="width: 80px;">#</th>
         <th scope="col">Username</th>
         <th scope="col">Member since</th>
       </tr>
     </thead>
     <tbody>
-      @each(user in latestRegisteredUsers.rows)
+      @each(user in latestRegisteredUsers)
         <tr>
           <th scope="row">{{ user.id }}</th>
           <td>{{ user.username }}</td>

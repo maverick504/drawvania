@@ -44,6 +44,10 @@ class User extends Model {
     }
   }
 
+  static get dates() {
+    return super.dates.concat([ 'upgraded_premium_at' ])
+  }
+
   /**
    * A relationship on tokens is required for auth to
    * work. Since features like `refreshTokens` or

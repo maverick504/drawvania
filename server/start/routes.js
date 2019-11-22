@@ -18,9 +18,12 @@ const Route = use('Route')
 // ADMIN ROUTES
 
 Route.group(() => {
-  Route.get('/dashboard', 'Admin/DashboardController.index')
+  Route.get('dashboard', 'Admin/DashboardController.index')
 
-  Route.get('/announcements', 'Admin/AnnouncementController.index')
+  Route.get('users', 'Admin/UserController.index')
+  Route.get('users/:id', 'Admin/UserController.show')
+  Route.patch('users/:id/upgradeToPremium', 'Admin/UserController.upgradeToPremium')
+  Route.patch('users/:id/removePremium', 'Admin/UserController.removePremium')
 }).prefix('admin').middleware(['auth:session', 'is:(administrator)'])
 
 // API ROUTES
@@ -69,11 +72,13 @@ Route.group(() => {
 
 // NORMAL ROUTES
 
-Route.get('/', ({ view }) => view.render('home'))
+Route.get('/', ({ response }) => response.redirect('http://localhost:5000/'))
 
 Route.get('login', 'AuthenticationController.showLoginForm').middleware(['guest:session'])
 Route.post('login', 'AuthenticationController.login').middleware(['guest:session'])
 Route.get('logout', 'AuthenticationController.logout').middleware(['auth:session'])
+
+Route.get('premium', 'MiscellaneousController.premiumLanding').middleware(['guest:session'])
 
 // ERROR PAGES
 
