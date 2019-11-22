@@ -176,8 +176,18 @@ export default {
       this.form.busy = false
     },
 
-    beforeClose (e) {
-      // console.log(e)
+    beforeClose () {
+      if(!this.form.busy) return
+
+      const scrollTopBefore = this.$refs.modal.$el.scrollTop
+
+      this.$nextTick(() => {
+        this.show = true
+
+        this.$nextTick(() => {
+          this.$refs.modal.$el.scrollTo(0, scrollTopBefore)
+        })
+      })
     }
   }
 }

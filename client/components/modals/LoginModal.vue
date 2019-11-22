@@ -1,5 +1,5 @@
 <template>
-  <t-modal v-model="show" header-class="bg-gray-100 p-4 text-xl text-center" header="Log in" width="400" @before-open="beforeOpen">
+  <t-modal ref="modal" v-model="show" header="Log in" header-class="bg-gray-100 p-4 text-xl text-center" width="400" @before-close="beforeClose">
     <form method="post" @submit.prevent="login">
 
       <error-alert :form="form"/>
@@ -57,6 +57,7 @@ export default {
 
   mounted () {
     this.$bus.$on('showLoginModal', () => {
+      this.form.clearErrors()
       this.show = true
     })
   },
@@ -66,11 +67,6 @@ export default {
   },
 
   methods: {
-    beforeOpen () {
-      this.form.clearErrors()
-      this.show = true
-    },
-
     async login() {
       this.form.busy = true
 
@@ -86,6 +82,20 @@ export default {
       }
 
       this.form.busy = false
+    },
+
+    beforeClose () {
+      if(!this.form.busy) return
+
+      const scrollTopBefore = this.$refs.modal.$el.scrollTop
+
+      this.$nextTick(() => {
+        this.show = true
+
+        this.$nextTick(() => {
+          this.$refs.modal.$el.scrollTo(0, scrollTopBefore)
+        })
+      })
     }
   }
 }
