@@ -15,7 +15,7 @@ module.exports = {
   */
 
   maximumStorage: {
-    common: Env.get('MAXIMUM_STORAGE_COMMON_USERS', 1024 * 1024 * 1024 * 2), // 2 GB
+    common: Env.get('MAXIMUM_STORAGE_COMMON_USERS', 1024 * 1024 * 1024), // 1 GB
     premium: Env.get('MAXIMUM_STORAGE_PREMIUM_USERS', 1024 * 1024 * 1024 * 10) // 10 GB
   }
 }
