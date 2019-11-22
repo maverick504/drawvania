@@ -66,8 +66,6 @@ Route.group(() => {
   Route.patch('comments/:id', 'Api/CommentController.update').middleware(['auth:jwt'])
   Route.delete('comments/:id', 'Api/CommentController.destroy').middleware(['auth:jwt'])
   Route.post('comments/:id/reply', 'Api/CommentController.reply').middleware(['auth:jwt'])
-
-  Route.get('miscellaneous/weeklyRanking', 'Api/MiscellaneousController.weeklyRanking')
 }).prefix('api')
 
 // NORMAL ROUTES
