@@ -3,6 +3,7 @@ const { hooks } = require('@adonisjs/ignitor')
 hooks.after.providersBooted(() => {
   const Validator = use('Validator')
   const Database = use('Database')
+  const Config = use('Config')
 
   const existsFn = async (data, field, message, args, get) => {
     const value = get(data, field)
@@ -86,6 +87,12 @@ hooks.after.providersBooted(() => {
     const value = get(data, field)
 
     const validUsername = /^[a-zA-Z0-9_]{1,20}$/.test(value)
+
+    const unavailableUsernames = Config.get('drawvania.unavailableUsernames')
+
+    if(unavailableUsernames.includes(value)) {
+      throw message
+    }
 
     if(!validUsername) {
       throw message
