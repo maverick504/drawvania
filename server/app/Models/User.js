@@ -10,9 +10,11 @@ class User extends Model {
   static boot () {
     super.boot()
 
+    this.addTrait('@provider:Morphable')
+    this.addTrait('@provider:CastAttributes')
+    this.addTrait('@provider:Notifiable')
     this.addTrait('@provider:Adonis/Acl/HasRole')
     this.addTrait('@provider:Adonis/Acl/HasPermission')
-    this.addTrait('@provider:CastAttributes')
     this.addTrait('HasMedia', {
       modelFolderName: 'users',
       collections: {
@@ -118,6 +120,11 @@ class User extends Model {
   followings () {
     return this.belongsToMany('App/Models/User', 'follower_id', 'followed_id', 'id', 'id')
     .pivotModel('App/Models/UserFollowing')
+  }
+
+  notifications () {
+    return this.hasMany('App/Models/Notification', 'id', 'notifiable_id')
+    .orderBy('created_at', 'desc')
   }
 }
 

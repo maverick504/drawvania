@@ -52,6 +52,9 @@ module.exports = {
       help: 'help'
     },
     extend: {
+      width: {
+        '96': '24rem'
+      },
       margin: {
         '-4': '-1rem',
         '-64': '-16rem'

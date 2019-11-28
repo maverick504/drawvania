@@ -1,8 +1,10 @@
 'use strict'
 
 const { validateAll } = use('Validator')
-const Post = use('App/Models/Post')
 const PostComment = use('App/Models/PostComment')
+const User = use('App/Models/User')
+const Post = use('App/Models/Post')
+const Notification = use('App/Models/Notification')
 
 class CommentController {
   async postIndex({ request, params }) {
@@ -33,15 +35,36 @@ class CommentController {
 
     if (!validation.fails()) {
       try {
-        // Store the post on database
+        // Store the comment on database
         const commentRecord = new PostComment()
         commentRecord.author_id = auth.user.id
         commentRecord.post_id = post_id
         commentRecord.comment = comment
         await commentRecord.save()
 
+        // Get the comment's post.
+        const post = await commentRecord.post().first()
+
+        if(auth.user.id !== post.author_id) {
+
+          // Notify the post's creator.
+          const notification = new Notification()
+          notification.triggerer_id = auth.user.id
+          notification.notifiable_id = post.author_id
+          notification.entity_id = post.id
+          notification.entity_type = 'App/Models/Post'
+          notification.type = 'newCommentInPost'
+          notification.metadata = {
+            comment: {
+              id: commentRecord.id,
+              comment: commentRecord.comment
+            }
+          }
+          await notification.save()
+        }
+
         // Load the comment's author.
-        await commentRecord.loadMany([ 'author' ])
+        await commentRecord.load('author')
 
         // Return a success message
         return response.json({
@@ -114,20 +137,39 @@ class CommentController {
       })
     }
 
-    // Check if the comment if owned by the authenticated user
-    if(comment.author_id !== auth.user.id) {
+    // Check if the comment was created by the authenticated user.
+    if(comment.author_id === auth.user.id) {
+      // Delete the comment
+      await comment.delete()
+    } else {
       const post = await Post.find(comment.post_id)
 
-      if(post.author_id !== auth.user.id) {
+      // Check if the post where the comment belongs to was created by the authenticated user.
+      if(post.author_id === auth.user.id) {
+        // Delete the comment
+        await comment.delete()
+
+        // Notify the comment author about that his comment was deleted.
+        const notification = new Notification()
+        notification.triggerer_id = auth.user.id
+        notification.notifiable_id = comment.author_id
+        notification.entity_id = post.id
+        notification.entity_type = 'App/Models/Post'
+        notification.type = 'deletedCommentInPost'
+        notification.metadata = {
+          comment: {
+            id: comment.id,
+            comment: comment.comment
+          }
+        }
+        await notification.save()
+      } else {
         return response.status(400).json({
           status: 'error',
           message: "You cannot delete this comment because you are not its author."
         })
       }
     }
-
-    // Delete the comment
-    await comment.delete()
 
     // Return a success message
     return response.json({
@@ -166,6 +208,36 @@ class CommentController {
         commentRecord.comment = comment
         await commentRecord.save()
 
+        // Get the comment/conversation participants.
+        const conversationParticipants = await User.query()
+        .select('users.*')
+        .distinct('users.id')
+        .leftJoin('post_comments', 'users.id', 'post_comments.author_id')
+        .where((builder) => {
+          builder.where('post_comments.id', '=', parentComment.id)
+          .orWhere('post_comments.parent_comment_id', '=', parentComment.id)
+        })
+        .fetch()
+
+        // Notify the conversation participants.
+        for(let user of conversationParticipants.rows) {
+          if(auth.user.id !== user.id) {
+            const notification = new Notification()
+            notification.triggerer_id = auth.user.id
+            notification.notifiable_id = user.id
+            notification.entity_id = parentComment.id
+            notification.entity_type = 'App/Models/PostComment'
+            notification.type = 'newReplyToCommentInPost'
+            notification.metadata = {
+              comment: {
+                id: commentRecord.id,
+                comment: commentRecord.comment
+              }
+            }
+            await notification.save()
+          }
+        }
+
         // Load the comment's author.
         await commentRecord.load('author')
 
@@ -175,6 +247,7 @@ class CommentController {
           data: commentRecord
         })
       } catch(error) {
+        console.log(error)
         return response.status(400).json({
           status: 'error',
           message: 'Something went wrong, please try again.'

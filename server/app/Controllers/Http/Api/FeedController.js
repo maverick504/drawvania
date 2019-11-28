@@ -36,17 +36,23 @@ class FeedController {
       .with('author')
     }
 
-    return await query
+    const posts = await query
     .with('media')
     .with('parentPost.author')
     .with('parentPost.media')
     .where('posts.date', '<=', new Date())
     .orderBy('posts.created_at', 'desc')
     .paginate(request.get().page, 5)
+
+    // Save request time.
+    auth.user.last_global_feed_request = new Date()
+    await auth.user.save()
+
+    return posts
   }
 
   async followings({ request, auth }) {
-    return await Post
+    const posts = await Post
     .query()
     .select([
       'posts.*',
@@ -76,6 +82,12 @@ class FeedController {
     .whereNull('user_followings.deleted_at')
     .orderBy('posts.created_at', 'desc')
     .paginate(request.get().page, 5)
+
+    // Save request time.
+    auth.user.last_followings_feed_request = new Date()
+    await auth.user.save()
+
+    return posts
   }
 
 }

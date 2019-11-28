@@ -1,27 +1,24 @@
 <template>
-  <nav class="w-full bg-white fixed pin-t z-10 shadow-md whitespace-no-wrap">
+  <nav class="w-full bg-white fixed pin-t z-20 shadow-md whitespace-no-wrap">
     <div class="flex container mx-auto">
       <div class="flex-initial py-3 text-center">
         <router-link :to="{ name: 'feed.global' }" class="text-xl mr-2">
           Drawvania
         </router-link>
       </div>
-      <div class="flex-grow block text-right">
+      <div class="flex-grow flex justify-end">
         <template v-if="isAuthenticated">
-          <router-link :to="{ name: 'notifications' }" class="inline-block p-4">
-            <bell-icon size="1.5x" class="inline"/>
-          </router-link><!--
+          <notifications-dropdown/><!--
        --><t-dropdown
-            class="inline-block text-left"
             :button-props="{
               baseClass: 'inline-block',
-              defaultSizeClass: 'p-4',
-              to: { name: 'users.show', params: { username: loggedInUser.username } }
+              defaultSizeClass: 'p-4'
             }"
             :visible-arrow="false"
             dropdown-class="w-64 bg-white border shadow-md py-4 z-10"
-            placement="bottom-end"
-            trigger="hover"
+            placement="bottom"
+            trigger="click"
+            class="inline-block"
           >
             <template slot="button-content">
               <user-icon size="1.5x" class="inline"/>
@@ -63,12 +60,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { PlusIcon, BellIcon, UserIcon, LogInIcon, UserPlusIcon } from 'vue-feather-icons'
+import NotificationsDropdown from '@/components/navbar/NotificationsDropdown.vue'
+import { PlusIcon, UserIcon, LogInIcon, UserPlusIcon } from 'vue-feather-icons'
 
 export default {
   components: {
+    NotificationsDropdown,
     PlusIcon,
-    BellIcon,
     UserIcon,
     LogInIcon,
     UserPlusIcon
@@ -85,6 +83,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css" scoped>
-</style>

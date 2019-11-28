@@ -12,7 +12,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Navbar from '@/components/Navbar.vue'
+import Navbar from '@/components/navbar/Navbar.vue'
 import CreatePostModal from '@/components/modals/CreatePostModal.vue'
 import EditPostModal from '@/components/modals/EditPostModal.vue'
 import LoginModal from '@/components/modals/LoginModal.vue'

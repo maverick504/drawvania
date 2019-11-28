@@ -41,14 +41,19 @@ Route.group(() => {
   Route.patch('settings/avatar', 'Api/SettingsController.updateAvatar').middleware(['auth:jwt'])
   Route.patch('settings/password', 'Api/SettingsController.updatePassword').middleware(['auth:jwt'])
 
+  Route.get('pull', 'Api/PullController.index').middleware(['auth:jwt'])
+
+  Route.get('notifications', 'Api/NotificationController.index').middleware(['auth:jwt'])
+  Route.post('notifications/:id/mark-as-read', 'Api/NotificationController.markAsRead').middleware(['auth:jwt'])
+
   Route.get('feed/global', 'Api/FeedController.global')
-  Route.get('feed/followings', 'Api/FeedController.followings')
+  Route.get('feed/followings', 'Api/FeedController.followings').middleware(['auth:jwt'])
 
   Route.get('users/:username', 'Api/UserController.show')
   Route.get('users/:username/followers', 'Api/UserController.followers')
   Route.get('users/:username/followings', 'Api/UserController.followings')
-  Route.post('users/:username/follow', 'Api/UserController.follow')
-  Route.post('users/:username/unfollow', 'Api/UserController.unfollow')
+  Route.post('users/:username/follow', 'Api/UserController.follow').middleware(['auth:jwt'])
+  Route.post('users/:username/unfollow', 'Api/UserController.unfollow').middleware(['auth:jwt'])
 
   Route.get('users/:username/posts', 'Api/PostController.userIndex')
   Route.post('posts', 'Api/PostController.store').middleware(['auth:jwt'])
@@ -76,7 +81,7 @@ Route.get('login', 'AuthenticationController.showLoginForm').middleware(['guest:
 Route.post('login', 'AuthenticationController.login').middleware(['guest:session'])
 Route.get('logout', 'AuthenticationController.logout').middleware(['auth:session'])
 
-Route.get('premium', 'MiscellaneousController.premiumLanding').middleware(['guest:session'])
+Route.get('premium', 'MiscellaneousController.premiumLanding')
 
 // ERROR PAGES
 

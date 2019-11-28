@@ -16,7 +16,9 @@ class UserSchema extends Schema {
       table.enum('gender', ['male', 'female']).nullable()
       table.string('location').nullable()
       table.text('about').nullable()
-      table.json('metadata').nullable()
+      table.timestamp('last_global_feed_request').nullable()
+      table.timestamp('last_followings_feed_request').nullable()
+      table.timestamp('last_notifications_request').nullable()
       table.integer('total_posts').notNullable().unsigned().default(0)
       table.integer('total_storage_usage').notNullable().unsigned().default(0) // The sumatory of the storage usage of the posts created by this user.
       table.integer('total_followings').notNullable().unsigned().default(0)

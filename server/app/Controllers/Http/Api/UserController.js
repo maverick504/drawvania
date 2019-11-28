@@ -2,6 +2,7 @@
 
 const User = use('App/Models/User')
 const UserFollowing = use('App/Models/UserFollowing')
+const Notification = use('App/Models/Notification')
 
 class UserController {
 
@@ -51,26 +52,44 @@ class UserController {
       })
     }
 
-    // Check if the user was followed previously.
-    const userFollowing = await UserFollowing
-    .query()
-    .withTrashed()
-    .where('follower_id', '=', auth.user.id)
-    .where('followed_id', '=', user.id)
-    .first()
+    try {
+      // Check if the user was followed previously.
+      const followRelation = await UserFollowing
+      .query()
+      .withTrashed()
+      .where('follower_id', '=', auth.user.id)
+      .where('followed_id', '=', user.id)
+      .first()
 
-    // Attach the user.
-    if(userFollowing) {
-      await userFollowing.restore()
-    } else {
-      await user.followers().attach([auth.user.id])
+      if(followRelation) {
+        await followRelation.restore()
+      } else {
+        // Create a 'follow' relationship between the user and the post.
+        await user.followers().attach([auth.user.id])
+
+        // Notify the followed user.
+        const notification = new Notification()
+        notification.triggerer_id = auth.user.id
+        notification.notifiable_id = user.id
+        notification.entity_id = null
+        notification.entity_type = null
+        notification.type = 'newFollower'
+        notification.metadata = {}
+        await notification.save()
+      }
+
+      // Recount followers.
+      await user.countFollowers()
+
+      // Recount followings.
+      await auth.user.countFollowings()
+    } catch(error) {
+      console.log(error)
+      return response.status(400).json({
+        status: 'error',
+        message: 'Something went wrong, please try again.'
+      })
     }
-
-    // Recount followers.
-    await user.countFollowers()
-
-    // Recount followings.
-    await auth.user.countFollowings()
   }
 
   async unfollow({ params, auth, response }) {

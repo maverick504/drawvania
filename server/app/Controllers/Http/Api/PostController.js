@@ -9,6 +9,7 @@ const User = use('App/Models/User')
 const Post = use('App/Models/Post')
 const PostMedia = use('App/Models/PostMedia')
 const PostLike = use('App/Models/PostLike')
+const Notification = use('App/Models/Notification')
 
 class PostController {
   async userIndex({ request, params, auth, response }) {
@@ -135,11 +136,23 @@ class PostController {
 
         trx.commit()
 
+        if(parent_post_id) {
+          // Notify the parent post's author.
+          const notification = new Notification()
+          notification.triggerer_id = auth.user.id
+          notification.notifiable_id = parentPost.author_id
+          notification.entity_id = post.id
+          notification.entity_type = 'App/Models/Post'
+          notification.type = 'newRedrawOfPost'
+          notification.metadata = {}
+          await notification.save()
+        }
+
         // Count posts on the author.
         await auth.user.countPostsAndStorageUsage()
 
-        // Count redraws on the parent post.
         if(parent_post_id) {
+          // Count redraws on the parent post.
           await parentPost.countDirectChildrenPosts()
         }
 
@@ -277,37 +290,75 @@ class PostController {
   }
 
   async like({ params, auth, response }) {
-    // Check if the post exists
+    // Check if the post exists.
     const post = await Post.findOrFail(params.id)
 
-    // Check if the post was liked previously.
-    const postLike = await PostLike
-    .query()
-    .withTrashed()
-    .where('user_id', '=', auth.user.id)
-    .where('post_id', '=', post.id)
-    .first()
+    try {
+      // Check if the post was liked previously.
+      const likeRelation = await PostLike
+      .query()
+      .withTrashed()
+      .where('user_id', '=', auth.user.id)
+      .where('post_id', '=', post.id)
+      .first()
 
-    // Attach the post
-    if(postLike) {
-      await postLike.restore()
-    } else {
-      await auth.user.likedPosts().attach([post.id])
+      if(likeRelation) {
+        // The user liked this post previously. Restore the relationship.
+        await likeRelation.restore()
+      } else {
+        // Create a 'like' relationship between the user and the post.
+        await auth.user.likedPosts().attach([post.id])
+
+        if(auth.user.id !== post.author_id) {
+          // Notify the post's creator.
+          const notification = new Notification()
+          notification.triggerer_id = auth.user.id
+          notification.notifiable_id = post.author_id
+          notification.entity_id = post.id
+          notification.entity_type = 'App/Models/Post'
+          notification.type = 'newLikeInPost'
+          notification.metadata = {}
+          await notification.save()
+        }
+      }
+
+      // Recount likes.
+      await post.countLikes()
+
+      // Return a success message
+      return response.json({
+        status: 'success'
+      })
+    } catch(error) {
+      console.log(error)
+      return response.status(400).json({
+        status: 'error',
+        message: 'Something went wrong, please try again.'
+      })
     }
-
-    // Recount likes.
-    await post.countLikes()
   }
 
   async unlike({ params, auth, response }) {
-    // Check if the post exists
+    // Check if the post exists.
     const post = await Post.findOrFail(params.id)
 
-    // Detach the post
-    await auth.user.likedPosts().detach([post.id])
+    try {
+      // Detach the like relationship.
+      await auth.user.likedPosts().detach([post.id])
 
-    // Recount likes.
-    await post.countLikes()
+      // Recount likes.
+      await post.countLikes()
+
+      // Return a success message
+      return response.json({
+        status: 'success'
+      })
+    } catch(error) {
+      return response.status(400).json({
+        status: 'error',
+        message: 'Something went wrong, please try again.'
+      })
+    }
   }
 
   async redraws({ request, params, response }) {
