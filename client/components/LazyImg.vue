@@ -1,25 +1,15 @@
 <template>
-  <div class="image">
+  <div class="bg-gray-300 relative lazy-img">
     <div
       v-if="!loaded"
-      :style="style"
+      :style="placeholderStyle"
+      class="lazy-img-placeholder"
     ></div>
     <img
-      v-if="zoomSrc"
-      v-show="loaded"
-      :src="src"
-      :data-zoom-src="zoomSrc"
-      :alt="alt"
-      data-zoomable
-      class="img-responsive"
-      @load="loaded = true"
-    >
-    <img
-      v-else
       v-show="loaded"
       :src="src"
       :alt="alt"
-      class="img-responsive"
+      class="lazy-img-image"
       @load="loaded = true"
     >
     <slot v-show="loaded"/>
@@ -28,11 +18,10 @@
 
 <script>
 export default {
-  name: 'VImage',
+  name: 'LazyImg',
 
   props: {
     src: { default: null, type: String, required: true },
-    zoomSrc: { default: null, type: String, required: false },
     alt: { default: null, type: String, required: false },
     width: { default: null, type: Number, required: true },
     height: { default: null, type: Number, required: true }
@@ -43,7 +32,7 @@ export default {
   }),
 
   computed: {
-    style () {
+    placeholderStyle () {
       return {
         'width': '100%',
         'height': '0px',
@@ -53,13 +42,3 @@ export default {
   }
 }
 </script>
-
-<style lang="css" scoped>
-.image {
-  background: #e0e0e0;
-}
-.image img {
-  width: 100%;
-  height: auto;
-}
-</style>

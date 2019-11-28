@@ -42,11 +42,11 @@
         <template v-else-if="isAuthenticated">
           <button v-if="comment.replies.length === 0 && !showReplyForm" class="text-primary mr-2" @click.prevent="replyButtonClicked">
             Reply
-          </button>
-          <button v-if="comment.author_id === loggedInUser.id" class="text-primary mr-2" @click.prevent="editButtonClicked">
+          </button><!--
+       --><button v-if="comment.author_id === loggedInUser.id" class="text-primary mr-2" @click.prevent="editButtonClicked">
             Edit
-          </button>
-          <button v-if="post.author_id === loggedInUser.id || comment.author_id === loggedInUser.id" class="text-primary mr-2" @click.prevent="deleteButtonClicked">
+          </button><!--
+       --><button v-if="post.author_id === loggedInUser.id || comment.author_id === loggedInUser.id" class="text-primary mr-2" @click.prevent="deleteButtonClicked">
             Delete
           </button>
         </template>

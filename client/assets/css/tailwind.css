@@ -53,16 +53,12 @@ body {
 }
 
 .illustration-thumbnail {
-  @apply block relative bg-black rounded overflow-hidden;
-}
-
-.illustration-thumbnail .image {
-  @apply block w-full h-full;
-  opacity: 1;
+  @apply block rounded overflow-hidden;
 }
 
 .illustration-thumbnail .overlay {
   @apply absolute inset-0 text-white;
+  background-color: rgba(0, 0, 0, .5);
   opacity: 0;
 }
 
@@ -70,10 +66,6 @@ body {
   @apply absolute text-right;
   right: 12px;
   bottom: 12px;
-}
-
-.illustration-thumbnail:hover .image {
-  opacity: 0.5;
 }
 
 .illustration-thumbnail:hover .overlay {
@@ -93,8 +85,8 @@ form .form-group:last-child {
 }
 
 .medium-zoom-overlay,
-.medium-zoom-image {
-  z-index: 100;
+.medium-zoom-image.medium-zoom-image--opened {
+  z-index: 100 !important;
 }
 
 /* CHECKBOX TOGGLE SWITCH */

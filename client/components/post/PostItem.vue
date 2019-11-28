@@ -74,16 +74,7 @@
         </router-link>
       </div>
     </div>
-    <div class="bg-gray-100">
-      <v-image
-        v-if="post.media && post.media.length > 0"
-        :src="post.media[0].variations['640wf'].url"
-        :zoom-src="post.media[0].variations['1280w'].url"
-        :width="post.media[0].variations['640wf'].width"
-        :height="post.media[0].variations['640wf'].height"
-        alt="Post's image"
-      />
-    </div>
+    <post-item-image :post="post"/>
     <div class="p-4">
       <p v-if="post.description" class="mb-4">
         {{ post.description }}
@@ -127,7 +118,7 @@ import swal from 'sweetalert2'
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import FollowButton from '@/components/FollowButton.vue'
-import VImage from '@/components/Image.vue'
+import PostItemImage from '@/components/post/PostItemImage.vue'
 import LikeButton from '@/components/LikeButton.vue'
 import CommentsFooter from '@/components/post/comments/CommentsFooter.vue'
 import { MoreHorizontalIcon, MessageCircleIcon, ZapIcon, Edit3Icon } from 'vue-feather-icons'
@@ -136,7 +127,7 @@ export default {
   components: {
     Avatar,
     FollowButton,
-    VImage,
+    PostItemImage,
     LikeButton,
     CommentsFooter,
     MoreHorizontalIcon,

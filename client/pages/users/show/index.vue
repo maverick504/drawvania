@@ -48,23 +48,23 @@
         <div class="flex flex-wrap pb-4 -mx-2">
           <div v-for="post in posts.data" :key="post.id" class="w-1/4 px-2 pb-4">
             <nuxt-link :to="{ name: 'posts.show', params: { id: post.id } }" class="illustration-thumbnail">
-              <v-image
-                v-if="post.media && post.media.length > 0"
+              <lazy-img
                 :src="post.media[0].variations['300x300f'].url"
                 :width="300"
                 :height="300"
                 alt="Post's image"
-              />
-              <div class="overlay">
-                <div class="overlay-content">
-                  <div class="block mb-2">
-                    {{ post.total_comments }} <message-circle-icon class="inline-block"/>
-                  </div>
-                  <div class="block">
-                    {{ post.total_likes }} <heart-icon class="inline-block" :class="{ 'filled text-red': post.logged_in_user_liked }"/>
+              >
+                <div class="overlay">
+                  <div class="overlay-content">
+                    <div class="block mt-2">
+                      {{ post.total_comments }} <message-circle-icon class="inline-block"/>
+                    </div>
+                    <div class="block mt-2">
+                      {{ post.total_likes }} <heart-icon class="inline-block" :class="{ 'filled text-red': post.logged_in_user_liked }"/>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </lazy-img>
             </nuxt-link>
           </div>
         </div>
@@ -83,7 +83,7 @@
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
 import FollowButton from '@/components/FollowButton.vue'
-import VImage from '@/components/Image.vue'
+import LazyImg from '@/components/LazyImg.vue'
 import FollowersModal from '@/components/modals/FollowersModal.vue'
 import FollowingsModal from '@/components/modals/FollowingsModal.vue'
 import { MapPinIcon, ImageIcon, HeartIcon, MessageCircleIcon } from 'vue-feather-icons'
@@ -92,7 +92,7 @@ export default {
   components: {
     Avatar,
     FollowButton,
-    VImage,
+    LazyImg,
     FollowersModal,
     FollowingsModal,
     MapPinIcon,
