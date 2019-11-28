@@ -21,7 +21,7 @@ export default {
         return this.user.avatar['small'].url
       }
 
-      return 'https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif'
+      return '/placeholders/avatar_placeholder.png'
     }
   }
 }
