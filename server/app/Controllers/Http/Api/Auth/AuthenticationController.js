@@ -1,7 +1,9 @@
 'use strict'
 
 const { validateAll } = use('Validator')
+const Database = use('Database')
 const User = use('App/Models/User')
+const NotificationSettings = use('App/Models/NotificationSettings')
 
 class AuthenticationController {
 
@@ -18,14 +20,28 @@ class AuthenticationController {
 
     if (!validation.fails()) {
       try {
-        const user = await User.create({ username, email, password })
+        const trx = await Database.beginTransaction()
+
+        const user = await User.create({
+          'username': username,
+          'email': email,
+          'password': password
+        }, trx)
+
+        const notificationSettings = await NotificationSettings.create({
+          'user_id': user.id
+        }, trx)
+
         const token = await auth.authenticator('jwt').generate(user)
+
+        trx.commit()
 
         return response.json({
           status: 'success',
           data: token
         })
       } catch(error) {
+        trx.rollback()
         return response.status(400).json({
           status: 'error',
           message: 'There was a problem creating the user, please try again.'

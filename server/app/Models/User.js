@@ -101,6 +101,10 @@ class User extends Model {
     return user ? true : false
   }
 
+  notificationSettings () {
+    return this.hasOne('App/Models/NotificationSettings')
+  }
+
   posts () {
     return this.hasMany('App/Models/Post', 'id', 'author_id')
   }
