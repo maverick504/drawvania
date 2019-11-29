@@ -51,6 +51,11 @@ module.exports = {
     '@nuxtjs/dotenv'
   ],
 
+  env: {
+    baseUrl: process.env.BASE_URL,
+    apiUrl: process.env.API_URL,
+  },
+
   /*
   ** Axios module configuration
   */
