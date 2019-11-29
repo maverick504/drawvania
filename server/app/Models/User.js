@@ -10,9 +10,7 @@ class User extends Model {
   static boot () {
     super.boot()
 
-    this.addTrait('@provider:Morphable')
     this.addTrait('@provider:CastAttributes')
-    this.addTrait('@provider:Notifiable')
     this.addTrait('@provider:Adonis/Acl/HasRole')
     this.addTrait('@provider:Adonis/Acl/HasPermission')
     this.addTrait('HasMedia', {

@@ -44,9 +44,11 @@ class FeedController {
     .orderBy('posts.created_at', 'desc')
     .paginate(request.get().page, 5)
 
-    // Save request time.
-    auth.user.last_global_feed_request = new Date()
-    await auth.user.save()
+    if(auth.user) {
+      // Save request time.
+      auth.user.last_global_feed_request = new Date()
+      await auth.user.save()
+    }
 
     return posts
   }
@@ -83,9 +85,11 @@ class FeedController {
     .orderBy('posts.created_at', 'desc')
     .paginate(request.get().page, 5)
 
-    // Save request time.
-    auth.user.last_followings_feed_request = new Date()
-    await auth.user.save()
+    if(auth.user) {
+      // Save request time.
+      auth.user.last_followings_feed_request = new Date()
+      await auth.user.save()
+    }
 
     return posts
   }
