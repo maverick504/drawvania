@@ -32,6 +32,14 @@ class Post extends Model {
     })
   }
 
+  static get createdAtColumn () {
+    return 'created_at'
+  }
+
+  static get updatedAtColumn () {
+    return null
+  }
+
   /**
    * add values to cast to upon set
    */

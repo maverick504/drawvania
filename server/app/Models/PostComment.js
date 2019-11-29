@@ -35,6 +35,14 @@ class PostComment extends Model {
     })
   }
 
+  static get createdAtColumn () {
+    return 'created_at'
+  }
+
+  static get updatedAtColumn () {
+    return null
+  }
+
   async countLikes () {
     const query = await this.likers().count()
     this.total_likes = query[0]['count(*)'] || 0

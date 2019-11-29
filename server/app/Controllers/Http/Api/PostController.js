@@ -209,6 +209,7 @@ class PostController {
       post.description = description
       post.restriction = restriction
       post.redrawable = redrawable
+      post.updated_at = new Date()
       await post.save()
 
       // Return a success message

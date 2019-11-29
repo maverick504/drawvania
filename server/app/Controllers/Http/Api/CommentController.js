@@ -122,6 +122,7 @@ class CommentController {
       try {
         // Update the comment's data
         commentRecord.comment = comment
+        commentRecord.updated_at = new Date()
         await commentRecord.save()
 
         // Return a success message
