@@ -9,9 +9,6 @@
           <router-link :to="{ name: 'settings.password' }" active-class="border-l-4 border-primary" class="block p-4 hover:bg-gray-100 hover:text-primary">
             Change Password
           </router-link>
-          <router-link :to="{ name: 'settings.notifications' }" active-class="border-l-4 border-primary" class="block p-4 hover:bg-gray-100 hover:text-primary">
-            Notifications Settings
-          </router-link>
         </div>
         <div class="w-3/4 px-4 py-8">
           <nuxt-child/>

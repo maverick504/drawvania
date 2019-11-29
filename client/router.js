@@ -20,8 +20,7 @@ const routes = [
     children: [
       { path: '', redirect: { name: 'settings.profile' } },
       { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue'), meta: { group: 'settings' } },
-      { path: 'password', name: 'settings.password', component: page('settings/password.vue'), meta: { group: 'settings' } },
-      { path: 'notifications', name: 'settings.notifications', component: page('settings/notifications.vue'), meta: { group: 'settings' } }
+      { path: 'password', name: 'settings.password', component: page('settings/password.vue'), meta: { group: 'settings' } }
     ]
   },
 
