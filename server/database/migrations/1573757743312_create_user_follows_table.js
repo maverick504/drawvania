@@ -5,7 +5,7 @@ const Schema = use('Schema')
 
 class CreateUserFollowersSchema extends Schema {
   up () {
-    this.create('user_followings', (table) => {
+    this.create('user_follows', (table) => {
       table.bigIncrements()
       table.integer('follower_id').unsigned().notNullable()
       table.integer('followed_id').unsigned().notNullable()
@@ -18,7 +18,7 @@ class CreateUserFollowersSchema extends Schema {
   }
 
   down () {
-    this.drop('user_followings')
+    this.drop('user_follows')
   }
 }
 

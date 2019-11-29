@@ -112,12 +112,12 @@ class User extends Model {
 
   followers () {
     return this.belongsToMany('App/Models/User', 'followed_id', 'follower_id', 'id', 'id')
-    .pivotModel('App/Models/UserFollowing')
+    .pivotModel('App/Models/UserFollow')
   }
 
   followings () {
     return this.belongsToMany('App/Models/User', 'follower_id', 'followed_id', 'id', 'id')
-    .pivotModel('App/Models/UserFollowing')
+    .pivotModel('App/Models/UserFollow')
   }
 
   notifications () {

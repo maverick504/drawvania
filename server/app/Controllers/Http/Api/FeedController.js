@@ -23,11 +23,11 @@ class FeedController {
         builder
         .select([
           'users.*',
-          Database.raw("IF((`user_followings`.`id` IS NOT NULL AND `user_followings`.`deleted_at` IS NULL), 1, 0) AS logged_in_user_is_follower")
+          Database.raw("IF((`user_follows`.`id` IS NOT NULL AND `user_follows`.`deleted_at` IS NULL), 1, 0) AS logged_in_user_is_follower")
         ])
-        .leftJoin('user_followings', function () {
-          this.on('user_followings.followed_id', 'users.id')
-          this.on('user_followings.follower_id', auth.user.id)
+        .leftJoin('user_follows', function () {
+          this.on('user_follows.followed_id', 'users.id')
+          this.on('user_follows.follower_id', auth.user.id)
         })
       })
     } else {
@@ -65,7 +65,7 @@ class FeedController {
       .on('post_id', 'posts.id')
       .on('user_id', auth.user.id)
     })
-    .join('user_followings', function () {
+    .join('user_follows', function () {
       this
       .on('followed_id', 'posts.author_id')
       .on('follower_id', auth.user.id)
@@ -81,7 +81,7 @@ class FeedController {
     .with('parentPost.author')
     .with('parentPost.media')
     .where('posts.date', '<=', new Date())
-    .whereNull('user_followings.deleted_at')
+    .whereNull('user_follows.deleted_at')
     .orderBy('posts.created_at', 'desc')
     .paginate(request.get().page, 5)
 

@@ -1,7 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User')
-const UserFollowing = use('App/Models/UserFollowing')
+const UserFollow = use('App/Models/UserFollow')
 const Notification = use('App/Models/Notification')
 
 class UserController {
@@ -22,7 +22,7 @@ class UserController {
     const user = await User.query().where('username', '=', params.username).firstOrFail()
 
     // Return followers
-    return await UserFollowing
+    return await UserFollow
     .query()
     .with('follower')
     .where('followed_id', '=', user.id)
@@ -34,7 +34,7 @@ class UserController {
     const user = await User.query().where('username', '=', params.username).firstOrFail()
 
     // Return followings
-    return await UserFollowing
+    return await UserFollow
     .query()
     .with('followed')
     .where('follower_id', '=', user.id)
@@ -54,7 +54,7 @@ class UserController {
 
     try {
       // Check if the user was followed previously.
-      const followRelation = await UserFollowing
+      const followRelation = await UserFollow
       .query()
       .withTrashed()
       .where('follower_id', '=', auth.user.id)
@@ -84,7 +84,6 @@ class UserController {
       // Recount followings.
       await auth.user.countFollowings()
     } catch(error) {
-      console.log(error)
       return response.status(400).json({
         status: 'error',
         message: 'Something went wrong, please try again.'
