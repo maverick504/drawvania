@@ -24,7 +24,7 @@
         </div>
         <div class="flex border-t border-gray-300 p-4">
           <div class="flex-grow">
-            <button v-if="page < lastPage" type="button" class="text-primary">Show more comments</button>
+            <button v-if="page < lastPage" type="button" class="text-primary" @click="loadNextPage()">Show more comments</button>
           </div>
           <div class="flex-initial">
             <span class="text-gray-600">{{ comments.length }} of {{ total }}</span>

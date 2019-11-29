@@ -110,6 +110,11 @@ class User extends Model {
     .pivotModel('App/Models/PostLike')
   }
 
+  likedPostComments () {
+    return this.belongsToMany('App/Models/PostComment', 'user_id', 'comment_id')
+    .pivotModel('App/Models/PostCommentLike')
+  }
+
   followers () {
     return this.belongsToMany('App/Models/User', 'followed_id', 'follower_id', 'id', 'id')
     .pivotModel('App/Models/UserFollow')

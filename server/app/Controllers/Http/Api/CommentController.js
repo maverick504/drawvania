@@ -2,24 +2,39 @@
 
 const { validateAll } = use('Validator')
 const PostComment = use('App/Models/PostComment')
+const PostCommentLike = use('App/Models/PostCommentLike')
 const User = use('App/Models/User')
 const Post = use('App/Models/Post')
 const Notification = use('App/Models/Notification')
 
 class CommentController {
-  async postIndex({ request, params }) {
+  async postIndex({ request, auth, params }) {
     // Check if the post exists
     const post = await Post.findOrFail(params.id)
 
-    // Return comments
-    return await PostComment
-    .query()
+    // Query comments
+    var query = PostComment.query()
+
+    if(auth.user) {
+      query.withLikes(auth.user.id)
+    } else {
+      query.select([ 'post_comments.*' ])
+    }
+
+    return await query
     .with('author')
-    .with('replies.author')
+    .with('replies', (builder) => {
+      builder
+      .withLikes(auth.user.id)
+      .with('author')
+      .orderBy('total_likes', 'desc')
+      .orderBy('created_at', 'desc')
+    })
     .where('post_id', '=', post.id)
     .whereNull('parent_comment_id')
+    .orderBy('total_likes', 'desc')
     .orderBy('created_at', 'desc')
-    .paginate(request.get().page, 10)
+    .paginate(request.get().page, 5)
   }
 
   async store({ request, auth, response }) {
@@ -254,6 +269,77 @@ class CommentController {
       }
     } else {
       response.status(400).send(validation.messages())
+    }
+  }
+
+  async like({ params, auth, response }) {
+    // Check if the comment exists.
+    const comment = await PostComment.findOrFail(params.id)
+
+    try {
+      // Check if the comment was liked previously.
+      const likeRelation = await PostCommentLike
+      .query()
+      .withTrashed()
+      .where('user_id', '=', auth.user.id)
+      .where('comment_id', '=', comment.id)
+      .first()
+
+      if(likeRelation) {
+        // The user liked this comment previously. Restore the relationship.
+        await likeRelation.restore()
+      } else {
+        // Create a 'like' relationship between the user and the comment.
+        await auth.user.likedPostComments().attach([comment.id])
+
+        if(auth.user.id !== comment.author_id) {
+          // Notify the comment's creator.
+          const notification = new Notification()
+          notification.triggerer_id = auth.user.id
+          notification.notifiable_id = comment.author_id
+          notification.entity_id = comment.id
+          notification.entity_type = 'App/Models/PostComment'
+          notification.type = 'newLikeInPostComment'
+          notification.metadata = {}
+          await notification.save()
+        }
+      }
+
+      // Recount likes.
+      await comment.countLikes()
+
+      // Return a success message
+      return response.json({
+        status: 'success'
+      })
+    } catch(error) {
+      return response.status(400).json({
+        status: 'error',
+        message: 'Something went wrong, please try again.'
+      })
+    }
+  }
+
+  async unlike({ params, auth, response }) {
+    // Check if the comment exists.
+    const comment = await PostComment.findOrFail(params.id)
+
+    try {
+      // Detach the like relationship.
+      await auth.user.likedPostComments().detach([comment.id])
+
+      // Recount likes.
+      await comment.countLikes()
+
+      // Return a success message.
+      return response.json({
+        status: 'success'
+      })
+    } catch(error) {
+      return response.status(400).json({
+        status: 'error',
+        message: 'Something went wrong, please try again.'
+      })
     }
   }
 }

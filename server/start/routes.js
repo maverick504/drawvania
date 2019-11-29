@@ -72,6 +72,9 @@ Route.group(() => {
   Route.patch('comments/:id', 'Api/CommentController.update').middleware(['auth:jwt'])
   Route.delete('comments/:id', 'Api/CommentController.destroy').middleware(['auth:jwt'])
   Route.post('comments/:id/reply', 'Api/CommentController.reply').middleware(['auth:jwt'])
+
+  Route.post('comments/:id/like', 'Api/CommentController.like').middleware(['auth:jwt'])
+  Route.post('comments/:id/unlike', 'Api/CommentController.unlike').middleware(['auth:jwt'])
 }).prefix('api')
 
 // NORMAL ROUTES

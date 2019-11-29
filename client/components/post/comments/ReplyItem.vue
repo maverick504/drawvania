@@ -16,7 +16,22 @@
             <abbr v-if="comment.updated_at > comment.created_at" :title="`Edited on ${comment.updated_at}`">(edited)</abbr>
           </span>
         </div>
-        <p>{{ comment.comment }}</p>
+        <div class="flex items-center">
+          <p class="flex-grow">
+            {{ comment.comment }}
+          </p>
+          <div class="flex-initial whitespace-no-wrap pl-1">
+            <like-button
+              :loggedInUserLiked.sync="comment.logged_in_user_liked"
+              :totalLikes.sync="comment.total_likes"
+              :likeEndpoint="`/comments/${comment.id}/like`"
+              :unlikeEndpoint="`/comments/${comment.id}/unlike`"
+              size="1x"
+              class="align-middle"
+            /><!--
+         --><span class="align-middle text-sm text-red ml-1">{{ comment.total_likes }}</span>
+          </div>
+        </div>
       </div>
       <t-input
         v-if="editing"
@@ -56,10 +71,12 @@
 import swal from 'sweetalert2'
 import { mapGetters } from 'vuex'
 import Avatar from '@/components/Avatar.vue'
+import LikeButton from '@/components/LikeButton.vue'
 
 export default {
   components: {
-    Avatar
+    Avatar,
+    LikeButton
   },
 
   props: {

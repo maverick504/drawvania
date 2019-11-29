@@ -1,6 +1,6 @@
 <template>
   <button class="text-red" @click="toggleLike()">
-    <heart-icon size="2x" :class="{ 'filled': loggedInUserLiked }"/>
+    <heart-icon :size="size" :class="{ 'filled': loggedInUserLiked }"/>
   </button>
 </template>
 
@@ -17,7 +17,8 @@ export default {
     likeEndpoint: { type: String, required: true },
     unlikeEndpoint: { type: String, required: true },
     loggedInUserLiked: { type: Boolean, default: false, required: false },
-    totalLikes: { type: Number, required: true }
+    totalLikes: { type: Number, required: true },
+    size: { type: String, default: '2x', required: false },
   },
 
   data: function () {

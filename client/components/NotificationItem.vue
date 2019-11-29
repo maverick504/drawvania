@@ -97,12 +97,14 @@ export default {
       switch (this.notification.type) {
         case 'newLikeInPost':
           return 'liked your post.'
+        case 'newLikeInPostComment':
+            return 'liked your comment.'
         case 'newRedrawOfPost':
           return 'redrawed your post.'
         case 'newCommentInPost':
-          return `commented your post: ${this.notification.metadata.comment.comment}`
+          return `commented your post: ${this.notification.metadata.comment.comment}.`
         case 'newReplyToCommentInPost':
-          return `replied to a conversation where you are participant: ${this.notification.metadata.comment.comment}`
+          return `replied to a conversation where you are participant: ${this.notification.metadata.comment.comment}.`
         case 'deletedCommentInPost':
           return 'deleted your comment.'
         case 'newFollower':
