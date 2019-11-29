@@ -1,6 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User')
+const Notification = use('App/Models/Notification')
 
 class NotificationController {
 
@@ -13,7 +14,9 @@ class NotificationController {
     for(let i = 0; i < notifications.rows.length; i++) {
       const entity = notifications.rows[i].$relations.entity
 
-      if(!entity) {
+      if(notifications.rows[i].entity_type && !entity) {
+        // The entity related to this notification was deleted, the notification should be deleted as well.
+        await Notification.query().where('id', '=', notifications.rows[i].id).delete()
         notifications.rows.splice(i, 1)
         i--
       } else {
