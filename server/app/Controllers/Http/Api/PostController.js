@@ -330,7 +330,6 @@ class PostController {
         status: 'success'
       })
     } catch(error) {
-      console.log(error)
       return response.status(400).json({
         status: 'error',
         message: 'Something went wrong, please try again.'

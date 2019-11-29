@@ -25,7 +25,6 @@ class AuthenticationController {
 
         response.redirect('/')
       } catch(error) {
-        console.log(error.name)
         return response.status(400).json({
           status: 'error',
           message: 'Invalid email/password.'
