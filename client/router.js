@@ -15,10 +15,6 @@ const routes = [
 
   { path: '/posts/:id', name: 'posts.show', component: page('posts/show.vue') },
 
-  { path: '/:username', name: 'users.show', component: page('users/show/index.vue') },
-
-  { path: '/notifications', name: 'notifications', component: page('notifications/index.vue') },
-
   { path: '/settings',
     component: page('settings/index.vue'),
     children: [
@@ -27,7 +23,10 @@ const routes = [
       { path: 'password', name: 'settings.password', component: page('settings/password.vue'), meta: { group: 'settings' } },
       { path: 'notifications', name: 'settings.notifications', component: page('settings/notifications.vue'), meta: { group: 'settings' } }
     ]
-  }
+  },
+
+  // The 'users' route should be always at the end of the routes array.
+  { path: '/:username', name: 'users.show', component: page('users/show/index.vue') },
 ]
 
 export function createRouter () {

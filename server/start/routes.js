@@ -14,6 +14,7 @@
 */
 
 const Route = use('Route')
+const Config = use('Config')
 
 // ADMIN ROUTES
 
@@ -75,7 +76,7 @@ Route.group(() => {
 
 // NORMAL ROUTES
 
-Route.get('/', ({ response }) => response.redirect('http://localhost:5000/'))
+Route.get('/', ({ response }) => response.redirect(Config.get('drawvania.subdomains.app')))
 
 Route.get('login', 'AuthenticationController.showLoginForm').middleware(['guest:session'])
 Route.post('login', 'AuthenticationController.login').middleware(['guest:session'])

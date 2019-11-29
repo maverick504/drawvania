@@ -38,7 +38,7 @@
                 <img src="~/assets/img/discord.png" class="w-full h-auto">
               </a>
               <div class="text-center text-sm text-gray-600">
-                <a href="#" class="whitespace-no-wrap mx-1">Support/Premium</a>
+                <a :href="`${baseUrl}/premium`" class="whitespace-no-wrap mx-1">Support/Premium</a>
                 <!--
                 <a href="#" class="whitespace-no-wrap mx-1">Patron List</a>
                 -->
@@ -55,6 +55,12 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  data: function () {
+    return {
+      baseUrl: process.env.baseUrl
+    }
+  },
+
   computed: {
     ...mapGetters([ 'isAuthenticated' ])
   }
