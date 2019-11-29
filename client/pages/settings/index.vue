@@ -1,5 +1,5 @@
 <template>
-  <div class="py-16">
+  <div class="py-8">
     <div class="container mx-auto bg-white border rounded overflow-hidden">
       <div class="flex">
         <div class="w-1/4 border-r">

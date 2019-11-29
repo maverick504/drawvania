@@ -8,6 +8,7 @@
         <div class="flex-grow">
           <div class="inline-flex items-center">
             <h1 class="inline-block text-3xl font-bold">{{ user.username }}</h1>
+            <span v-if="user.upgraded_premium_at" class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-1">premium</span>
             <router-link
               v-if="isAuthenticated && user.id === loggedInUser.id"
               :to="{ name: 'settings.profile' }"

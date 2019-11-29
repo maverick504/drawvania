@@ -8,9 +8,10 @@
       </div>
       <div class="flex-grow">
         <div class="block">
-          <router-link :to="{ name: 'users.show', params: { username: post.author.username } }" class="font-bold leading-none mr-2">
+          <router-link :to="{ name: 'users.show', params: { username: post.author.username } }" class="font-bold leading-none mr-1">
             {{ post.author.username }}
           </router-link><!--
+       --><span v-if="post.author.upgraded_premium_at" class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-1">premium</span><!--
        --><follow-button
             v-if="!isAuthenticated || loggedInUser.id !== post.author.id"
             :loggedInUserIsFollower.sync="post.author.logged_in_user_is_follower"

@@ -45,7 +45,10 @@ module.exports = {
         '100': '#ffe3e3', // 90% lighter
         '500': '#ff7474', // 50% lighter
         '700': '#ff3d3d', // 30% lighter
-      }
+      },
+      gold: {
+        'default': '#ff9f1a'
+      },
     },
     cursor: {
       pointer: 'pointer',
