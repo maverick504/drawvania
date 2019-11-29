@@ -11,7 +11,7 @@ class SettingsController {
       username: `required|username|unique:users,username,id,${auth.user.id}`,
       gender: `in:male,female`,
       location: `max:100`,
-      about: `max:250`
+      about: `max:500`
     }
 
     const { username, gender, location, about } = request.only(['username', 'gender', 'location', 'about' ])
