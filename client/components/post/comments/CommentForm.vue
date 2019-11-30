@@ -1,9 +1,9 @@
 <template>
   <div class="flex p-4">
     <div class="flex-shrink-0">
-      <avatar 
-        :user="loggedInUser" 
-        size="10" 
+      <avatar
+        :user="loggedInUser"
+        size="10"
         class="mr-2"/>
     </div>
     <div class="flex-grow">
@@ -17,8 +17,8 @@
         autocomplete="off"
         @keyup.enter="submit"
       />
-      <span 
-        v-if="error" 
+      <span
+        v-if="error"
         class="text-danger text-sm">
         {{ error }}
       </span>
@@ -66,6 +66,7 @@ export default {
           post_id: this.post.id,
           comment: this.content
         })
+
         const comment = response.data.data
         comment.total_likes = 0
         comment.logged_in_user_liked = false

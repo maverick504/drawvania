@@ -1,26 +1,26 @@
 <template>
   <div class="flex mt-4">
     <div class="flex-shrink-0">
-      <router-link 
-        :to="{ name: 'users.show', params: { username: comment.author.username } }" 
+      <router-link
+        :to="{ name: 'users.show', params: { username: comment.author.username } }"
         class="block mr-2">
-        <avatar 
-          :user="comment.author" 
+        <avatar
+          :user="comment.author"
           size="8"/>
       </router-link>
     </div>
     <div class="flex-grow">
       <div v-show="!editing">
         <div class="block">
-          <router-link 
-            :to="{ name: 'users.show', params: { username: comment.author.username } }" 
+          <router-link
+            :to="{ name: 'users.show', params: { username: comment.author.username } }"
             class="font-bold mr-1">
             {{ comment.author.username }}
           </router-link>
           <span class="inline-block text-sm gray-600">
             {{ comment.created_at | moment("from", "now") }}
-            <abbr 
-              v-if="comment.updated_at > comment.created_at" 
+            <abbr
+              v-if="comment.updated_at > comment.created_at"
               :title="`Edited on ${comment.updated_at}`">(edited)</abbr>
           </span>
         </div>
@@ -53,30 +53,30 @@
         autocomplete="off"
         @keyup.enter="confirmEditing"
       />
-      <div 
-        v-if="error" 
+      <div
+        v-if="error"
         class="text-danger text-sm">
         {{ error }}
       </div>
       <div class="text-sm pt-1">
         <template v-if="editing">
-          <button 
-            class="text-primary mr-2" 
+          <button
+            class="text-primary mr-2"
             @click.prevent="cancelEditing()">
             Cancel
           </button>
         </template>
         <template v-else-if="isAuthenticated">
-          <button 
-            v-if="comment.author_id === loggedInUser.id" 
-            class="text-primary mr-2" 
+          <button
+            v-if="comment.author_id === loggedInUser.id"
+            class="text-primary mr-2"
             @click.prevent="editButtonClicked">
             Edit
           </button><!--
-       --><button 
-v-if="post.author_id === loggedInUser.id || comment.author_id === loggedInUser.id" 
-class="text-primary mr-2" 
-@click.prevent="deleteButtonClicked">
+       --><button
+            v-if="post.author_id === loggedInUser.id || comment.author_id === loggedInUser.id" 
+            class="text-primary mr-2"
+            @click.prevent="deleteButtonClicked">
             Delete
           </button>
         </template>

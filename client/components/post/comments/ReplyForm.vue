@@ -1,9 +1,9 @@
 <template>
   <div class="flex pb-4">
     <div class="flex-shrink-0">
-      <avatar 
-        :user="loggedInUser" 
-        size="8" 
+      <avatar
+        :user="loggedInUser"
+        size="8"
         class="mr-2"/>
     </div>
     <div class="flex-grow">
@@ -18,14 +18,14 @@
         autocomplete="off"
         @keyup.enter="submit"
       />
-      <span 
-        v-if="error" 
+      <span
+        v-if="error"
         class="text-danger text-sm">
         {{ error }}
       </span>
       <div class="text-sm pt-1">
-        <button 
-          class="text-primary mr-2" 
+        <button
+          class="text-primary mr-2"
           @click.prevent="cancel()">
           Cancel
         </button>
@@ -78,9 +78,10 @@ export default {
         const response = await this.$axios.post(`comments/${this.parentComment.id}/reply`, {
           comment: this.content
         })
+
         const reply = response.data.data
-        comment.total_likes = 0
-        comment.logged_in_user_liked = false
+        reply.total_likes = 0
+        reply.logged_in_user_liked = false
 
         this.$emit('replyPosted', reply)
       } catch (e) {
