@@ -12,8 +12,13 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { hid: 'description', name: 'description', content: pkg.description },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { 'http-equiv': 'x-ua-compatible', content: 'ie=edge,chrome=1' }
     ],
+    htmlAttrs: {
+      lang: 'en'
+    },
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
@@ -26,6 +31,11 @@ module.exports = {
     color: '#7158e2',
     height: '4px'
   },
+
+  /*
+  ** CSS that will be bundled in the project.
+  */
+  css: ['~/assets/css/main.css'],
 
   /*
   ** Plugins to load before mounting the App
@@ -43,18 +53,12 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/router',
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    'nuxt-purgecss'
   ],
-
-  env: {
-    baseUrl: process.env.BASE_URL,
-    apiUrl: process.env.API_URL,
-  },
 
   /*
   ** Axios module configuration
@@ -88,10 +92,36 @@ module.exports = {
   },
 
   /*
+  ** Dotenv module configuration
+  */
+  env: {
+    baseUrl: process.env.BASE_URL,
+    apiUrl: process.env.API_URL,
+  },
+
+  /*
+  ** Purgecss module configuration
+  */
+  purgeCSS: {
+    mode: 'postcss'
+  },
+
+  /*
   ** Build configuration
   */
   build: {
+    analyze: true,
     extractCSS: true,
+
+    /*
+    ** PostCSS configuration
+    */
+    postcss: {
+      plugins: {
+        tailwindcss: 'tailwind.config.js'
+      }
+    },
+
     /*
     ** You can extend webpack config here
     */
