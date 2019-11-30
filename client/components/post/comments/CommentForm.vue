@@ -62,6 +62,8 @@ export default {
           comment: this.content
         })
         const comment = response.data.data
+        comment.total_likes = 0
+        comment.logged_in_user_liked = false
         comment.replies = []
 
         this.$emit('commentPosted', comment)

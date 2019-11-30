@@ -72,6 +72,8 @@ export default {
           comment: this.content
         })
         const reply = response.data.data
+        comment.total_likes = 0
+        comment.logged_in_user_liked = false
 
         this.$emit('replyPosted', reply)
       } catch (e) {
