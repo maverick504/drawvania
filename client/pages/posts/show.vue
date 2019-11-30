@@ -2,7 +2,9 @@
   <div>
     <feed-layout>
       <div class="p-4">
-        <post-item :post="post" class="mb-32"/>
+        <post-item 
+          :post="post" 
+          class="mb-32"/>
       </div>
     </feed-layout>
     <likes-modal/>

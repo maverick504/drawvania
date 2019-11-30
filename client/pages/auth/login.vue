@@ -1,41 +1,57 @@
 <template>
   <div>
     <h1 class="text-2xl text-center mb-4">Log in</h1>
-    <form method="post" @submit.prevent="login">
+    <form 
+      method="post" 
+      @submit.prevent="login">
 
       <error-alert :form="form"/>
 
       <div class="form-group">
-        <label class="block text-gray-700 mb-2" for="email">Email</label>
+        <label 
+          class="block text-gray-700 mb-2" 
+          for="email">Email</label>
         <t-input
+          id="email"
           :class="{ 'border-danger': form.hasErrors('email') }"
           v-model="form.email"
-          id="email"
           placeholder="Email"
         />
-        <has-error :form="form" field="email"/>
+        <has-error 
+          :form="form" 
+          field="email"/>
       </div>
 
       <div class="form-group">
-        <label class="block text-gray-700 mb-2" for="password">Password</label>
+        <label 
+          class="block text-gray-700 mb-2" 
+          for="password">Password</label>
         <t-input
+          id="password"
           :class="{ 'border-danger': form.hasErrors('password') }"
           v-model="form.password"
-          id="password"
           type="password"
           placeholder="Password"
         />
-        <has-error :form="form" field="password"/>
+        <has-error 
+          :form="form" 
+          field="password"/>
       </div>
 
       <div class="form-group">
-        <t-button :class="{ 'btn-loading': form.busy }" class="block w-full" type="submit" variant="primary">
+        <t-button 
+          :class="{ 'btn-loading': form.busy }" 
+          class="block w-full" 
+          type="submit" 
+          variant="primary">
           Login
         </t-button>
       </div>
 
       <div class="text-center">
-        Don't have an account? <nuxt-link :to="{ name: 'auth.register' }" class="text-primary">Register</nuxt-link>
+        Don't have an account? <nuxt-link 
+          :to="{ name: 'auth.register' }" 
+          class="text-primary">Register</nuxt-link>
       </div>
 
     </form>

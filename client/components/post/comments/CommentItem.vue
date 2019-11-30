@@ -1,19 +1,27 @@
 <template>
   <div class="flex px-4 mb-4">
     <div class="flex-shrink-0">
-      <router-link :to="{ name: 'users.show', params: { username: comment.author.username } }" class="block mr-2">
-        <avatar :user="comment.author" size="10"/>
+      <router-link 
+        :to="{ name: 'users.show', params: { username: comment.author.username } }" 
+        class="block mr-2">
+        <avatar 
+          :user="comment.author" 
+          size="10"/>
       </router-link>
     </div>
     <div class="flex-grow">
       <div v-show="!editing">
         <div class="block">
-          <router-link :to="{ name: 'users.show', params: { username: comment.author.username } }" class="font-bold mr-1">
+          <router-link 
+            :to="{ name: 'users.show', params: { username: comment.author.username } }" 
+            class="font-bold mr-1">
             {{ comment.author.username }}
           </router-link>
           <span class="inline-block text-sm gray-600">
             {{ comment.created_at | moment("from", "now") }}
-            <abbr v-if="comment.updated_at > comment.created_at" :title="`Edited on ${comment.updated_at}`">(edited)</abbr>
+            <abbr 
+              v-if="comment.updated_at > comment.created_at" 
+              :title="`Edited on ${comment.updated_at}`">(edited)</abbr>
           </span>
         </div>
         <div class="flex items-center">
@@ -22,10 +30,10 @@
           </p>
           <div class="flex-initial whitespace-no-wrap pl-1">
             <like-button
-              :loggedInUserLiked.sync="comment.logged_in_user_liked"
-              :totalLikes.sync="comment.total_likes"
-              :likeEndpoint="`/comments/${comment.id}/like`"
-              :unlikeEndpoint="`/comments/${comment.id}/unlike`"
+              :logged-in-user-liked.sync="comment.logged_in_user_liked"
+              :total-likes.sync="comment.total_likes"
+              :like-endpoint="`/comments/${comment.id}/like`"
+              :unlike-endpoint="`/comments/${comment.id}/unlike`"
               size="1x"
               class="align-middle"
             /><!--
@@ -37,36 +45,51 @@
         v-if="editing"
         ref="editCommentInput"
         :status="error ? 'error' : null"
-        baseClass="w-full border-b-2 border-gray-200 focus:border-primary"
-        defaultSizeClass="px-2 pt-2 pb-1"
-        errorStatusClass="border-danger focus:border-danger"
         v-model="newContent"
+        base-class="w-full border-b-2 border-gray-200 focus:border-primary"
+        default-size-class="px-2 pt-2 pb-1"
+        error-status-class="border-danger focus:border-danger"
         placeholder="Write a comment about this..."
         autocomplete="off"
         @keyup.enter="confirmEditing"
       />
-      <div v-if="error" class="text-danger text-sm">
+      <div 
+        v-if="error" 
+        class="text-danger text-sm">
         {{ error }}
       </div>
       <div class="text-sm pt-1">
         <template v-if="editing">
-          <button class="text-primary mr-2" @click.prevent="cancelEditing()">
+          <button 
+            class="text-primary mr-2" 
+            @click.prevent="cancelEditing()">
             Cancel
           </button>
         </template>
         <template v-else-if="isAuthenticated">
-          <button v-if="comment.replies.length === 0 && !showReplyForm" class="text-primary mr-2" @click.prevent="replyButtonClicked">
+          <button 
+            v-if="comment.replies.length === 0 && !showReplyForm" 
+            class="text-primary mr-2" 
+            @click.prevent="replyButtonClicked">
             Reply
           </button><!--
-       --><button v-if="comment.author_id === loggedInUser.id" class="text-primary mr-2" @click.prevent="editButtonClicked">
+       --><button 
+v-if="comment.author_id === loggedInUser.id" 
+class="text-primary mr-2" 
+@click.prevent="editButtonClicked">
             Edit
           </button><!--
-       --><button v-if="post.author_id === loggedInUser.id || comment.author_id === loggedInUser.id" class="text-primary mr-2" @click.prevent="deleteButtonClicked">
+       --><button 
+v-if="post.author_id === loggedInUser.id || comment.author_id === loggedInUser.id" 
+class="text-primary mr-2" 
+@click.prevent="deleteButtonClicked">
             Delete
           </button>
         </template>
       </div>
-      <div v-if="comment.replies.length > 0" class="mt-4">
+      <div 
+        v-if="comment.replies.length > 0" 
+        class="mt-4">
         <reply-item
           v-for="reply in comment.replies"
           :key="reply.id"
@@ -75,12 +98,15 @@
           @replyDeleted="onReplyDeleted"
         />
       </div>
-      <button v-if="comment.replies.length > 0 && !showReplyForm && isAuthenticated" class="text-primary text-sm mt-4" @click.prevent="replyButtonClicked">
+      <button 
+        v-if="comment.replies.length > 0 && !showReplyForm && isAuthenticated" 
+        class="text-primary text-sm mt-4" 
+        @click.prevent="replyButtonClicked">
         Reply to this conversation
       </button>
       <reply-form
         v-if="showReplyForm"
-        :parentComment="comment"
+        :parent-comment="comment"
         class="mt-4"
         @cancelled="showReplyForm = false"
         @replyPosted="onReplyPosted"

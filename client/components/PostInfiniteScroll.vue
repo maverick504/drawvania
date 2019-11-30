@@ -1,12 +1,19 @@
 <template>
   <div class="mb-32">
     <template v-if="!loading && posts.length === 0">
-      <slot name="empty-state"></slot>
+      <slot name="empty-state"/>
     </template>
     <template v-else>
-      <post-item v-for="(post, index) in posts" :key="index" :post="post"/>
-      <div v-if="loading" class="py-4 text-center text-primary">
-        <div class="spinner" role="status">
+      <post-item 
+        v-for="(post, index) in posts" 
+        :key="index" 
+        :post="post"/>
+      <div 
+        v-if="loading" 
+        class="py-4 text-center text-primary">
+        <div 
+          class="spinner" 
+          role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>

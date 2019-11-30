@@ -4,7 +4,7 @@
       v-if="!loaded"
       :style="placeholderStyle"
       class="lazy-img-placeholder"
-    ></div>
+    />
     <img
       v-show="loaded"
       :src="src"

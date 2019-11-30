@@ -1,40 +1,62 @@
 <template>
-  <t-modal ref="modal" v-model="show" header="Log in" header-class="bg-gray-100 p-4 text-xl text-center" width="400" @before-close="beforeClose">
-    <form method="post" @submit.prevent="login">
+  <t-modal 
+    ref="modal" 
+    v-model="show" 
+    header="Log in" 
+    header-class="bg-gray-100 p-4 text-xl text-center" 
+    width="400" 
+    @before-close="beforeClose">
+    <form 
+      method="post" 
+      @submit.prevent="login">
 
       <error-alert :form="form"/>
 
       <div class="form-group">
-        <label class="block text-gray-700 mb-2" for="login-modal-email">Email</label>
+        <label 
+          class="block text-gray-700 mb-2" 
+          for="login-modal-email">Email</label>
         <t-input
+          id="login-modal-email"
           :class="{ 'border-danger': form.hasErrors('email') }"
           v-model="form.email"
-          id="login-modal-email"
           placeholder="Email"
         />
-        <has-error :form="form" field="email"/>
+        <has-error 
+          :form="form" 
+          field="email"/>
       </div>
 
       <div class="form-group">
-        <label class="block text-gray-700 mb-2" for="login-modal-password">Password</label>
+        <label 
+          class="block text-gray-700 mb-2" 
+          for="login-modal-password">Password</label>
         <t-input
+          id="login-modal-password"
           :class="{ 'border-danger': form.hasErrors('password') }"
           v-model="form.password"
-          id="login-modal-password"
           type="password"
           placeholder="Password"
         />
-        <has-error :form="form" field="password"/>
+        <has-error 
+          :form="form" 
+          field="password"/>
       </div>
 
       <div class="form-group">
-        <t-button :class="{ 'btn-loading': form.busy }" class="block w-full" type="submit" variant="primary">
+        <t-button 
+          :class="{ 'btn-loading': form.busy }" 
+          class="block w-full" 
+          type="submit" 
+          variant="primary">
           Login
         </t-button>
       </div>
 
       <div class="text-center">
-        Don't have an account? <nuxt-link :to="{ name: 'auth.register' }" class="text-primary">Register</nuxt-link>
+        Don't have an account? <nuxt-link 
+          :to="{ name: 'auth.register' }" 
+          class="text-primary">Register</nuxt-link>
       </div>
 
     </form>

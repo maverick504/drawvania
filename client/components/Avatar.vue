@@ -1,6 +1,11 @@
 <template>
-  <figure :class="{ [`w-${size}`]: true, [`h-${size}`]: true }" class="rounded-full overflow-hidden">
-    <img :src="imageUrl" :alt="`Avatar of ${user.username}`" class="w-full h-full">
+  <figure 
+    :class="{ [`w-${size}`]: true, [`h-${size}`]: true }" 
+    class="rounded-full overflow-hidden">
+    <img 
+      :src="imageUrl" 
+      :alt="`Avatar of ${user.username}`" 
+      class="w-full h-full">
   </figure>
 </template>
 

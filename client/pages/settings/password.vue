@@ -1,5 +1,7 @@
 <template>
-  <form method="post" @submit.prevent="update">
+  <form 
+    method="post" 
+    @submit.prevent="update">
 
     <error-alert :form="form"/>
 
@@ -10,7 +12,9 @@
         type="password"
         placeholder="Current password"
       />
-      <has-error :form="form" field="current_password"/>
+      <has-error 
+        :form="form" 
+        field="current_password"/>
     </form-group>
 
     <form-group label="New password">
@@ -20,22 +24,29 @@
         type="password"
         placeholder="New password"
       />
-      <has-error :form="form" field="new_password"/>
+      <has-error 
+        :form="form" 
+        field="new_password"/>
     </form-group>
 
     <form-group label="New password confirmation">
       <t-input
+        id="new_password_confirmation"
         :class="{ 'border-danger': form.hasErrors('new_password_confirmation') }"
         v-model="form.new_password_confirmation"
         type="password"
-        id="new_password_confirmation"
         placeholder="New password confirmation"
       />
-      <has-error :form="form" field="new_password_confirmation"/>
+      <has-error 
+        :form="form" 
+        field="new_password_confirmation"/>
     </form-group>
 
     <div class="form-group">
-      <t-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
+      <t-button 
+        :class="{ 'btn-loading': form.busy }" 
+        type="submit" 
+        variant="primary">
         Update
       </t-button>
     </div>

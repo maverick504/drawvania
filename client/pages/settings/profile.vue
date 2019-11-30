@@ -1,11 +1,22 @@
 <template>
   <div>
     <div class="text-center mb-3">
-      <avatar v-if="loggedInUser" :user="loggedInUser" size="40" class="mx-auto cursor-pointer" @click.native="$refs.avatarFile.click()"/>
-      <input ref="avatarFile" class="hidden" type="file" @change="avatarFileChanged()">
+      <avatar 
+        v-if="loggedInUser" 
+        :user="loggedInUser" 
+        size="40" 
+        class="mx-auto cursor-pointer" 
+        @click.native="$refs.avatarFile.click()"/>
+      <input 
+        ref="avatarFile" 
+        class="hidden" 
+        type="file" 
+        @change="avatarFileChanged()">
     </div>
 
-    <form method="post" @submit.prevent="update">
+    <form 
+      method="post" 
+      @submit.prevent="update">
 
       <error-alert :form="form"/>
 
@@ -15,7 +26,9 @@
           :class="{ 'border-danger': form.hasErrors('username') }"
           placeholder="Username"
         />
-        <has-error :form="form" field="username"/>
+        <has-error 
+          :form="form" 
+          field="username"/>
       </form-group>
 
       <form-group label="Gender">
@@ -27,7 +40,9 @@
             { value: 'female', text: 'Female' }
           ]"
         />
-        <has-error :form="form" field="gender"/>
+        <has-error 
+          :form="form" 
+          field="gender"/>
       </form-group>
 
       <form-group label="Location">
@@ -36,7 +51,9 @@
           :class="{ 'border-danger': form.hasErrors('location') }"
           placeholder="Location"
         />
-        <has-error :form="form" field="location"/>
+        <has-error 
+          :form="form" 
+          field="location"/>
       </form-group>
 
       <form-group label="About">
@@ -45,11 +62,16 @@
           :class="{ 'border-danger': form.hasErrors('about') }"
           placeholder="About"
         />
-        <has-error :form="form" field="about"/>
+        <has-error 
+          :form="form" 
+          field="about"/>
       </form-group>
 
       <div class="form-group">
-        <t-button :class="{ 'btn-loading': form.busy }" type="submit" variant="primary">
+        <t-button 
+          :class="{ 'btn-loading': form.busy }" 
+          type="submit" 
+          variant="primary">
           Update
         </t-button>
       </div>

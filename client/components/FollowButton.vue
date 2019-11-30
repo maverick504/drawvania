@@ -1,5 +1,7 @@
 <template>
-  <button :class="{ [`${baseClass}`]: true }" @click="toggleFollow()">
+  <button 
+    :class="{ [`${baseClass}`]: true }" 
+    @click="toggleFollow()">
     {{ loggedInUserIsFollower ? 'Following' : 'Follow' }}
   </button>
 </template>

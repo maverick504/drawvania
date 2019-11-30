@@ -1,6 +1,10 @@
 <template>
-  <button class="text-red" @click="toggleLike()">
-    <heart-icon :size="size" :class="{ 'filled': loggedInUserLiked }"/>
+  <button 
+    class="text-red" 
+    @click="toggleLike()">
+    <heart-icon 
+      :size="size" 
+      :class="{ 'filled': loggedInUserLiked }"/>
   </button>
 </template>
 

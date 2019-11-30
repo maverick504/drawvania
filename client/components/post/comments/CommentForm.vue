@@ -1,20 +1,25 @@
 <template>
   <div class="flex p-4">
     <div class="flex-shrink-0">
-      <avatar :user="loggedInUser" size="10" class="mr-2"/>
+      <avatar 
+        :user="loggedInUser" 
+        size="10" 
+        class="mr-2"/>
     </div>
     <div class="flex-grow">
       <t-input
         :status="error ? 'error' : null"
-        baseClass="w-full border-b-2 border-gray-200 focus:border-primary"
-        defaultSizeClass="px-2 py-2"
-        errorStatusClass="border-danger focus:border-danger"
         v-model="content"
+        base-class="w-full border-b-2 border-gray-200 focus:border-primary"
+        default-size-class="px-2 py-2"
+        error-status-class="border-danger focus:border-danger"
         placeholder="Write a comment about this..."
         autocomplete="off"
         @keyup.enter="submit"
       />
-      <span v-if="error" class="text-danger text-sm">
+      <span 
+        v-if="error" 
+        class="text-danger text-sm">
         {{ error }}
       </span>
     </div>

@@ -1,52 +1,72 @@
 <template>
   <div>
     <h1 class="text-2xl text-center mb-4">Create an account</h1>
-    <form method="post" @submit.prevent="register">
+    <form 
+      method="post" 
+      @submit.prevent="register">
 
       <error-alert :form="form"/>
 
       <div class="form-group">
-        <label class="block text-gray-700 mb-2" for="username">Username</label>
+        <label 
+          class="block text-gray-700 mb-2" 
+          for="username">Username</label>
         <t-input
+          id="username"
           :class="{ 'border-danger': form.hasErrors('username') }"
           v-model="form.username"
-          id="username"
           placeholder="Username"
         />
-        <has-error :form="form" field="username"/>
+        <has-error 
+          :form="form" 
+          field="username"/>
       </div>
 
       <div class="form-group">
-        <label class="block text-gray-700 mb-2" for="email">Email</label>
+        <label 
+          class="block text-gray-700 mb-2" 
+          for="email">Email</label>
         <t-input
+          id="email"
           :class="{ 'border-danger': form.hasErrors('email') }"
           v-model="form.email"
-          id="email"
           placeholder="Email"
         />
-        <has-error :form="form" field="email"/>
+        <has-error 
+          :form="form" 
+          field="email"/>
       </div>
 
       <div class="form-group">
-        <label class="block text-gray-700 mb-2" for="password">Password</label>
+        <label 
+          class="block text-gray-700 mb-2" 
+          for="password">Password</label>
         <t-input
+          id="password"
           :class="{ 'border-danger': form.hasErrors('password') }"
           v-model="form.password"
-          id="password"
           type="password"
           placeholder="Password"
         />
-        <has-error :form="form" field="password"/>
+        <has-error 
+          :form="form" 
+          field="password"/>
       </div>
 
       <div class="form-group">
-        <t-button :class="{ 'btn-loading': form.busy }" class="block w-full" type="submit" variant="primary">
+        <t-button 
+          :class="{ 'btn-loading': form.busy }" 
+          class="block w-full" 
+          type="submit" 
+          variant="primary">
           Register
         </t-button>
       </div>
 
       <div class="text-center">
-        Already got an account? <nuxt-link :to="{ name: 'auth.login' }" class="text-primary">Login</nuxt-link>
+        Already got an account? <nuxt-link 
+          :to="{ name: 'auth.login' }" 
+          class="text-primary">Login</nuxt-link>
       </div>
 
     </form>

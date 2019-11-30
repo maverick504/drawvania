@@ -1,12 +1,19 @@
 <template>
   <div class="border-t">
-    <div v-if="loading && comments.length === 0" class="text-primary text-center py-5">
-      <div class="spinner" role="status">
+    <div 
+      v-if="loading && comments.length === 0" 
+      class="text-primary text-center py-5">
+      <div 
+        class="spinner" 
+        role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </div>
     <template v-else>
-      <comment-form v-if="isAuthenticated" :post="post" @commentPosted="onCommentPosted"/>
+      <comment-form 
+        v-if="isAuthenticated" 
+        :post="post" 
+        @commentPosted="onCommentPosted"/>
       <template v-if="comments.length > 0">
         <div class="mt-4">
           <comment-item
@@ -17,14 +24,22 @@
             @commentDeleted="onCommentDeleted"
           />
         </div>
-        <div v-if="loading" class="text-primary text-center py-5">
-          <div class="spinner" role="status">
+        <div 
+          v-if="loading" 
+          class="text-primary text-center py-5">
+          <div 
+            class="spinner" 
+            role="status">
             <span class="sr-only">Loading...</span>
           </div>
         </div>
         <div class="flex border-t border-gray-300 p-4">
           <div class="flex-grow">
-            <button v-if="page < lastPage" type="button" class="text-primary" @click="loadNextPage()">Show more comments</button>
+            <button 
+              v-if="page < lastPage" 
+              type="button" 
+              class="text-primary" 
+              @click="loadNextPage()">Show more comments</button>
           </div>
           <div class="flex-initial">
             <span class="text-gray-600">{{ comments.length }} of {{ total }}</span>

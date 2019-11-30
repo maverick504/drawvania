@@ -10,11 +10,13 @@
         @change="$emit('input', $event.target.checked)"
       >
       <label
-        class="form-switch-label"
         :for="id"
+        class="form-switch-label"
       />
     </div>
-    <label class="align-middle text-gray-900" :for="id">
+    <label 
+      :for="id" 
+      class="align-middle text-gray-900">
       {{ `${ isToggleOn ? onText : offText }` }}
     </label>
   </div>

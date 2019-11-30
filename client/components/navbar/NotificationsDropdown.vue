@@ -14,19 +14,37 @@
   >
     <template slot="button-content">
       <div class="relative">
-        <bell-icon size="1.5x" class="inline"/>
-        <span v-if="newNotifications > 0" class="bg-primary px-1 text-xs text-white rounded-full" style="position: absolute; right: -8px; top: -4px;">{{ newNotifications }}</span>
+        <bell-icon 
+          size="1.5x" 
+          class="inline"/>
+        <span 
+          v-if="newNotifications > 0" 
+          class="bg-primary px-1 text-xs text-white rounded-full" 
+          style="position: absolute; right: -8px; top: -4px;">{{ newNotifications }}</span>
       </div>
     </template>
-    <div id="notifications-dropdown-content" class="overflow-auto" style="max-height: 400px;">
+    <div 
+      id="notifications-dropdown-content" 
+      class="overflow-auto" 
+      style="max-height: 400px;">
       <template v-if="notifications.length > 0">
-        <notification-item v-for="notification in notifications" :key="notification.id" :notification="notification"/>
+        <notification-item 
+          v-for="notification in notifications" 
+          :key="notification.id" 
+          :notification="notification"/>
       </template>
-      <div v-if="notifications.length === 0 && !loading" class="py-8 text-center text-gray-600">
+      <div 
+        v-if="notifications.length === 0 && !loading" 
+        class="py-8 text-center text-gray-600">
         You don't have any notifications yet.
       </div>
-      <div v-if="loading" :class="{ 'py-8': notifications.length === 0 }" class="text-primary text-center">
-        <div class="spinner" role="status">
+      <div 
+        v-if="loading" 
+        :class="{ 'py-8': notifications.length === 0 }" 
+        class="text-primary text-center">
+        <div 
+          class="spinner" 
+          role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>

@@ -1,8 +1,14 @@
 <template>
-  <router-link :to="to" :class="{ 'opacity-50': notification.read_at }" class="flex bg-white p-2 hover:bg-gray-100" @click.native="markAsRead()">
+  <router-link 
+    :to="to" 
+    :class="{ 'opacity-50': notification.read_at }" 
+    class="flex bg-white p-2 hover:bg-gray-100" 
+    @click.native="markAsRead()">
     <div class="flex-initial flex-shrink-0 pr-2">
       <template v-if="notification.type === 'newFollower'">
-        <avatar :user="notification.triggerer" size="12"/>
+        <avatar 
+          :user="notification.triggerer" 
+          size="12"/>
       </template>
       <template v-else>
         <img
@@ -16,17 +22,28 @@
     </div>
     <div class="flex-grow">
       <div class="flex items-center">
-        <div v-if="notification.type !== 'newFollower'" class="inline-block">
-          <router-link :to="{ name: 'users.show', params: { username: notification.triggerer.username } }" class="inline-block mr-2">
-            <avatar :user="notification.triggerer" size="6"/>
+        <div 
+          v-if="notification.type !== 'newFollower'" 
+          class="inline-block">
+          <router-link 
+            :to="{ name: 'users.show', params: { username: notification.triggerer.username } }" 
+            class="inline-block mr-2">
+            <avatar 
+              :user="notification.triggerer" 
+              size="6"/>
           </router-link>
         </div><!--
      --><span class="text-gray-600">{{ notification.created_at | moment("from", "now") }}</span>
       </div>
       <div class="whitespace-normal text-gray-900 text-sm">
-        <router-link :to="{ name: 'users.show', params: { username: notification.triggerer.username } }" class="text-primary">
+        <router-link 
+          :to="{ name: 'users.show', params: { username: notification.triggerer.username } }" 
+          class="text-primary">
           {{ `@${notification.triggerer.username}` }}
-        </router-link> {{ suffix }} <div v-if="!notification.read_at" class="inline-block w-2 h-2 bg-primary rounded-full" title="New Notification"></div>
+        </router-link> {{ suffix }} <div 
+          v-if="!notification.read_at" 
+          class="inline-block w-2 h-2 bg-primary rounded-full" 
+          title="New Notification"/>
       </div>
     </div>
   </router-link>

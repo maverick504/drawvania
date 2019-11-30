@@ -1,16 +1,33 @@
 <template>
-  <t-modal v-model="show" :header="total!==null ? `Liked by ${total} users` : 'Loading...'" width="400" height="0" @before-open="beforeOpen" @closed="closed">
-    <div id="likes-modal-content" class="overflow-y-auto -m-4 p-4 pb-0" style="max-height: 300px;">
+  <t-modal 
+    v-model="show" 
+    :header="total!==null ? `Liked by ${total} users` : 'Loading...'" 
+    width="400" 
+    height="0" 
+    @before-open="beforeOpen" 
+    @closed="closed">
+    <div 
+      id="likes-modal-content" 
+      class="overflow-y-auto -m-4 p-4 pb-0" 
+      style="max-height: 300px;">
       <div v-if="!loading">
-        <div v-for="likeRelation in likes" :key="likeRelation.id" class="flex items-center text-sm mb-4">
+        <div 
+          v-for="likeRelation in likes" 
+          :key="likeRelation.id" 
+          class="flex items-center text-sm mb-4">
           <div class="flex-initial pr-2">
             <router-link :to="{ name: 'users.show', params: { username: likeRelation.user.username } }">
-              <avatar :user="likeRelation.user" size="10" class="d-block"/>
+              <avatar 
+                :user="likeRelation.user" 
+                size="10" 
+                class="d-block"/>
             </router-link>
           </div>
           <div class="flex-grow">
             <div class="block">
-              <router-link :to="{ name: 'users.show', params: { username: likeRelation.user.username } }" class="font-bold leading-none mr-2">
+              <router-link 
+                :to="{ name: 'users.show', params: { username: likeRelation.user.username } }" 
+                class="font-bold leading-none mr-2">
                 {{ likeRelation.user.username }}
               </router-link>
             </div>
@@ -20,8 +37,12 @@
           </div>
         </div>
       </div>
-      <div v-else class="text-primary text-center pb-4">
-        <div class="spinner" role="status">
+      <div 
+        v-else 
+        class="text-primary text-center pb-4">
+        <div 
+          class="spinner" 
+          role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>
