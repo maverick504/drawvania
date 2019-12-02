@@ -6,7 +6,7 @@
           :to="{ name: 'feed.global' }"
           class="mr-2">
           <span class="text-xl font-bold text-primary">Drawvania</span>
-          <small class="text-gray-600">Beta</small>
+          <span class="text-sm text-gray-600">Beta</span>
         </router-link>
       </div>
       <div class="flex-grow flex justify-end">
