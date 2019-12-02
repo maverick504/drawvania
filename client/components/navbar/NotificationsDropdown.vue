@@ -78,11 +78,11 @@ export default {
   },
 
   created () {
-  	setInterval(this.checkNewNotifications, 3000)
+  	setInterval(this.checkNewNotifications, 15000)
   },
 
   beforeDestroy () {
-    clearInterval(this.checkNewNotifications, 3000)
+    clearInterval(this.checkNewNotifications, 15000)
   },
 
   methods: {
