@@ -106,7 +106,7 @@ Route.group(() => {
 // NORMAL ROUTES
 
 Route.get('/', ({ response }) => response.redirect(Config.get('drawvania.subdomains.app')))
-Route.on('/premium').render('premium.landing')
+// Route.on('/premium').render('premium.landing')
 
 // ERROR PAGES
 
