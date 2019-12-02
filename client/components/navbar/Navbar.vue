@@ -4,8 +4,9 @@
       <div class="flex-initial py-3 text-center">
         <router-link
           :to="{ name: 'feed.global' }"
-          class="text-xl mr-2">
-          Drawvania
+          class="mr-2">
+          <span class="text-xl font-bold text-primary">Drawvania</span>
+          <small class="text-gray-600">Beta</small>
         </router-link>
       </div>
       <div class="flex-grow flex justify-end">
