@@ -80,7 +80,7 @@ Route.group(() => {
   Route.post('comments/:id/like', 'Api/CommentController.like').middleware(['auth:jwt'])
   Route.post('comments/:id/unlike', 'Api/CommentController.unlike').middleware(['auth:jwt'])
 
-}).prefix('api')
+}).prefix('api').middleware('throttle:30,60')
 
 // SESSION AUTHENTICATION ROUTES
 
