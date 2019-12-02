@@ -13,7 +13,7 @@ const TSelect = {
 
 const TButton = {
   baseClass: 'inline-block rounded border inline-flex justify-center items-center',
-  primaryClass: 'text-white bg-primary border-primary hover:bg-primary-lighter hover:border-primary-lighter'
+  primaryClass: 'bg-primary text-white border-primary hover:bg-primary-lighter hover:border-primary-lighter'
 }
 
 const TModal = {

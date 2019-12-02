@@ -14,7 +14,8 @@ module.exports = {
   */
 
   subdomains: {
-    app: Env.get('APP_SUBDOMAIN_URL')
+    main: Env.get('MAIN_SUBDOMAIN_URL', 'http://localhost:3333'),
+    app: Env.get('APP_SUBDOMAIN_URL', 'http://localhost:5000')
   },
 
   /*

@@ -2,6 +2,7 @@
 
 const { validateAll } = use('Validator')
 const Database = use('Database')
+const Event = use('Event')
 const User = use('App/Models/User')
 const NotificationSettings = use('App/Models/NotificationSettings')
 
@@ -35,6 +36,9 @@ class AuthenticationController {
         const token = await auth.authenticator('jwt').generate(user)
 
         trx.commit()
+
+        // Send email validation e-mail.
+        Event.fire('AUTH_REGISTER', user)
 
         return response.json({
           status: 'success',
@@ -87,6 +91,25 @@ class AuthenticationController {
     })
   }
 
+  // Send email with email confirmation token.
+  async sendConfirmEmail({ auth, request, response }) {
+    // Check if email was already verified.
+    if (auth.user.email_confirmed_at) {
+      return response.status(400).json({
+        status: 'error',
+        message: 'Your email is already verified.'
+      })
+    }
+
+    // Send email confirmation via email.
+    Event.fire('AUTH_RESEND_CONFIRMATION', auth.user)
+
+    // Return a success message.
+    return response.json({
+      status: 'success',
+      message: 'Email sent. Check your email inbox.'
+    })
+  }
 }
 
 module.exports = AuthenticationController

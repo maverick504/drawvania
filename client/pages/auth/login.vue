@@ -1,15 +1,15 @@
 <template>
   <div>
     <h1 class="text-2xl text-center mb-4">Log in</h1>
-    <form 
-      method="post" 
+    <form
+      method="post"
       @submit.prevent="login">
 
       <error-alert :form="form"/>
 
       <div class="form-group">
-        <label 
-          class="block text-gray-700 mb-2" 
+        <label
+          class="block text-gray-700 mb-2"
           for="email">Email</label>
         <t-input
           id="email"
@@ -17,14 +17,14 @@
           v-model="form.email"
           placeholder="Email"
         />
-        <has-error 
-          :form="form" 
+        <has-error
+          :form="form"
           field="email"/>
       </div>
 
       <div class="form-group">
-        <label 
-          class="block text-gray-700 mb-2" 
+        <label
+          class="block text-gray-700 mb-2"
           for="password">Password</label>
         <t-input
           id="password"
@@ -33,24 +33,29 @@
           type="password"
           placeholder="Password"
         />
-        <has-error 
-          :form="form" 
+        <has-error
+          :form="form"
           field="password"/>
+        <a
+          :href="`${baseUrl}/forgot-password`"
+          class="inline-block mt-2 text-primary">
+          Forgot password?
+        </a>
       </div>
 
       <div class="form-group">
-        <t-button 
-          :class="{ 'btn-loading': form.busy }" 
-          class="block w-full" 
-          type="submit" 
+        <t-button
+          :class="{ 'btn-loading': form.busy }"
+          class="block w-full"
+          type="submit"
           variant="primary">
           Login
         </t-button>
       </div>
 
       <div class="text-center">
-        Don't have an account? <nuxt-link 
-          :to="{ name: 'auth.register' }" 
+        Don't have an account? <nuxt-link
+          :to="{ name: 'auth.register' }"
           class="text-primary">Register</nuxt-link>
       </div>
 
@@ -68,6 +73,7 @@ export default {
 
   data () {
     return {
+      baseUrl: process.env.baseUrl,
       form: new Form({
         email: null,
         password: null

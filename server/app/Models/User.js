@@ -6,6 +6,8 @@ const Model = use('Model')
 /** @type {import('@adonisjs/framework/src/Hash')} */
 const Hash = use('Hash')
 
+const uuid = require('uuid/v4')
+
 class User extends Model {
   static boot () {
     super.boot()
@@ -32,6 +34,8 @@ class User extends Model {
      */
     this.addHook('beforeCreate', async (userInstance) => {
       userInstance.password = await Hash.make(userInstance.password)
+      userInstance.provider = userInstance.provider || 'local'
+      userInstance.email_confirmation_token = (userInstance.provider === 'local' ? uuid() : null)
     })
   }
 

@@ -19,17 +19,20 @@ const Config = use('Config')
 // ADMIN ROUTES
 
 Route.group(() => {
+
   Route.get('dashboard', 'Admin/DashboardController.index')
 
   Route.get('users', 'Admin/UserController.index')
   Route.get('users/:id', 'Admin/UserController.show')
-  Route.patch('users/:id/upgradeToPremium', 'Admin/UserController.upgradeToPremium')
-  Route.patch('users/:id/removePremium', 'Admin/UserController.removePremium')
+  Route.patch('users/:id/upgrade-to-premium', 'Admin/UserController.upgradeToPremium')
+  Route.patch('users/:id/remove-premium', 'Admin/UserController.removePremium')
+
 }).prefix('admin').middleware(['auth:session', 'is:(administrator)'])
 
 // API ROUTES
 
 Route.group(() => {
+
   Route.get('/', () => {
     return { app_name: 'drawvania', version: '0.1' }
   })
@@ -37,6 +40,7 @@ Route.group(() => {
   Route.post('login', 'Api/Auth/AuthenticationController.login')
   Route.post('register', 'Api/Auth/AuthenticationController.register')
   Route.get('me', 'Api/Auth/AuthenticationController.me').middleware(['auth:jwt'])
+  Route.post('send-confirm-email' , 'Api/Auth/AuthenticationController.sendConfirmEmail').middleware(['auth:jwt'])
 
   Route.patch('settings/profile', 'Api/SettingsController.updateProfile').middleware(['auth:jwt'])
   Route.patch('settings/avatar', 'Api/SettingsController.updateAvatar').middleware(['auth:jwt'])
@@ -75,17 +79,34 @@ Route.group(() => {
 
   Route.post('comments/:id/like', 'Api/CommentController.like').middleware(['auth:jwt'])
   Route.post('comments/:id/unlike', 'Api/CommentController.unlike').middleware(['auth:jwt'])
+
 }).prefix('api')
+
+// SESSION AUTHENTICATION ROUTES
+
+// Login, logout.
+Route.on('/login').render('auth.login')
+Route.get('/logout', 'AuthenticationController.logout').middleware(['auth:session'])
+
+// Confirm email.
+Route.get('/confirm-email/:token', 'AuthenticationController.confirmEmail')
+
+// Forgot/reset password.
+Route.on('/forgot-password').render('auth.forgotPassword')
+Route.get('/reset-password/:token', 'AuthenticationController.renderResetPassword')
+
+Route.group(() => {
+
+  Route.post('/login', 'AuthenticationController.login')
+  Route.post('/forgot-password' , 'AuthenticationController.forgotPassword')
+  Route.post('/reset-password'  , 'AuthenticationController.resetPassword')
+
+}).prefix('auth')
 
 // NORMAL ROUTES
 
 Route.get('/', ({ response }) => response.redirect(Config.get('drawvania.subdomains.app')))
-
-Route.get('login', 'AuthenticationController.showLoginForm').middleware(['guest:session'])
-Route.post('login', 'AuthenticationController.login').middleware(['guest:session'])
-Route.get('logout', 'AuthenticationController.logout').middleware(['auth:session'])
-
-Route.get('premium', 'MiscellaneousController.premiumLanding')
+Route.on('/premium').render('premium.landing')
 
 // ERROR PAGES
 

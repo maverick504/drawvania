@@ -4,6 +4,7 @@ hooks.after.providersBooted(() => {
   const Validator = use('Validator')
   const Database = use('Database')
   const Config = use('Config')
+  const View = use('Adonis/Src/View')
 
   const existsFn = async (data, field, message, args, get) => {
     const value = get(data, field)
@@ -121,4 +122,9 @@ hooks.after.providersBooted(() => {
   Validator.extend('in', inFn)
   Validator.extend('username', usernameFn)
   Validator.extend('redrawablePost', redrawablePostFn)
+
+  // Make the configuration accessible in all views.
+  View.global('config', function (key) {
+    return Config.get(key)
+  })
 })

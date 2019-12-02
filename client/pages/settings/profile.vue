@@ -1,21 +1,21 @@
 <template>
   <div>
     <div class="text-center mb-3">
-      <avatar 
-        v-if="loggedInUser" 
-        :user="loggedInUser" 
-        size="40" 
-        class="mx-auto cursor-pointer" 
+      <avatar
+        v-if="loggedInUser"
+        :user="loggedInUser"
+        size="40"
+        class="mx-auto cursor-pointer"
         @click.native="$refs.avatarFile.click()"/>
-      <input 
-        ref="avatarFile" 
-        class="hidden" 
-        type="file" 
+      <input
+        ref="avatarFile"
+        class="hidden"
+        type="file"
         @change="avatarFileChanged()">
     </div>
 
-    <form 
-      method="post" 
+    <form
+      method="post"
       @submit.prevent="update">
 
       <error-alert :form="form"/>
@@ -26,8 +26,8 @@
           :class="{ 'border-danger': form.hasErrors('username') }"
           placeholder="Username"
         />
-        <has-error 
-          :form="form" 
+        <has-error
+          :form="form"
           field="username"/>
       </form-group>
 
@@ -40,8 +40,8 @@
             { value: 'female', text: 'Female' }
           ]"
         />
-        <has-error 
-          :form="form" 
+        <has-error
+          :form="form"
           field="gender"/>
       </form-group>
 
@@ -51,8 +51,8 @@
           :class="{ 'border-danger': form.hasErrors('location') }"
           placeholder="Location"
         />
-        <has-error 
-          :form="form" 
+        <has-error
+          :form="form"
           field="location"/>
       </form-group>
 
@@ -62,15 +62,36 @@
           :class="{ 'border-danger': form.hasErrors('about') }"
           placeholder="About"
         />
-        <has-error 
-          :form="form" 
+        <has-error
+          :form="form"
           field="about"/>
       </form-group>
 
+      <form-group label="Email (private)">
+        <t-input
+          v-model="loggedInUser.email"
+          placeholder="Email"
+          disabled
+        />
+        <span
+          v-if="loggedInUser.email_confirmed_at"
+          class="text-success text-sm">
+          Email successfully verified.
+        </span>
+        <t-button
+          v-else
+          type="button"
+          variant="primary"
+          size="small"
+          @click="sendConfirmationEmail()">
+          Send Confirmation Email
+        </t-button>
+      </form-group>
+
       <div class="form-group">
-        <t-button 
-          :class="{ 'btn-loading': form.busy }" 
-          type="submit" 
+        <t-button
+          :class="{ 'btn-loading': form.busy }"
+          type="submit"
           variant="primary">
           Update
         </t-button>
@@ -178,6 +199,17 @@ export default {
       }
 
       this.form.busy = false
+    },
+
+    async sendConfirmationEmail () {
+      const response = await this.$axios.post('send-confirm-email')
+
+      swal.fire({
+        type: 'success',
+        title: response.data.message,
+        showConfirmButton: false,
+        timer: 1500
+      })
     }
   }
 }
