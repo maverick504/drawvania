@@ -1,7 +1,7 @@
 <template>
-  <span 
-    v-if="form.hasErrors(field)" 
-    class="text-danger text-sm">
+  <span
+    v-if="form.hasErrors(field)"
+    class="block text-danger text-sm">
     {{ form.getFirstError(field) }}
   </span>
 </template>
