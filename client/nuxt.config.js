@@ -110,7 +110,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    analyze: true,
+    analyze: false,
     extractCSS: true,
 
     /*
