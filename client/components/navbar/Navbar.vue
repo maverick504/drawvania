@@ -58,7 +58,7 @@
               <li class="h-4"/>
                 <li>
                   <button
-                    class="block no-underline px-6 py-2 hover:text-primary"
+                    class="block w-full text-left px-6 py-2 hover:text-primary"
                     @click.prevent="logout">
                     Log out
                   </button>
