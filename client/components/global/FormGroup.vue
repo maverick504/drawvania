@@ -1,6 +1,11 @@
 <template>
   <div class="form-group">
-    <label v-if="label !== ''">{{ label }}</label>
+    <label
+      v-if="label !== ''"
+      class="block font-bold mb-1"
+    >
+      {{ label }}
+    </label>
     <slot/>
   </div>
 </template>
