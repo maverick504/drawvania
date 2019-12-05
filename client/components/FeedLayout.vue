@@ -59,7 +59,7 @@
             style="width: 260px;">
             <div class="py-4">
               <a
-                href="https://discord.gg/9C76KTq"
+                href="https://discord.gg/n5afmc"
                 target="_blank"
                 class="block rounded overflow-hidden mx-4 mb-2">
                 <img
