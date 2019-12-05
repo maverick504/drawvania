@@ -1,5 +1,5 @@
 <template>
-  <nav class="w-full bg-white fixed pin-t z-20 shadow-md whitespace-no-wrap">
+  <nav class="w-full bg-white whitespace-no-wrap fixed pin-t z-30 shadow-md">
     <div class="flex container mx-auto">
       <div class="flex-initial py-3 text-center">
         <router-link
