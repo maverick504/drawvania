@@ -1,3 +1,5 @@
+/* purgecss start ignore */
+
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
@@ -121,3 +123,5 @@ form .form-group:last-child {
 .form-switch-checkbox:checked + .form-switch-label:before {
   right: 0;
 }
+
+/* purgecss end ignore */

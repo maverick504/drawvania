@@ -35,7 +35,9 @@ module.exports = {
   /*
   ** CSS that will be bundled in the project.
   */
-  css: ['~/assets/css/main.css'],
+  css: [
+    '~/assets/css/main.css'
+  ],
 
   /*
   ** Plugins to load before mounting the App
@@ -103,7 +105,12 @@ module.exports = {
   ** Purgecss module configuration
   */
   purgeCSS: {
-    mode: 'postcss'
+    mode: 'postcss',
+    content: [
+      '**/*.html',
+      '**/*.vue',
+      './themes/default.js'
+    ]
   },
 
   /*
