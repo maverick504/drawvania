@@ -1,12 +1,14 @@
 <template>
   <nav class="w-full bg-white whitespace-no-wrap fixed pin-t z-30 shadow-md">
     <div class="flex container mx-auto">
-      <div class="flex-initial py-3 text-center">
+      <div class="mx-0">
         <router-link
           :to="{ name: 'feed.global' }"
-          class="mr-2">
-          <span class="text-xl font-bold text-primary">Drawvania</span>
-          <span class="text-sm text-gray-600">Beta</span>
+          class="h-full flex items-center px-4">
+          <h1>
+            <span class="text-xl font-bold text-primary">Drawvania</span>
+            <span class="text-sm text-gray-600">Beta</span>
+          </h1>
         </router-link>
       </div>
       <div class="flex-grow flex justify-end">
