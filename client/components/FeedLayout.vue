@@ -58,15 +58,6 @@
             relative-element-selector="#content"
             style="width: 260px;">
             <div class="py-4">
-              <a
-                v-if="isAuthenticated"
-                href="https://discord.gg/n5afmc"
-                target="_blank"
-                class="block rounded overflow-hidden mx-4 mb-4">
-                <img
-                  src="~/assets/img/discord.png"
-                  class="w-full h-auto">
-              </a>
               <div class="mx-4 mb-2 text-sm font-bold uppercase">Featured tags</div>
               <router-link
                 v-for="hashtag in featuredHashtags"
