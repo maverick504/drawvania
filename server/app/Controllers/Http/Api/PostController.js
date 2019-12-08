@@ -13,6 +13,7 @@ const PostLike = use('App/Models/PostLike')
 const Notification = use('App/Models/Notification')
 
 class PostController {
+
   async userIndex({ request, params, auth }) {
     const user = await User.query().where('username', '=', params.username).firstOrFail()
 
