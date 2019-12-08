@@ -80,6 +80,9 @@ Route.group(() => {
   Route.post('comments/:id/like', 'Api/CommentController.like').middleware(['auth:jwt'])
   Route.post('comments/:id/unlike', 'Api/CommentController.unlike').middleware(['auth:jwt'])
 
+  Route.get('featured-hashtags', 'Api/HashtagController.featured')
+  Route.get('explore/hashtags/:slug', 'Api/PostController.hashtagIndex')
+
 }).prefix('api').middleware('throttle:30,60')
 
 // SESSION AUTHENTICATION ROUTES

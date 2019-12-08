@@ -16,24 +16,24 @@
               <div class="mx-4 mb-2 text-sm font-bold uppercase">Activity</div>
               <router-link
                 :to="{ name: 'feed.global' }"
-                class="flex items-center px-4 py-2"
+                class="block px-4 py-2"
                 exact-active-class="border-l-4 border-primary">
                 Recent works
               </router-link>
               <router-link
                 v-if="isAuthenticated"
                 :to="{ name: 'feed.followings' }"
-                class="flex items-center px-4 py-2"
+                class="block px-4 py-2"
                 exact-active-class="border-l-4 border-primary">
                 Followings works
               </router-link>
               <!--
               <template v-if="isAuthenticated">
                 <div class="mx-4 my-2 text-sm font-bold uppercase">Lists Activity</div>
-                <a href="#" class="flex items-center px-4 py-2" active-class="border-l-4 border-primary">
+                <a href="#" class="block px-4 py-2" active-class="border-l-4 border-primary">
                   Manga
                 </a>
-                <a href="#" class="flex items-center px-4 py-2" active-class="border-l-4 border-primary">
+                <a href="#" class="block px-4 py-2" active-class="border-l-4 border-primary">
                   Newbies
                 </a>
               </template>
@@ -59,15 +59,26 @@
             style="width: 260px;">
             <div class="py-4">
               <a
+                v-if="isAuthenticated"
                 href="https://discord.gg/n5afmc"
                 target="_blank"
-                class="block rounded overflow-hidden mx-4 mb-2">
+                class="block rounded overflow-hidden mx-4 mb-4">
                 <img
                   src="~/assets/img/discord.png"
                   class="w-full h-auto">
               </a>
+              <div class="mx-4 mb-2 text-sm font-bold uppercase">Featured tags</div>
+              <router-link
+                v-for="hashtag in featuredHashtags"
+                :key="hashtag.id"
+                :to="{ name: 'explore.hashtags', params: { slug: hashtag.slug } }"
+                class="block px-4 py-2 hover:bg-gray-100"
+              >
+                <strong class="block text-gray-900">{{ `#${hashtag.slug}` }}</strong>
+                <span class="block text-gray-600">{{ `${hashtag.total_posts} illustrations` }}</span>
+              </router-link>
+              <!--
               <div class="text-center text-sm text-gray-600">
-                <!--
                 <a
                   :href="`${baseUrl}/premium`"
                   class="whitespace-no-wrap mx-1">
@@ -78,8 +89,8 @@
                   class="whitespace-no-wrap mx-1">
                   Patron List
                 </a>
-                -->
               </div>
+              -->
             </div>
           </affix>
         </no-ssr>
@@ -94,12 +105,24 @@ import { mapGetters } from 'vuex'
 export default {
   data: function () {
     return {
-      baseUrl: process.env.baseUrl
+      baseUrl: process.env.baseUrl,
+      featuredHashtags: []
     }
   },
 
   computed: {
     ...mapGetters([ 'isAuthenticated' ])
+  },
+
+  mounted () {
+    this.fetchFeaturedHashtags()
+  },
+
+  methods: {
+    async fetchFeaturedHashtags () {
+      const response = await this.$axios.get('/featured-hashtags')
+      this.featuredHashtags = response.data
+    }
   }
 }
 </script>

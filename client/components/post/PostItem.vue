@@ -3,20 +3,20 @@
     <div class="flex text-sm px-4 my-4">
       <div class="flex-initial py-px pr-2">
         <router-link :to="{ name: 'users.show', params: { username: post.author.username } }">
-          <avatar 
-            :user="post.author" 
+          <avatar
+            :user="post.author"
             size="10"/>
         </router-link>
       </div>
       <div class="flex-grow">
         <div class="block">
-          <router-link 
-            :to="{ name: 'users.show', params: { username: post.author.username } }" 
+          <router-link
+            :to="{ name: 'users.show', params: { username: post.author.username } }"
             class="font-bold leading-none mr-1">
             {{ post.author.username }}
           </router-link><!--
-       --><span 
-v-if="post.author.upgraded_premium_at" 
+       --><span
+v-if="post.author.upgraded_premium_at"
 class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-1">premium</span><!--
        --><follow-button
             v-if="!isAuthenticated || loggedInUser.id !== post.author.id"
@@ -48,29 +48,29 @@ class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-
             <more-horizontal-icon size="1.8x"/>
           </template>
           <ul>
-            <li 
-              v-for="(item, index) in dropdownItems" 
+            <li
+              v-for="(item, index) in dropdownItems"
               :key="index">
               <template v-if="item.to">
-                <router-link 
-                  :to="item.to" 
-                  :class="{ [`${item.extraClasses}`]: true }" 
-                  class="block w-full text-left no-underline px-6 py-2" 
+                <router-link
+                  :to="item.to"
+                  :class="{ [`${item.extraClasses}`]: true }"
+                  class="block w-full text-left no-underline px-6 py-2"
                   exact-active-class="text-primary">
                   {{ item.text }}
                 </router-link>
               </template>
               <template v-else-if="item.onclick">
-                <button 
-                  :class="{ [`${item.extraClasses}`]: true }" 
-                  class="block w-full text-left no-underline px-6 py-2" 
+                <button
+                  :class="{ [`${item.extraClasses}`]: true }"
+                  class="block w-full text-left no-underline px-6 py-2"
                   @click="item.onclick">
                   {{ item.text }}
                 </button>
               </template>
               <template v-else>
-                <div 
-                  :class="{ [`${item.extraClasses}`]: true }" 
+                <div
+                  :class="{ [`${item.extraClasses}`]: true }"
                   class="block no-underline px-6 py-2">
                   {{ item.text }}
                 </div>
@@ -80,13 +80,13 @@ class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-
         </t-dropdown>
       </div>
     </div>
-    <div 
-      v-if="post.parentPost" 
+    <div
+      v-if="post.parentPost"
       class="flex items-center text-sm px-4 mb-4">
       <div class="flex-initial pr-2">
         <router-link :to="{ name: 'posts.show', params: { id: post.parentPost.id } }">
-          <img 
-            :src="post.parentPost.media[0].variations['50x50f'].url" 
+          <img
+            :src="post.parentPost.media[0].variations['50x50f'].url"
             class="w-10 h-10 rounded">
         </router-link>
       </div>
@@ -98,30 +98,26 @@ class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-
     </div>
     <post-item-image :post="post"/>
     <div class="p-4">
-      <p 
-        v-if="post.description" 
-        class="mb-4">
-        {{ post.description }}
-      </p>
+      <p v-if="post.description" class="mb-4" v-html="descriptionHtml"></p>
       <div class="block">
-        <button 
-          v-if="post.total_likes > 0" 
-          class="inline-block text-primary mb-4" 
-          type="button" 
+        <button
+          v-if="post.total_likes > 0"
+          class="inline-block text-primary mb-4"
+          type="button"
           @click.prevent="likesClicked">
           {{ post.total_likes }} likes
         </button>
-        <button 
-          v-if="post.total_comments > 0" 
-          class="inline-block text-primary mb-4 float-right ml-4" 
-          type="button" 
+        <button
+          v-if="post.total_comments > 0"
+          class="inline-block text-primary mb-4 float-right ml-4"
+          type="button"
           @click.prevent="commentsClicked">
           {{ post.total_comments }} comments
         </button>
-        <button 
-          v-if="post.total_direct_children_posts > 0" 
-          class="inline-block text-primary mb-4 float-right" 
-          type="button" 
+        <button
+          v-if="post.total_direct_children_posts > 0"
+          class="inline-block text-primary mb-4 float-right"
+          type="button"
           @click.prevent="redrawsClicked">
           {{ post.total_direct_children_posts }} redraws
         </button>
@@ -134,18 +130,18 @@ class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-
           :unlike-endpoint="`/posts/${post.id}/unlike`"
           class="mr-4"
         /><!--
-     --><button 
-class="inline-block mr-4" 
+     --><button
+class="inline-block mr-4"
 @click="commentButtonClicked">
-          <message-circle-icon 
-size="2x" 
+          <message-circle-icon
+size="2x"
 class="text-primary"/>
         </button><!--
-     --><button 
-class="inline-block" 
+     --><button
+class="inline-block"
 @click="redrawButtonClicked">
-          <edit-3-icon 
-size="2x" 
+          <edit-3-icon
+size="2x"
 class="text-primary"/>
         </button>
       </div>
@@ -192,6 +188,10 @@ export default {
 
   computed: {
     ...mapGetters(['isAuthenticated', 'loggedInUser']),
+
+    descriptionHtml () {
+      return this.post.description.replace(/#([a-z][a-z0-9]*)(?=\s|$)/gi,'<a class="text-primary" href="/explore/hashtags/$1">#$1</a>')
+    },
 
     dropdownItems () {
       var items = []
@@ -246,10 +246,6 @@ export default {
 
     redrawsClicked () {
       this.$bus.$emit('showRedrawsModal', `/posts/${this.post.id}/redraws`)
-    },
-
-    boostButtonClicked () {
-      // ...
     },
 
     commentButtonClicked () {

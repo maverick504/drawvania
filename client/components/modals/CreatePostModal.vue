@@ -1,113 +1,79 @@
 <template>
-  <t-modal 
-    ref="modal" 
-    v-model="show" 
-    header="Create post" 
-    footer-class="bg-gray-100 p-4 text-right" 
-    width="540" 
-    @before-close="beforeClose">
-    <div 
-      v-if="loading" 
-      class="text-primary text-center py-5">
-      <div 
-        class="spinner" 
-        role="status">
+  <t-modal
+    ref="modal"
+    v-model="show"
+    header="Create post"
+    footer-class="bg-gray-100 p-4 text-right"
+    width="540"
+    @before-close="beforeClose"
+  >
+
+    <div v-if="loading" class="text-primary text-center py-5">
+      <div class="spinner" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </div>
 
-    <form 
-      v-else 
-      class="-mt-4">
+    <form v-else class="-mt-4">
 
-      <error-alert 
-        :form="form" 
-        class="mt-4"/>
+      <error-alert :form="form" class="mt-4"/>
 
-      <div 
-        v-if="parentPost" 
-        class="form-group mt-4">
+      <div v-if="parentPost" class="mt-4 mb-4">
         <div class="flex items-center text-sm">
           <div class="flex-initial pr-2">
-            <img 
-              :src="parentPost.media[0].variations['50x50f'].url" 
-              width="50" 
-              height="50" 
-              class="w-10 h-10 rounded">
+            <img :src="parentPost.media[0].variations['50x50f'].url" width="50" height="50" class="w-10 h-10 rounded">
           </div>
           <div class="flex-grow">
             redraw to a post of <b>{{ parentPost.author.username }}</b>
           </div>
           <div class="flex-initial pl-2">
-            <button 
-              type="button" 
-              class="text-gray-900 hover:text-primary p-1" 
-              @click="removeParentPost()">
+            <button type="button" class="text-gray-900 hover:text-primary p-1" @click="removeParentPost()">
               <x-icon/>
             </button>
           </div>
         </div>
-        <has-error 
-          :form="form" 
-          field="parent_post_id"/>
+        <has-error :form="form" field="parent_post_id"/>
       </div>
 
       <div class="form-group">
         <div class="bg-gray-900 text-center -mx-4">
-          <div 
-            v-if="previewUrl" 
-            class="py-4">
-            <div 
-              class="relative w-full h-auto mx-auto" 
-              style="max-width: 400px;">
-              <img 
-                :src="previewUrl" 
-                alt="Preview" 
-                class="w-full h-auto shadow-lg">
-              <button 
-                type="button" 
-                class="absolute w-10 h-10 text-white text-center rounded-full" 
-                style="background-color: rgba(0, 0, 0, 0.25); top: 8px; right: 8px;" 
+          <div v-if="previewUrl" class="py-4">
+            <div class="relative w-full h-auto mx-auto" style="max-width: 400px;">
+              <img :src="previewUrl" alt="Preview" class="w-full h-auto shadow-lg">
+              <button
+                type="button"
+                class="absolute w-10 h-10 text-white text-center rounded-full"
+                style="background-color: rgba(0, 0, 0, 0.25); top: 8px; right: 8px;"
                 @click="clearFile()">
                 <trash-2-icon class="mx-auto"/>
               </button>
             </div>
           </div>
-          <div 
-            v-else 
-            class="text-white pt-12 pb-10">
+          <div v-else class="text-white pt-12 pb-10">
             <label class="bg-primary hover:bg-primary-lighter text-white py-2 px-4 rounded-full cursor-pointer">
-              Select a file to upload <input 
-                type="file" 
-                accept="image/jpeg,image/jpg,image/x-png" 
-                hidden 
-                @change="onFileChange">
+              Select a file to upload <input type="file" accept="image/jpeg,image/jpg,image/x-png" hidden @change="onFileChange">
             </label>
             <p class="mt-4">
-              valid formats: jpeg, jpg, png<br>
+              valid formats: jpeg, jpg, png<br/>
               max file size: 5mb
             </p>
           </div>
         </div>
-        <has-error 
-          :form="form" 
-          field="image"/>
+        <has-error :form="form" field="image"/>
       </div>
 
-      <form-group>
+      <t-input-group>
         <t-textarea
           :class="{ 'border-danger': form.hasErrors('description') }"
           v-model="form.description"
-          placeholder="Use this box to comment anything you want about this work."
+          placeholder="Use this box to tell anything you want about this work. Append #hashtags to reference topics, events or contests."
           autocomplete="off"
           rows="3"
         />
-        <has-error 
-          :form="form" 
-          field="description"/>
-      </form-group>
+        <has-error :form="form" field="description"/>
+      </t-input-group>
 
-      <form-group>
+      <t-input-group>
         <div class="flex">
           <t-button
             :class="{ 'bg-green text-white': form.restriction === 'no-restriction' }"
@@ -131,46 +97,40 @@
             +18
           </t-button>
         </div>
-        <has-error 
-          :form="form" 
-          field="restriction"/>
-      </form-group>
+        <has-error :form="form" field="restriction"/>
+      </t-input-group>
 
-      <form-group>
+      <t-input-group>
         <toggle
-          id="create-post-modal-redrawable"
+          id="create-post-modal--redrawable"
           :value="form.redrawable"
           v-model="form.redrawable"
           on-text="Redrawable"
           off-text="Redrawable"
           class="inline"
         />
-        <span 
-          class="text-gray-600 align-middle cursor-help hover:text-gray-900" 
-          title="Allows other users to create their own versions of this work. A link to the original work will be visible.">
-          <help-circle-icon 
-            size="1.2x" 
-            class="inline"/>
+        <span class="text-gray-600 align-middle cursor-help hover:text-gray-900" title="Allows other users to create their own versions of this work. A link to the original work will be visible.">
+          <help-circle-icon size="1.2x" class="inline"/>
         </span>
-        <has-error 
-          :form="form" 
-          field="redrawable"/>
-      </form-group>
+        <has-error :form="form" field="redrawable"/>
+      </t-input-group>
 
     </form>
 
     <template slot="footer">
-      <t-button 
-        :disabled="form.busy" 
-        variant="danger" 
-        danger-class="bg-red text-white mr-2 hover:bg-red-lighter" 
-        @click="$refs.modal.hide()">
+      <t-button
+        :disabled="form.busy"
+        variant="danger"
+        danger-class="bg-red text-white mr-2 hover:bg-red-lighter"
+        @click="$refs.modal.hide()"
+      >
         Cancel
       </t-button><!--
-   --><t-button 
-:class="{ 'btn-loading': form.busy }" 
-variant="primary" 
-@click="save()">
+   --><t-button
+        :class="{ 'btn-loading': form.busy }"
+        variant="primary"
+        @click="save()"
+      >
         Post
       </t-button>
     </template>
@@ -192,8 +152,8 @@ export default {
   data: function () {
     return {
       show: false,
-      descriptionCharacterLimit: 280,
       loading: true,
+      descriptionCharacterLimit: 280,
       parentPost: null,
       previewUrl: null,
       form: new Form({

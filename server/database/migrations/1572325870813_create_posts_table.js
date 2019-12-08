@@ -16,6 +16,7 @@ class PostSchema extends Schema {
       table.boolean('redrawable').notNullable().default(false)
       table.integer('total_media').notNullable().unsigned().default(0)
       table.integer('total_storage_usage').notNullable().unsigned().default(0) // The sumatory of the storage usage of all the media associated to this post.
+      table.integer('total_hashtags').notNullable().unsigned().default(0)
       table.integer('total_likes').notNullable().unsigned().default(0)
       table.integer('total_comments').notNullable().unsigned().default(0)
       table.integer('total_direct_children_posts').notNullable().unsigned().default(0)

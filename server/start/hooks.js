@@ -116,10 +116,30 @@ hooks.after.providersBooted(() => {
     }
   }
 
+  const maxHashtagsFn = async (data, field, message, args, get) => {
+    const value = get(data, field)
+    if (!value) {
+      /**
+       * skip validation if value is not defined. `required` rule
+       * should take care of it.
+       */
+      return
+    }
+
+    // Match hashtags from the given value.
+    const matchedHashtags = value.match(/#[a-z][a-z0-9]*(?=\s|$)/gi) || []
+
+    const maxHashtags = parseInt(args[0])
+    if(matchedHashtags.length > maxHashtags) {
+      throw message
+    }
+  }
+
   Validator.extend('exists', existsFn)
   Validator.extend('min', minFn)
   Validator.extend('max', maxFn)
   Validator.extend('in', inFn)
+  Validator.extend('maxHashtags', maxHashtagsFn)
   Validator.extend('username', usernameFn)
   Validator.extend('redrawablePost', redrawablePostFn)
 

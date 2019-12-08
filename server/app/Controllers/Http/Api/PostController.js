@@ -8,18 +8,17 @@ const Database = use('Database')
 const User = use('App/Models/User')
 const Post = use('App/Models/Post')
 const PostMedia = use('App/Models/PostMedia')
+const Hashtag = use('App/Models/Hashtag')
 const PostLike = use('App/Models/PostLike')
 const Notification = use('App/Models/Notification')
 
 class PostController {
-  async userIndex({ request, params, auth, response }) {
+  async userIndex({ request, params, auth }) {
     const user = await User.query().where('username', '=', params.username).firstOrFail()
 
     var query = Post.query()
 
     if(auth.user) {
-      query
-      .select([ 'posts.*' ])
       query
       .select([ 'posts.*', Database.raw("IF((`post_likes`.`id` IS NOT NULL AND `post_likes`.`deleted_at` IS NULL), 1, 0) AS logged_in_user_liked") ])
       .leftJoin('post_likes', function () {
@@ -43,6 +42,51 @@ class PostController {
     .paginate(request.get().page, 9)
   }
 
+  async hashtagIndex({ request, params, auth }) {
+    const hashtag = await Hashtag.findByOrFail('slug', params.slug)
+
+    var query = Post
+    .query()
+    .leftJoin('post_hashtags', 'posts.id', 'post_hashtags.post_id')
+    .where('post_hashtags.hashtag_id', '=', hashtag.id)
+
+    if(auth.user) {
+      query
+      .select([
+        'posts.*',
+        Database.raw("IF((`post_likes`.`id` IS NOT NULL AND `post_likes`.`deleted_at` IS NULL), 1, 0) AS logged_in_user_liked")
+      ])
+      .leftJoin('post_likes', function () {
+        this
+        .on('post_likes.post_id', 'posts.id')
+        .on('post_likes.user_id', auth.user.id)
+      })
+      .with('author', (builder) => {
+        builder
+        .select([
+          'users.*',
+          Database.raw("IF((`user_follows`.`id` IS NOT NULL AND `user_follows`.`deleted_at` IS NULL), 1, 0) AS logged_in_user_is_follower")
+        ])
+        .leftJoin('user_follows', function () {
+          this.on('user_follows.followed_id', 'users.id')
+          this.on('user_follows.follower_id', auth.user.id)
+        })
+      })
+    } else {
+      query
+      .select([ 'posts.*' ])
+    }
+
+    return await query
+    .with('author')
+    .with('media')
+    .with('parentPost.author')
+    .with('parentPost.media')
+    .where('posts.date', '<=', new Date())
+    .orderBy('posts.created_at', 'desc')
+    .paginate(request.get().page, 9)
+  }
+
   async store({ request, auth, response }) {
     if(auth.user.total_storage_usage > Config.get('drawvania.maximumStorage.common')) {
       return response.status(400).json({
@@ -52,7 +96,7 @@ class PostController {
     }
 
     const rules = {
-      description: `string|max:280`,
+      description: `string|max:280|maxHashtags:10`,
       restriction: `required|in:no-restriction,moderate-mature-content,strict-mature-content`,
       redrawable: `boolean`,
       parent_post_id: `redrawablePost`
@@ -134,7 +178,12 @@ class PostController {
         post.total_storage_usage = media.total_storage_usage
         await post.save(trx)
 
+        const tags = []
+
         trx.commit()
+
+        // Syncronize hashtags
+        await this.syncHashtags(post)
 
         if(parent_post_id) {
           // Notify the parent post's author.
@@ -162,6 +211,8 @@ class PostController {
           data: post
         })
       } catch(error) {
+        console.log(error)
+
         trx.rollback()
 
         return response.status(400).json({
@@ -187,7 +238,7 @@ class PostController {
     }
 
     const rules = {
-      description: `string|max:280`,
+      description: `string|max:280|maxHashtags:10`,
       restriction: `required|in:no-restriction,moderate-mature-content,strict-mature-content`,
       redrawable: `boolean`
     }
@@ -212,6 +263,9 @@ class PostController {
       post.updated_at = new Date()
       await post.save()
 
+      // Syncronize hashtags
+      await this.syncHashtags(post)
+
       // Return a success message
       return response.json({
         status: 'success',
@@ -220,6 +274,48 @@ class PostController {
     } else {
       response.status(400).send(validation.messages())
     }
+  }
+
+  async syncHashtags(post) {
+    const oldHashtags = await post.hashtags().fetch()
+    const oldHashtagsIds = oldHashtags.rows.map(function(hashtag) {
+      return hashtag.id
+    })
+
+    var newHashtagsIds = []
+
+    // Match hashtags on the post's description.
+    const matchedHashtags = post.description.match(/#[a-z][a-z0-9]*(?=\s|$)/gi) || []
+
+    // Find or create the hashtags and make an array with their ids.
+    for(let i=0; i<matchedHashtags.length; i++) {
+      const slug = matchedHashtags[i].substr(1) // Remove the '#' (hash) from the start.
+
+      const hashtag = await Hashtag.findOrCreate({
+        slug: slug
+      })
+
+      newHashtagsIds.push(hashtag.id)
+    }
+
+    // Attach the new hashtags to the post and detach the removed hashtags.
+    await post.hashtags().sync(newHashtagsIds)
+
+    const hashtagsIds = oldHashtagsIds.concat(newHashtagsIds)
+    for(let i=0; i<hashtagsIds.length; i++) {
+      const hashtagId = hashtagsIds[i]
+
+      // If the hashtag has been added or removed, recount posts and users from it.
+      const hashtagRemained = newHashtagsIds.includes(hashtagId) && oldHashtagsIds.includes(hashtagId)
+      if(hashtagRemained === false) {
+        const hashtag = await Hashtag.find(hashtagId)
+        await hashtag.countPostsAndUsers()
+      }
+    }
+
+    // Save the total of used hashtags by the post.
+    post.total_hashtags = newHashtagsIds.length
+    await post.save()
   }
 
   async destroy({ params, auth, response }) {

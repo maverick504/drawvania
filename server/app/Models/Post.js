@@ -100,6 +100,11 @@ class Post extends Model {
     return this.hasMany('App/Models/PostMedia')
   }
 
+  hashtags () {
+    return this.belongsToMany('App/Models/Hashtag')
+    .pivotModel('App/Models/PostHashtag')
+  }
+
   likers () {
     return this.belongsToMany('App/Models/User')
     .pivotModel('App/Models/PostLike')

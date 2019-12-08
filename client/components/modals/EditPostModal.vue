@@ -1,39 +1,27 @@
 <template>
-  <t-modal 
-    ref="modal" 
-    v-model="show" 
-    header="Edit post" 
-    footer-class="bg-gray-100 p-4 text-right" 
-    width="540" 
-    @before-close="beforeClose">
-    <div 
-      v-if="loading" 
-      class="text-primary text-center py-5">
-      <div 
-        class="spinner" 
-        role="status">
+  <t-modal
+    ref="modal"
+    v-model="show"
+    header="Edit post"
+    footer-class="bg-gray-100 p-4 text-right"
+    width="540"
+    @before-close="beforeClose"
+  >
+
+    <div v-if="loading" class="text-primary text-center py-5">
+      <div class="spinner" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </div>
 
-    <form 
-      v-else 
-      class="-mt-4">
+    <form v-else class="-mt-4">
 
-      <error-alert 
-        :form="form" 
-        class="mt-4"/>
+      <error-alert :form="form" class="mt-4"/>
 
-      <div 
-        v-if="post.parentPost" 
-        class="form-group mt-4">
+      <div v-if="post.parentPost" class="mt-4 mb-4">
         <div class="flex items-center text-sm">
           <div class="flex-initial pr-2">
-            <img 
-              :src="post.parentPost.media[0].variations['50x50f'].url" 
-              width="50" 
-              height="50" 
-              class="w-10 h-10 rounded">
+            <img :src="post.parentPost.media[0].variations['50x50f'].url" width="50" height="50" class="w-10 h-10 rounded">
           </div>
           <div class="flex-grow">
             redraw to a post of <b>{{ post.parentPost.author.username }}</b>
@@ -43,18 +31,13 @@
 
       <div class="form-group">
         <div class="bg-gray-900 py-4 text-center -mx-4">
-          <div 
-            class="relative w-full h-auto mx-auto" 
-            style="max-width: 400px;">
-            <img 
-              :src="post.media[0].variations['1280w'].url" 
-              alt="Preview" 
-              class="w-full h-auto shadow-lg">
+          <div class="relative w-full h-auto mx-auto" style="max-width: 400px;">
+            <img :src="post.media[0].variations['1280w'].url" alt="Preview" class="w-full h-auto shadow-lg">
           </div>
         </div>
       </div>
 
-      <form-group>
+      <t-input-group>
         <t-textarea
           :class="{ 'border-danger': form.hasErrors('description') }"
           v-model="form.description"
@@ -62,12 +45,10 @@
           autocomplete="off"
           rows="3"
         />
-        <has-error 
-          :form="form" 
-          field="description"/>
-      </form-group>
+        <has-error :form="form" field="description"/>
+      </t-input-group>
 
-      <form-group>
+      <t-input-group>
         <div class="flex">
           <t-button
             :class="{ 'bg-green text-white': form.restriction === 'no-restriction' }"
@@ -91,46 +72,40 @@
             +18
           </t-button>
         </div>
-        <has-error 
-          :form="form" 
-          field="restriction"/>
-      </form-group>
+        <has-error :form="form" field="restriction"/>
+      </t-input-group>
 
-      <form-group>
+      <t-input-group>
         <toggle
-          id="edit-post-modal-redrawable"
+          id="create-post-modal--redrawable"
           :value="form.redrawable"
           v-model="form.redrawable"
           on-text="Redrawable"
           off-text="Redrawable"
           class="inline"
         />
-        <span 
-          class="text-gray-600 align-middle cursor-help hover:text-gray-900" 
-          title="Allows other users to create their own versions of this work. A link to the original work will be visible.">
-          <help-circle-icon 
-            size="1.2x" 
-            class="inline"/>
+        <span class="text-gray-600 align-middle cursor-help hover:text-gray-900" title="Allows other users to create their own versions of this work. A link to the original work will be visible.">
+          <help-circle-icon size="1.2x" class="inline"/>
         </span>
-        <has-error 
-          :form="form" 
-          field="redrawable"/>
-      </form-group>
+        <has-error :form="form" field="redrawable"/>
+      </t-input-group>
 
     </form>
 
     <template slot="footer">
-      <t-button 
-        :disabled="form.busy" 
-        variant="danger" 
-        danger-class="bg-red text-white mr-2 hover:bg-red-lighter" 
-        @click="$refs.modal.hide()">
+      <t-button
+        :disabled="form.busy"
+        variant="danger"
+        danger-class="bg-red text-white mr-2 hover:bg-red-lighter"
+        @click="$refs.modal.hide()"
+      >
         Cancel
       </t-button><!--
-   --><t-button 
-:class="{ 'btn-loading': form.busy }" 
-variant="primary" 
-@click="save()">
+   --><t-button
+        :class="{ 'btn-loading': form.busy }"
+        variant="primary"
+        @click="save()"
+      >
         Save
       </t-button>
     </template>
