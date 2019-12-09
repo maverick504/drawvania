@@ -27,14 +27,6 @@ class PostController {
     // Get the required post
     const post = await Post.findOrFail(params.id)
 
-    // Check if the post if owned by the authenticated user
-    if(post.author_id !== auth.user.id) {
-      return response.status(400).json({
-        status: 'error',
-        message: "You cannot delete this post because you are not its author."
-      })
-    }
-
     // Delete the post
     await post.delete()
 
