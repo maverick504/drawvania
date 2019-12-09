@@ -42,7 +42,7 @@
   </div>
   <div class="mt-2">
     @if(user.upgraded_premium_at === null)
-      <form action="{{ 'http://localhost:3333/admin/users/' + user.id + '/upgrade-to-premium?_method=PATCH' }}" method="POST">
+      <form action="{{ '/admin/users/' + user.id + '/upgrade-to-premium?_method=PATCH' }}" method="POST">
         <button type="submit" class="btn btn-primary">Add Premium</button>
       </form>
     @else
