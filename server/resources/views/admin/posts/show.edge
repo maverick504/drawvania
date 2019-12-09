@@ -1,0 +1,43 @@
+@layout('layouts.admin')
+
+@section('content')
+  <h1 class="h2">{{ 'Post #' + post.id }}</h1>
+  <img class="mb-2" src="{{ post.media[0].variations['640wf'].url }}" width="320">
+  <div class="row no-gutters">
+    <div class="col-3">
+      <b>author</b>
+    </div>
+    <div class="col-9">
+      {{ post.author.username }}
+    </div>
+    <div class="col-3">
+      <b>description</b>
+    </div>
+    <div class="col-9">
+      {{ post.description }}
+    </div>
+    <div class="col-3">
+      <b>total likes</b>
+    </div>
+    <div class="col-9">
+      {{ post.total_likes }}
+    </div>
+    <div class="col-3">
+      <b>total comments</b>
+    </div>
+    <div class="col-9">
+      {{ post.total_comments }}
+    </div>
+    <div class="col-3">
+      <b>total redraws</b>
+    </div>
+    <div class="col-9">
+      {{ post.total_direct_children_posts }}
+    </div>
+  </div>
+  <div class="mt-2">
+    <form action="{{ '/admin/posts/' + post.id + '?_method=DELETE' }}" method="POST">
+      <button type="submit" class="btn btn-danger">Delete post</button>
+    </form>
+  </div>
+@endsection

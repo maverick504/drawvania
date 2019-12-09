@@ -1,0 +1,46 @@
+@layout('layouts.admin')
+
+@section('content')
+  <h1 class="h2">Posts</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 80px;">#</th>
+        <th scope="col" style="width: 120px;">Thumbnail</th>
+        <th scope="col">description</th>
+        <th scope="col">Author</th>
+        <th scope="col">Created at</th>
+        <th scope="col" style="width: 60px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @each(post in posts.data)
+        <tr>
+          <th scope="row">{{ post.id }}</th>
+          <td>
+            <img src="{{ post.media[0].variations['100x100f'].url }}" width="100" height="100">
+          </td>
+          <td>{{ post.description }}</td>
+          <td>{{ post.author.username }}</td>
+          <td>{{ post.created_at }}</td>
+          <td>
+            <a href="/admin/posts/{{ post.id }}" class="btn btn-primary">view</a>
+          </td>
+        </tr>
+      @endeach
+    </tbody>
+  </table>
+  <nav>
+    <ul class="pagination">
+      <li class="page-item {{ posts.page <= 1 ? 'disabled' : '' }}">
+        <a class="page-link" href="{{ '/admin/posts?page=' + (posts.page - 1) }}">Previous</a>
+      </li>
+      <li class="page-item active">
+        <a class="page-link" href="{{ '/admin/posts?page=' + posts.page }}">{{ posts.page }}</a>
+      </li>
+      <li class="page-item {{ posts.page >= posts.lastPage ? 'disabled' : '' }}">
+        <a class="page-link" href="{{ '/admin/posts?page=' + (posts.page + 1) }}">Next</a>
+      </li>
+    </ul>
+  </nav>
+@endsection

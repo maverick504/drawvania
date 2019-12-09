@@ -27,6 +27,10 @@ Route.group(() => {
   Route.patch('users/:id/upgrade-to-premium', 'Admin/UserController.upgradeToPremium')
   Route.patch('users/:id/remove-premium', 'Admin/UserController.removePremium')
 
+  Route.get('posts', 'Admin/PostController.index')
+  Route.get('posts/:id', 'Admin/PostController.show')
+  Route.delete('posts/:id', 'Admin/PostController.destroy')
+
 }).prefix('admin').middleware(['auth:session', 'is:(administrator)'])
 
 // API ROUTES
