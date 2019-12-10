@@ -6,8 +6,8 @@
           :to="{ name: 'feed.global' }"
           class="h-full flex items-center px-4">
           <h1>
-            <span class="text-xl font-bold text-primary">Drawvania</span>
-            <span class="text-sm text-gray-600">Beta</span>
+            <span class="text-xl font-bold text-primary mr-1">Drawvania</span><!--
+         --><span class="text-sm text-gray-600">Beta</span>
           </h1>
         </router-link>
       </div>
