@@ -1,6 +1,5 @@
 'use strict'
 
-const { validateAll } = use('Validator')
 const Database = use('Database')
 const Event = use('Event')
 const User = use('App/Models/User')
@@ -9,78 +8,55 @@ const NotificationSettings = use('App/Models/NotificationSettings')
 class AuthenticationController {
 
   async register({ request, auth, response }) {
-    const rules = {
-      username: 'required|username|unique:users,username',
-      email: 'required|email|unique:users,email',
-      password: 'required|min:8'
-    }
+    try {
+      const trx = await Database.beginTransaction()
 
-    const { username, email, password } = request.only(['username', 'email', 'password'])
+      const data = request.only([ 'username', 'email', 'password' ])
 
-    const validation = await validateAll({ username, email, password }, rules);
+      const user = await User.create({
+        'username': data.username,
+        'email': data.email,
+        'password': data.password
+      }, trx)
 
-    if (!validation.fails()) {
-      try {
-        const trx = await Database.beginTransaction()
+      const notificationSettings = await NotificationSettings.create({
+        'user_id': user.id
+      }, trx)
 
-        const user = await User.create({
-          'username': username,
-          'email': email,
-          'password': password
-        }, trx)
+      const token = await auth.authenticator('jwt').generate(user)
 
-        const notificationSettings = await NotificationSettings.create({
-          'user_id': user.id
-        }, trx)
+      trx.commit()
 
-        const token = await auth.authenticator('jwt').generate(user)
+      // Send email validation e-mail.
+      Event.fire('AUTH_REGISTER', user)
 
-        trx.commit()
-
-        // Send email validation e-mail.
-        Event.fire('AUTH_REGISTER', user)
-
-        return response.json({
-          status: 'success',
-          data: token
-        })
-      } catch(error) {
-        trx.rollback()
-        return response.status(400).json({
-          status: 'error',
-          message: 'There was a problem creating the user, please try again.'
-        })
-      }
-    } else {
-      response.status(400).send(validation.messages());
+      return response.json({
+        status: 'success',
+        data: token
+      })
+    } catch(error) {
+      trx.rollback()
+      return response.status(400).json({
+        status: 'error',
+        message: 'There was a problem creating the user, please try again.'
+      })
     }
   }
 
   async login({ request, auth, response }) {
-    const rules = {
-      email: 'required|email',
-      password: 'required'
-    }
+    const data = request.only([ 'email', 'password' ])
 
-    const { email, password } = request.only(['email', 'password']);
-
-    const validation = await validateAll({ email, password }, rules);
-
-    if (!validation.fails()) {
-      try {
-        const token = await auth.authenticator('jwt').attempt(email, password)
-        return response.json({
-          status: 'success',
-          data: token
-        })
-      } catch(error) {
-        return response.status(400).json({
-          status: 'error',
-          message: 'Invalid email/password.'
-        })
-      }
-    } else {
-      response.status(400).send(validation.messages());
+    try {
+      const token = await auth.authenticator('jwt').attempt(data.email, data.password)
+      return response.json({
+        status: 'success',
+        data: token
+      })
+    } catch(error) {
+      return response.status(400).json({
+        status: 'error',
+        message: 'Invalid email/password.'
+      })
     }
   }
 

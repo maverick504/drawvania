@@ -43,8 +43,8 @@ Route.group(() => {
     return { app_name: 'drawvania', version: '0.1' }
   })
 
-  Route.post('login', 'Api/Auth/AuthenticationController.login')
-  Route.post('register', 'Api/Auth/AuthenticationController.register')
+  Route.post('login', 'Api/Auth/AuthenticationController.login').validator('auth/Login')
+  Route.post('register', 'Api/Auth/AuthenticationController.register').validator('auth/Register')
   Route.get('me', 'Api/Auth/AuthenticationController.me').middleware(['auth:jwt'])
   Route.post('send-confirm-email' , 'Api/Auth/AuthenticationController.sendConfirmEmail').middleware(['auth:jwt'])
 
