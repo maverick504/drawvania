@@ -16,9 +16,22 @@ class Post extends Model {
      * being created in the transaction.
      */
 
-     /**
-      * Recount childrens on the parent post after the post is deleted.
-      */
+    /**
+     * Detach the post's related hashtags and recount posts and users on those hashtags.
+     */
+    this.addHook('beforeDelete', async (postInstance) => {
+      const hashtags = await postInstance.hashtags().fetch()
+      await postInstance.hashtags().sync([])
+
+      for(let i in hashtags.rows) {
+        const hashtag = hashtags.rows[i]
+        await hashtag.countPostsAndUsers()
+      }
+    })
+
+    /**
+     * Recount childrens on the parent post after the post it is deleted.
+     */
     this.addHook('afterDelete', async (postInstance) => {
       // Count posts on the author.
       const author = await postInstance.author().first()
