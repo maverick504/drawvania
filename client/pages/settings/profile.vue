@@ -82,7 +82,8 @@
           v-else
           type="button"
           variant="primary"
-          size="small"
+          size="sm"
+          class="mt-2"
           @click="sendConfirmationEmail()">
           Send Confirmation Email
         </t-button>
