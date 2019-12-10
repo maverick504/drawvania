@@ -1,8 +1,6 @@
 <template>
   <feed-layout>
-    <div
-      class="fixed bg-white p-4 font-bold text-lg border-b shadow z-20" 
-      style="margin: 0 1px; width: 574px; top: 57px;">
+    <div class="fixed bg-white p-4 font-bold text-lg border-b z-20" style="margin: 0 1px; width: 560px; top: 57px;">
       Followings works
     </div>
     <div style="height: 59px;"/>
@@ -10,13 +8,11 @@
       <post-infinite-scroll endpoint="feed/followings">
         <template slot="empty-state">
           <div class="text-center py-8">
-            <users-icon
-              size="4x"
-              class="mx-auto"/>
+            <users-icon size="4x" class="mx-auto"/>
             <p class="mt-2">Start following the users you like the most and you will see their new posts here.</p>
-            <router-link
-              :to="{ name: 'feed.global' }"
-              class="inline-block text-primary mt-2">Explore recent posts</router-link>
+            <router-link :to="{ name: 'feed.global' }" class="inline-block text-primary mt-2">
+              Explore recent posts
+            </router-link>
           </div>
         </template>
       </post-infinite-scroll>

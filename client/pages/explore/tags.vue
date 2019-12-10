@@ -1,8 +1,6 @@
 <template>
   <feed-layout>
-    <div
-      class="fixed bg-white p-4 font-bold text-lg border-b shadow z-20"
-      style="margin: 0 1px; width: 574px; top: 57px;">
+    <div class="fixed bg-white p-4 font-bold text-lg border-b z-20" style="margin: 0 1px; width: 560px; top: 57px;">
       {{ `#${$route.params.slug}` }}
     </div>
     <div style="height: 59px;"/>

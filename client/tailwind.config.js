@@ -2,7 +2,6 @@ module.exports = {
   important: true,
   theme: {
     screens: {
-      lg: '1024px',
       xl: '1112px'
     },
     fontFamily: {

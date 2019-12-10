@@ -42,6 +42,9 @@ module.exports = {
   | 'notifications' (https://app,drawvania.com/notifications), which interfers
   | with the notifications route.
   |
+  | IMPORTANT: put all the unavailable usernames in lower case.
+  | The validation function will pass the values to lower case so it is case insensitive.
+  |
   */
 
   unavailableUsernames: [

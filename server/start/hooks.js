@@ -84,8 +84,24 @@ hooks.after.providersBooted(() => {
     }
   }
 
-  const usernameFn = async (data, field, message, args, get) => {
+  const urlFn = async (data, field, messsage, args, get) => {
     const value = get(data, field)
+    if (!value) {
+      /**
+       * skip validation if value is not defined. `required` rule
+       * should take care of it.
+       */
+      return
+    }
+
+    const regex = '/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi'
+    if(!value.match(regex)) {
+      throw message
+    }
+  }
+
+  const usernameFn = async (data, field, message, args, get) => {
+    const value = get(data, field).toLowerCase()
 
     const validUsername = /^[a-zA-Z0-9_]{1,20}$/.test(value)
 
@@ -139,6 +155,7 @@ hooks.after.providersBooted(() => {
   Validator.extend('min', minFn)
   Validator.extend('max', maxFn)
   Validator.extend('in', inFn)
+  Validator.extend('url', urlFn)
   Validator.extend('maxHashtags', maxHashtagsFn)
   Validator.extend('username', usernameFn)
   Validator.extend('redrawablePost', redrawablePostFn)

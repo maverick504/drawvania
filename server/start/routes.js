@@ -31,6 +31,8 @@ Route.group(() => {
   Route.get('posts/:id', 'Admin/PostController.show')
   Route.delete('posts/:id', 'Admin/PostController.destroy')
 
+  Route.get('feedback', 'Admin/FeedbackMessageController.index')
+
 }).prefix('admin').middleware(['auth:session', 'is:(administrator)'])
 
 // API ROUTES
@@ -86,6 +88,8 @@ Route.group(() => {
 
   Route.get('featured-hashtags', 'Api/HashtagController.featured')
   Route.get('explore/hashtags/:slug', 'Api/PostController.hashtagIndex')
+
+  Route.post('feedback', 'Api/FeedbackMessageController.store').middleware(['auth:jwt'])
 
 }).prefix('api').middleware('throttle:30,60')
 
