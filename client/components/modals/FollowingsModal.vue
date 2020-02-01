@@ -1,32 +1,32 @@
 <template>
-  <t-modal 
-    v-model="show" 
-    :header="total!==null ? `Following ${total} users` : 'Loading...'" 
-    width="400" 
-    height="0" 
-    @before-open="beforeOpen" 
+  <t-modal
+    v-model="show"
+    :header="total!==null ? `Following ${total} users` : 'Loading...'"
+    width="400"
+    height="0"
+    @before-open="beforeOpen"
     @closed="closed">
-    <div 
-      id="followings-modal-content" 
-      class="overflow-y-auto -m-4 p-4 pb-0" 
+    <div
+      id="followings-modal-content"
+      class="overflow-y-auto -m-4 p-4 pb-0"
       style="max-height: 300px;">
       <div v-if="!loading">
-        <div 
-          v-for="followingRelation in followings" 
-          :key="followingRelation.id" 
+        <div
+          v-for="followingRelation in followings"
+          :key="followingRelation.id"
           class="flex items-center text-sm mb-4">
           <div class="flex-initial pr-2">
             <router-link :to="{ name: 'users.show', params: { username: followingRelation.followed.username } }">
-              <avatar 
-                :user="followingRelation.followed" 
-                size="10" 
+              <avatar
+                :user="followingRelation.followed"
+                size="10"
                 class="d-block"/>
             </router-link>
           </div>
           <div class="flex-grow">
             <div class="block">
-              <router-link 
-                :to="{ name: 'users.show', params: { username: followingRelation.followed.username } }" 
+              <router-link
+                :to="{ name: 'users.show', params: { username: followingRelation.followed.username } }"
                 class="font-bold leading-none mr-2">
                 {{ followingRelation.followed.username }}
               </router-link>
@@ -37,11 +37,11 @@
           </div>
         </div>
       </div>
-      <div 
-        v-else 
+      <div
+        v-else
         class="text-primary text-center pb-4">
-        <div 
-          class="spinner" 
+        <div
+          class="spinner"
           role="status">
           <span class="sr-only">Loading...</span>
         </div>
@@ -102,7 +102,7 @@ export default {
 
     onScroll (event) {
       const modalContent = document.getElementById('followings-modal-content')
-      const bottomOfWindow = modalContent.scrollTop + modalContent.clientHeight === modalContent.scrollHeight
+      const bottomOfWindow = modalContent.scrollTop + modalContent.clientHeight >= modalContent.scrollHeight
       if (bottomOfWindow && !this.loading && (this.page !== this.lastPage)) {
         this.page++
         this.loadMore()
