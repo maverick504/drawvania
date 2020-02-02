@@ -7,7 +7,7 @@ class FeedbackController {
 
   async store({ request, auth, response }) {
     const rules = {
-      type: `required|in:challenge-suggestion,bug-report,feature-request,translation-error,other`,
+      type: `required|in:challenge-suggestion,tutorial-category-suggestion,other-suggestion,bug-report,feature-request,other`,
       details: `required|string|max:500`,
       origin_url: `required`
     }

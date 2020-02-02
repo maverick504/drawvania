@@ -22,9 +22,10 @@
           v-model="form.type"
           :options="[
             { value: 'challenge-suggestion', text: 'Challenge suggestion' },
+            { value: 'tutorial-category-suggestion', text: 'Tutorial category suggestion' },
+            { value: 'other-suggestion', text: 'Other suggestion' },
             { value: 'bug-report', text: 'Bug report' },
             { value: 'feature-request', text: 'Feature request' },
-            { value: 'translation-error', text: 'Translation error' },
             { value: 'other', text: 'Other' }
           ]"
         />
