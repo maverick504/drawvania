@@ -99,6 +99,23 @@ class PostController {
       })
     }
 
+    const latestPost = await auth.user.posts()
+    .orderBy('date', 'DESC')
+    .firstOrFail()
+
+    // Once you create a post, you must wait 30 minutes to create the next one.
+    const minimumPostTimeDiference = 30
+
+    // Calculate minutes since last post created.
+    const diff = Math.floor((new Date() - new Date(latestPost.created_at)) / 1000 / 60)
+
+    if(diff < minimumPostTimeDiference) {
+      return response.status(400).json({
+        status: 'error',
+        message: `You must wait ${minimumPostTimeDiference-diff} minutes before posting again.`
+      })
+    }
+
     const rules = {
       description: `string|max:280|maxHashtags:10`,
       restriction: `required|in:no-restriction,moderate-mature-content,strict-mature-content`,
