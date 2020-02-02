@@ -4,7 +4,7 @@
     v-model="show"
     header="Create post"
     footer-class="bg-gray-100 p-4 text-right"
-    width="540"
+    width="480"
     @before-close="beforeClose"
   >
 
@@ -18,13 +18,38 @@
 
       <error-alert :form="form" class="mt-4"/>
 
+      <div class="form-group">
+        <div class="bg-gray-900 text-center -mx-4">
+          <div v-if="previewUrl" class="relative">
+            <img :src="previewUrl" alt="Preview" class="w-full h-auto">
+            <button
+              type="button"
+              class="absolute w-10 h-10 text-white text-center rounded-full"
+              style="background-color: rgba(0, 0, 0, 0.25); top: 8px; right: 8px;"
+              @click="clearFile()">
+              <trash-2-icon class="mx-auto"/>
+            </button>
+          </div>
+          <div v-else class="text-white pt-12 pb-10">
+            <label class="inline-block bg-primary hover:bg-primary-lighter text-white px-6 py-3 rounded-full cursor-pointer mb-4">
+              Select a file to upload <input type="file" accept="image/jpeg,image/jpg,image/x-png" hidden @change="onFileChange">
+            </label>
+            <div>
+              valid formats: jpeg, jpg, png<br/>
+              max file size: 5mb
+            </div>
+          </div>
+        </div>
+        <has-error :form="form" field="image"/>
+      </div>
+
       <div v-if="parentPost" class="mt-4 mb-4">
-        <div class="flex items-center text-sm">
-          <div class="flex-initial pr-2">
+        <div class="flex items-center">
+          <div class="flex-initial flex-shrink-0 pr-2">
             <img :src="parentPost.media[0].variations['50x50f'].url" width="50" height="50" class="w-10 h-10 rounded">
           </div>
-          <div class="flex-grow">
-            redraw to a post of <b>{{ parentPost.author.username }}</b>
+          <div class="flex-grow text-sm">
+            redraw to a post of: <b>{{ parentPost.author.username }}</b>
           </div>
           <div class="flex-initial pl-2">
             <button type="button" class="text-gray-900 hover:text-primary p-1" @click="removeParentPost()">
@@ -35,34 +60,31 @@
         <has-error :form="form" field="parent_post_id"/>
       </div>
 
-      <div class="form-group">
-        <div class="bg-gray-900 text-center -mx-4">
-          <div v-if="previewUrl" class="py-4">
-            <div class="relative w-full h-auto mx-auto" style="max-width: 400px;">
-              <img :src="previewUrl" alt="Preview" class="w-full h-auto shadow-lg">
-              <button
-                type="button"
-                class="absolute w-10 h-10 text-white text-center rounded-full"
-                style="background-color: rgba(0, 0, 0, 0.25); top: 8px; right: 8px;"
-                @click="clearFile()">
-                <trash-2-icon class="mx-auto"/>
+      <template v-if="completedChallenge">
+        <div class="mt-4 mb-4">
+          <div class="flex items-center">
+            <div class="flex-initial flex-shrink-0 pr-2">
+              <img src="~/assets/img/challenge_icon.png" width="50" height="50" class="w-10 h-10 rounded">
+            </div>
+            <div class="flex-grow text-sm">
+              challenge overcome: <b>{{ completedChallenge.title }}</b>
+            </div>
+            <div class="flex-initial pl-2">
+              <button type="button" class="text-gray-900 hover:text-primary p-1" @click="removeCompletedChallenge()">
+                <x-icon/>
               </button>
             </div>
           </div>
-          <div v-else class="text-white pt-12 pb-10">
-            <label class="bg-primary hover:bg-primary-lighter text-white py-2 px-4 rounded-full cursor-pointer">
-              Select a file to upload <input type="file" accept="image/jpeg,image/jpg,image/x-png" hidden @change="onFileChange">
-            </label>
-            <p class="mt-4">
-              valid formats: jpeg, jpg, png<br/>
-              max file size: 5mb
-            </p>
-          </div>
+          <has-error :form="form" field="completed_challenge_id"/>
         </div>
-        <has-error :form="form" field="image"/>
-      </div>
+        <div class="mb-4">
+          <span v-for="skill in completedChallenge.skillPoints" :style="{ 'color': skill.color }">
+            {{ `+${skill.pivot.points} ${skill.name}` }}
+          </span>
+        </div>
+      </template>
 
-      <t-input-group>
+      <t-input-group class="mb-4">
         <t-textarea
           :class="{ 'border-danger': form.hasErrors('description') }"
           v-model="form.description"
@@ -73,7 +95,7 @@
         <has-error :form="form" field="description"/>
       </t-input-group>
 
-      <t-input-group>
+      <t-input-group class="mb-4">
         <div class="flex">
           <t-button
             :class="{ 'bg-green text-white': form.restriction === 'no-restriction' }"
@@ -100,7 +122,7 @@
         <has-error :form="form" field="restriction"/>
       </t-input-group>
 
-      <t-input-group>
+      <t-input-group class="mb-4">
         <toggle
           id="create-post-modal--redrawable"
           :value="form.redrawable"
@@ -155,9 +177,11 @@ export default {
       loading: true,
       descriptionCharacterLimit: 280,
       parentPost: null,
+      completedChallenge: null,
       previewUrl: null,
       form: new Form({
         parent_post_id: null,
+        completed_challenge_id: null,
         image: null,
         description: '',
         restriction: 'no-restriction',
@@ -167,14 +191,17 @@ export default {
   },
 
   mounted () {
-    this.$bus.$on('createPost', (parentPostId = null) => {
+    this.$bus.$on('createPost', (options = {}) => {
       this.clearForm()
       this.loading = true
-
       this.show = true
 
-      if(parentPostId) {
-        this.setParentPost(parentPostId)
+      if('parentPostId' in options) {
+        this.setParentPost(options.parentPostId)
+      }
+
+      if('completedChallengeRelationshipId' in options) {
+        this.setCompletedChallenge(options.completedChallengeRelationshipId)
       }
 
       this.loading = false
@@ -189,9 +216,21 @@ export default {
       this.form.parent_post_id = this.parentPost.id
     },
 
+    async setCompletedChallenge (completedChallengeRelationshipId) {
+      const response = await this.$axios.get(`/completed-challenges/${completedChallengeRelationshipId}?with=skillPoints`)
+      this.completedChallenge = response.data
+
+      this.form.completed_challenge_id = this.completedChallenge.id
+    },
+
     removeParentPost () {
       this.parentPost = null
       this.form.parent_post_id = null
+    },
+
+    removeCompletedChallenge () {
+      this.completedChallenge = null
+      this.form.completed_challenge_id = null
     },
 
     onFileChange (e) {
@@ -208,8 +247,8 @@ export default {
 
     clearForm () {
       this.removeParentPost()
+      this.removeCompletedChallenge()
       this.clearFile()
-      this.form.parent_post_id = null
       this.form.image = null
       this.form.description = ''
       this.form.restriction = 'no-restriction'
@@ -231,6 +270,9 @@ export default {
         formData.append('redrawable', this.form.redrawable)
         if(this.form.parent_post_id) {
           formData.append('parent_post_id', this.form.parent_post_id)
+        }
+        if(this.form.completed_challenge_id) {
+          formData.append('completed_challenge_id', this.form.completed_challenge_id)
         }
 
         const response = await this.$axios.post('posts', formData, {

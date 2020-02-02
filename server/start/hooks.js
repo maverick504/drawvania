@@ -100,6 +100,25 @@ hooks.after.providersBooted(() => {
     }
   }
 
+  const maxHashtagsFn = async (data, field, message, args, get) => {
+    const value = get(data, field)
+    if (!value) {
+      /**
+       * skip validation if value is not defined. `required` rule
+       * should take care of it.
+       */
+      return
+    }
+
+    // Match hashtags from the given value.
+    const matchedHashtags = value.match(/#[a-z][a-z0-9]*(?=\s|$)/gi) || []
+
+    const maxHashtags = parseInt(args[0])
+    if(matchedHashtags.length > maxHashtags) {
+      throw message
+    }
+  }
+
   const usernameFn = async (data, field, message, args, get) => {
     const value = get(data, field).toLowerCase()
 
@@ -132,7 +151,7 @@ hooks.after.providersBooted(() => {
     }
   }
 
-  const maxHashtagsFn = async (data, field, message, args, get) => {
+  const validCompletedChallengeRelationshipFn = async (data, field, message, args, get) => {
     const value = get(data, field)
     if (!value) {
       /**
@@ -142,11 +161,12 @@ hooks.after.providersBooted(() => {
       return
     }
 
-    // Match hashtags from the given value.
-    const matchedHashtags = value.match(/#[a-z][a-z0-9]*(?=\s|$)/gi) || []
-
-    const maxHashtags = parseInt(args[0])
-    if(matchedHashtags.length > maxHashtags) {
+    const userId = args[0]
+    const completedRelationship = await Database.table('user_completed_challenges')
+    .where('id', '=', value)
+    .where('user_id', '=', userId)
+    .first()
+    if(!completedRelationship) {
       throw message
     }
   }
@@ -159,6 +179,7 @@ hooks.after.providersBooted(() => {
   Validator.extend('maxHashtags', maxHashtagsFn)
   Validator.extend('username', usernameFn)
   Validator.extend('redrawablePost', redrawablePostFn)
+  Validator.extend('validCompletedChallengeRelationship', validCompletedChallengeRelationshipFn)
 
   // Make the configuration accessible in all views.
   View.global('config', function (key) {

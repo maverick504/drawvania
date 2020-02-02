@@ -3,14 +3,14 @@
     <navbar/>
     <div class="navbar-space"/>
     <nuxt/>
-    <canvas 
-      ref="confettiCanvas" 
-      class="fixed pointer-events-none" 
+    <canvas
+      ref="confettiCanvas"
+      class="fixed pointer-events-none"
       style="top: 0; left: 0; width: 100vw; height: 100vh;"/>
     <create-post-modal ref="createPostModal"/>
     <edit-post-modal ref="editPostModal"/>
-    <login-modal 
-      v-if="!isAuthenticated" 
+    <login-modal
+      v-if="!isAuthenticated"
       ref="loginModal"/>
   </div>
 </template>

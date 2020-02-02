@@ -2,9 +2,7 @@
   <div>
     <feed-layout>
       <div class="p-4">
-        <post-item 
-          :post="post" 
-          class="mb-32"/>
+        <post-item :post="post" class="mb-32"/>
       </div>
     </feed-layout>
     <likes-modal/>
@@ -35,7 +33,7 @@ export default {
 
   async asyncData ({ $axios, params, error }) {
     try {
-      const response = await $axios.get(`/posts/${params.id}?with=author,media,parentPost.author,parentPost.media`)
+      const response = await $axios.get(`/posts/${params.id}?with=author,media,parentPost.author,parentPost.media,completedChallengeRelationship.challenge`)
 
       return {
         post: response.data

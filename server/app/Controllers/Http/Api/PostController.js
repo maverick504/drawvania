@@ -7,10 +7,13 @@ const Drive = use('Drive')
 const Database = use('Database')
 const User = use('App/Models/User')
 const Post = use('App/Models/Post')
+const UserCompletedChallenge = use('App/Models/UserCompletedChallenge')
 const PostMedia = use('App/Models/PostMedia')
 const Hashtag = use('App/Models/Hashtag')
 const PostLike = use('App/Models/PostLike')
-const Notification = use('App/Models/Notification')
+const NotificationSender = use('App/Utils/NotificationSender')
+const NewRedrawOfPost = use('App/Notifications/NewRedrawOfPost')
+const NewLikeInPost = use('App/Notifications/NewLikeInPost')
 
 class PostController {
 
@@ -100,13 +103,14 @@ class PostController {
       description: `string|max:280|maxHashtags:10`,
       restriction: `required|in:no-restriction,moderate-mature-content,strict-mature-content`,
       redrawable: `boolean`,
-      parent_post_id: `redrawablePost`
+      parent_post_id: `redrawablePost`,
+      completed_challenge_id: `validCompletedChallengeRelationship:${auth.user.id}`
     }
 
-    const { description, restriction, redrawable, parent_post_id } = request.only([ 'description', 'restriction', 'redrawable', 'parent_post_id' ])
+    const { description, restriction, redrawable, parent_post_id, completed_challenge_id } = request.only([ 'description', 'restriction', 'redrawable', 'parent_post_id', 'completed_challenge_id' ])
 
     // Validate the fields in the request
-    const validation = await validateAll({ description, restriction, redrawable, parent_post_id }, rules)
+    const validation = await validateAll({ description, restriction, redrawable, parent_post_id, completed_challenge_id }, rules)
 
     if (!validation.fails()) {
       // The file will be moved to a temporal path before being streamed to the cloud
@@ -152,6 +156,7 @@ class PostController {
         post.redrawable = redrawable === 'true' ? true : false
 
         var parentPost
+        var completedChallenge
 
         if(parent_post_id) {
           parentPost = await Post.find(parent_post_id)
@@ -179,6 +184,17 @@ class PostController {
         post.total_storage_usage = media.total_storage_usage
         await post.save(trx)
 
+        // Relate the post with a completed challenge.
+        if(completed_challenge_id) {
+          const completedRelationship = await UserCompletedChallenge.query()
+          .where('id', '=', completed_challenge_id)
+          .where('user_id', '=', auth.user.id)
+          .first()
+
+          completedRelationship.post_id = post.id
+          await completedRelationship.save(trx)
+        }
+
         const tags = []
 
         trx.commit()
@@ -186,16 +202,11 @@ class PostController {
         // Syncronize hashtags
         await this.syncHashtags(post)
 
-        if(parent_post_id) {
+        if(parent_post_id && (auth.user.id !== parentPost.author_id)) {
+          const parentPostAuthor = await parentPost.author().first()
+
           // Notify the parent post's author.
-          const notification = new Notification()
-          notification.triggerer_id = auth.user.id
-          notification.notifiable_id = parentPost.author_id
-          notification.entity_id = post.id
-          notification.entity_type = 'App/Models/Post'
-          notification.type = 'newRedrawOfPost'
-          notification.metadata = {}
-          await notification.save()
+          await NotificationSender.send(auth.user, parentPostAuthor, new NewRedrawOfPost(parentPost))
         }
 
         // Count posts on the author.
@@ -212,8 +223,6 @@ class PostController {
           data: post
         })
       } catch(error) {
-        console.log(error)
-
         trx.rollback()
 
         return response.status(400).json({
@@ -350,7 +359,7 @@ class PostController {
       const relations = _with.split(",")
 
       // Limit relations
-      if(relations.length > 5) {
+      if(relations.length > 6) {
         return response.status(400).json({
           status: 'error',
           message: 'Too many relations.'
@@ -359,7 +368,7 @@ class PostController {
 
       // Filter relations and keep only valid relations.
       for(var i=0; i<relations.length; i++) {
-        if([ 'author', 'media', 'parentPost', 'parentPost.author', 'parentPost.media', 'rootPost', 'rootPost.author', 'rootPost.media' ].includes(relations[i])) {
+        if([ 'author', 'media', 'parentPost', 'parentPost.author', 'parentPost.media', 'rootPost', 'rootPost.author', 'rootPost.media', 'completedChallengeRelationship.challenge', 'completedChallengeRelationship.challenge.skillPoints' ].includes(relations[i])) {
           query.with(relations[i])
         }
       }
@@ -408,15 +417,10 @@ class PostController {
         await auth.user.likedPosts().attach([post.id])
 
         if(auth.user.id !== post.author_id) {
+          const postAuthor = await post.author().first()
+
           // Notify the post's creator.
-          const notification = new Notification()
-          notification.triggerer_id = auth.user.id
-          notification.notifiable_id = post.author_id
-          notification.entity_id = post.id
-          notification.entity_type = 'App/Models/Post'
-          notification.type = 'newLikeInPost'
-          notification.metadata = {}
-          await notification.save()
+          await NotificationSender.send(auth.user, postAuthor, new NewLikeInPost(post, auth.user))
         }
       }
 

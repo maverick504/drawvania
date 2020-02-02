@@ -69,7 +69,10 @@ module.exports = {
     'p',
     'post',
     'posts',
+    'c',
+    'challenges',
     'notifications',
-    'settings'
+    'settings',
+    'draw'
   ]
 }

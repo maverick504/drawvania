@@ -2,7 +2,8 @@
 
 const User = use('App/Models/User')
 const UserFollow = use('App/Models/UserFollow')
-const Notification = use('App/Models/Notification')
+const NotificationSender = use('App/Utils/NotificationSender')
+const NewFollower = use('App/Notifications/NewFollower')
 
 class UserController {
 
@@ -68,14 +69,7 @@ class UserController {
         await user.followers().attach([auth.user.id])
 
         // Notify the followed user.
-        const notification = new Notification()
-        notification.triggerer_id = auth.user.id
-        notification.notifiable_id = user.id
-        notification.entity_id = null
-        notification.entity_type = null
-        notification.type = 'newFollower'
-        notification.metadata = {}
-        await notification.save()
+        await NotificationSender.send(auth.user, user, new NewFollower(auth.user))
       }
 
       // Recount followers.

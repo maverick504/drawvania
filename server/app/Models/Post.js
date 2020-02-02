@@ -109,6 +109,10 @@ class Post extends Model {
     return this.hasMany('App/Models/Post', 'id', 'parent_post_id')
   }
 
+  completedChallengeRelationship () {
+    return this.hasOne('App/Models/UserCompletedChallenge')
+  }
+
   media () {
     return this.hasMany('App/Models/PostMedia')
   }

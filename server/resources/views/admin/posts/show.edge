@@ -1,9 +1,9 @@
 @layout('layouts.admin')
 
 @section('content')
-  <h1 class="h2">{{ 'Post #' + post.id }}</h1>
-  <img class="mb-2" src="{{ post.media[0].variations['640wf'].url }}" width="320">
-  <div class="row no-gutters">
+  <h1 class="h2 mb-3">{{ 'Post #' + post.id }}</h1>
+  <img class="mb-3" src="{{ post.media[0].variations['640wf'].url }}" width="320">
+  <div class="row no-gutters mb-3">
     <div class="col-3">
       <b>author</b>
     </div>
@@ -35,7 +35,7 @@
       {{ post.total_direct_children_posts }}
     </div>
   </div>
-  <div class="mt-2">
+  <div class="mb-3">
     <form action="{{ '/admin/posts/' + post.id + '?_method=DELETE' }}" method="POST">
       <button type="submit" class="btn btn-danger">Delete post</button>
     </form>

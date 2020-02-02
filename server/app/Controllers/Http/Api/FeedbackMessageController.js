@@ -7,10 +7,9 @@ class FeedbackController {
 
   async store({ request, auth, response }) {
     const rules = {
-      type: `required|in:suggestion,bug-report,feature-request,translation-error,other`,
+      type: `required|in:challenge-suggestion,bug-report,feature-request,translation-error,other`,
       details: `required|string|max:500`,
       origin_url: `required`
-      // origin_url: `required|url`
     }
 
     const { type, details, origin_url } = request.only([ 'type', 'details', 'origin_url' ])

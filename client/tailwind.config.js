@@ -1,3 +1,5 @@
+const { colors } = require('tailwindcss/defaultTheme')
+
 module.exports = {
   important: true,
   theme: {
@@ -10,46 +12,46 @@ module.exports = {
     },
     colors: {
       // Color palette: https://flatuicolors.com/palette/tr
-      white: '#fff',
-      black: '#000',
-      gray: {
-        '100': '#f5f5f5',
-        '200': '#eeeeee',
-        '300': '#e0e0e0',
-        '400': '#bdbdbd',
-        '500': '#9e9e9e',
-        '600': '#757575',
-        '700': '#616161',
-        '800': '#424242',
-        '900': '#212121'
-      },
+      white: colors.white,
+      black: colors.black,
+      gray: colors.gray,
       primary: {
-        'lighter': '#8d79e7', // 30% lighter
-        'default': '#7158e2'
+        'lighter': colors.indigo['300'],
+        'default': colors.indigo['500'],
+        'darker': colors.indigo['700'],
       },
       green: {
-        'lighter': '#6fffa4', // 30% lighter
-        'default': '#32ff7e'
+        'lighter': colors.green['300'],
+        'default': colors.green['500'],
+        'darker': colors.green['700'],
       },
       orange: {
-        'lighter': '#ffc679', // 30% lighter
-        'default': '#ffaf40',
+        'lighter': colors.orange['300'],
+        'default': colors.orange['500'],
+        'darker': colors.orange['700'],
       },
       red: {
-        'lighter': '#ff8282', // 30% lighter
-        'default': '#ff4d4d',
+        'lighter': colors.red['300'],
+        'default': colors.red['500'],
+        'darker': colors.red['700'],
       },
       danger: {
-        'default': '#ff3838',
-        '100': '#ffe3e3', // 90% lighter
-        '500': '#ff7474', // 50% lighter
-        '700': '#ff3d3d', // 30% lighter
+        'default': colors.red['500'],
+        '100': colors.red['100'],
+        '200': colors.red['200'],
+        '300': colors.red['300'],
+        '400': colors.red['400'],
+        '500': colors.red['500'],
+        '600': colors.red['600'],
+        '700': colors.red['700'],
+        '800': colors.red['800'],
+        '900': colors.red['900']
       },
       success: {
-        'default': '#6fffa4'
+        'default': colors.green['500']
       },
       gold: {
-        'default': '#ff9f1a'
+        'default': colors.orange['500'],
       },
     },
     cursor: {

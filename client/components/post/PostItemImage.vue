@@ -1,30 +1,21 @@
 <template>
   <div class="bg-gray-300 relative overflow-hidden">
-    <div
-      v-if="!loaded"
-      :style="placeholderStyle"
-    />
+    <div v-if="!loaded" :style="placeholderStyle"/>
     <div v-show="loaded">
       <img
         :src="post.media[0].variations['640wf'].url"
-        :data-zoom-src="post.media[0].variations['1280w'].url" 
+        :data-zoom-src="post.media[0].variations['1280w'].url"
         :style="{ filter: censor ? 'blur(16px)' : 'none' }"
         data-zoomable
         class="z-0"
         alt="Post's image"
         @load="loaded = true"
       >
-      <div 
-        v-if="censor" 
-        class="absolute inset-0 flex justify-center items-center p-16 text-white z-10">
+      <div v-if="censor" class="absolute inset-0 flex justify-center items-center p-16 text-white z-0">
         <div class="text-center">
           <p>This artwork may contain mature content.</p>
-          <button 
-            class="mt-2 px-4 py-2 text-white" 
-            @click="censor = false">
-            <eye-icon 
-              size="1x" 
-              class="inline-block"/> Uncover Image
+          <button class="mt-2 px-4 py-2 text-white" @click="censor = false">
+            <eye-icon size="1x" class="inline-block"/> Uncover Image
           </button>
         </div>
       </div>

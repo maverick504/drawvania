@@ -3,10 +3,16 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import 'tailwindcss/utilities';
+@import './dashboard.css';
 
 body {
   @apply bg-gray-100 text-black;
   min-width: 1112px;
+}
+
+body.medium-zoom--opened {
+  @apply overflow-hidden;
 }
 
 .feather.filled {
@@ -122,6 +128,14 @@ form .form-group:last-child {
 
 .form-switch-checkbox:checked + .form-switch-label:before {
   right: 0;
+}
+
+.swal2-confirm {
+  @apply bg-primary rounded !important;
+}
+
+.swal2-cancel {
+  @apply bg-gray-600 rounded !important;
 }
 
 /* purgecss end ignore */

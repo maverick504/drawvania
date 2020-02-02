@@ -5,7 +5,11 @@ const PostComment = use('App/Models/PostComment')
 const PostCommentLike = use('App/Models/PostCommentLike')
 const User = use('App/Models/User')
 const Post = use('App/Models/Post')
-const Notification = use('App/Models/Notification')
+const NotificationSender = use('App/Utils/NotificationSender')
+const NewCommentInPost = use('App/Notifications/NewCommentInPost')
+const NewReplyToCommentInPost = use('App/Notifications/NewReplyToCommentInPost')
+const DeletedCommentInPost = use('App/Notifications/DeletedCommentInPost')
+const NewLikeInPostComment = use('App/Notifications/NewLikeInPostComment')
 
 class CommentController {
   async postIndex({ request, auth, params }) {
@@ -61,21 +65,10 @@ class CommentController {
         const post = await commentRecord.post().first()
 
         if(auth.user.id !== post.author_id) {
+          const postAuthor = await post.author().first()
 
           // Notify the post's creator.
-          const notification = new Notification()
-          notification.triggerer_id = auth.user.id
-          notification.notifiable_id = post.author_id
-          notification.entity_id = post.id
-          notification.entity_type = 'App/Models/Post'
-          notification.type = 'newCommentInPost'
-          notification.metadata = {
-            comment: {
-              id: commentRecord.id,
-              comment: commentRecord.comment
-            }
-          }
-          await notification.save()
+          await NotificationSender.send(auth.user, postAuthor, new NewCommentInPost(post, commentRecord))
         }
 
         // Load the comment's author.
@@ -143,7 +136,12 @@ class CommentController {
 
   async destroy({ params, auth, response }) {
     // Get the required comment
-    const comment = await PostComment.findOrFail(params.id)
+    const comment = await PostComment
+    .query()
+    .with('author')
+    .with('post')
+    .where('id', params.id)
+    .firstOrFail()
 
     // Comment with replies cannot be deleted.
     if(comment.total_replies > 0) {
@@ -158,27 +156,17 @@ class CommentController {
       // Delete the comment
       await comment.delete()
     } else {
-      const post = await Post.find(comment.post_id)
+      const post = comment.getRelated('post')
 
       // Check if the post where the comment belongs to was created by the authenticated user.
       if(post.author_id === auth.user.id) {
+        const commentAuthor = comment.getRelated('author')
+
         // Delete the comment
         await comment.delete()
 
         // Notify the comment author about that his comment was deleted.
-        const notification = new Notification()
-        notification.triggerer_id = auth.user.id
-        notification.notifiable_id = comment.author_id
-        notification.entity_id = post.id
-        notification.entity_type = 'App/Models/Post'
-        notification.type = 'deletedCommentInPost'
-        notification.metadata = {
-          comment: {
-            id: comment.id,
-            comment: comment.comment
-          }
-        }
-        await notification.save()
+        await NotificationSender.send(auth.user, commentAuthor, new DeletedCommentInPost(post, comment))
       } else {
         return response.status(400).json({
           status: 'error',
@@ -225,12 +213,14 @@ class CommentController {
         await commentRecord.save()
 
         // Get the comment/conversation participants.
-        const conversationParticipants = await User.query()
+        const conversationParticipants = await User
+        .query()
         .select('users.*')
         .distinct('users.id')
         .leftJoin('post_comments', 'users.id', 'post_comments.author_id')
         .where((builder) => {
-          builder.where('post_comments.id', '=', parentComment.id)
+          builder
+          .where('post_comments.id', '=', parentComment.id)
           .orWhere('post_comments.parent_comment_id', '=', parentComment.id)
         })
         .fetch()
@@ -238,19 +228,7 @@ class CommentController {
         // Notify the conversation participants.
         for(let user of conversationParticipants.rows) {
           if(auth.user.id !== user.id) {
-            const notification = new Notification()
-            notification.triggerer_id = auth.user.id
-            notification.notifiable_id = user.id
-            notification.entity_id = parentComment.id
-            notification.entity_type = 'App/Models/PostComment'
-            notification.type = 'newReplyToCommentInPost'
-            notification.metadata = {
-              comment: {
-                id: commentRecord.id,
-                comment: commentRecord.comment
-              }
-            }
-            await notification.save()
+            await NotificationSender.send(auth.user, user, new NewReplyToCommentInPost(parentComment, commentRecord))
           }
         }
 
@@ -275,7 +253,11 @@ class CommentController {
 
   async like({ params, auth, response }) {
     // Check if the comment exists.
-    const comment = await PostComment.findOrFail(params.id)
+    const comment = await PostComment
+    .query()
+    .with('author')
+    .where('id', params.id)
+    .firstOrFail()
 
     try {
       // Check if the comment was liked previously.
@@ -294,15 +276,10 @@ class CommentController {
         await auth.user.likedPostComments().attach([comment.id])
 
         if(auth.user.id !== comment.author_id) {
+          const commentAuthor = comment.getRelated('author')
+
           // Notify the comment's creator.
-          const notification = new Notification()
-          notification.triggerer_id = auth.user.id
-          notification.notifiable_id = comment.author_id
-          notification.entity_id = comment.id
-          notification.entity_type = 'App/Models/PostComment'
-          notification.type = 'newLikeInPostComment'
-          notification.metadata = {}
-          await notification.save()
+          await NotificationSender.send(auth.user, commentAuthor, new NewLikeInPostComment(comment))
         }
       }
 

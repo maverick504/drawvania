@@ -2,9 +2,7 @@
   <nav class="w-full bg-white whitespace-no-wrap border-b fixed pin-t z-40">
     <div class="flex container mx-auto">
       <div class="mx-0">
-        <router-link
-          :to="{ name: 'feed.global' }"
-          class="h-full flex items-center px-4">
+        <router-link :to="{ name: 'feed.global' }" class="h-full flex items-center px-4">
           <h1>
             <span class="text-xl font-bold text-primary mr-1">Drawvania</span><!--
          --><span class="text-sm text-gray-600">Beta</span>
@@ -26,17 +24,15 @@
             class="inline-block"
           >
             <template slot="button-content">
-              <user-icon
-                size="1.5x"
-                class="inline"
-              />
+              <user-icon size="1.5x" class="inline"/>
             </template>
             <ul>
               <li>
                 <router-link
                   :to="{ name: 'users.show', params: { username: loggedInUser.username } }"
                   class="block text-xl font-bold no-underline px-6 py-2 hover:text-primary"
-                  active-class="text-primary">
+                  active-class="text-primary"
+                >
                   {{ loggedInUser.username }}
                 </router-link>
               </li>
@@ -45,7 +41,8 @@
                 <router-link
                   :to="{ name: 'users.show', params: { username: loggedInUser.username } }"
                   class="block no-underline px-6 py-2 hover:text-primary"
-                  active-class="text-primary">
+                  active-class="text-primary"
+                >
                   Profile
                 </router-link>
               </li>
@@ -53,15 +50,14 @@
                 <router-link
                   :to="{ name: 'settings.profile' }"
                   class="block no-underline px-6 py-2 hover:text-primary"
-                  active-class="text-primary">
+                  active-class="text-primary"
+                >
                   Settings
                 </router-link>
               </li>
               <li class="h-4"/>
                 <li>
-                  <button
-                    class="block w-full text-left px-6 py-2 hover:text-primary"
-                    @click.prevent="logout">
+                  <button class="block w-full text-left px-6 py-2 hover:text-primary" @click.prevent="logout">
                     Log out
                   </button>
                 </li>
@@ -70,13 +66,11 @@
        --><t-button
             base-class="inline-block text-primary"
             default-size-class="p-4"
-            @click.prevent="$bus.$emit('createPost')">
-              <plus-icon
-                size="1.5x"
-                class="inline mr-1"
-              />
-              <span class="align-middle">Submit</span>
-            </t-button>
+            @click.prevent="$bus.$emit('createPost')"
+          >
+            <plus-icon size="1.5x" class="inline mr-1"/>
+            <span class="align-middle">Submit</span>
+          </t-button>
         </template><!--
      --><template v-if="!isAuthenticated">
           <t-button
@@ -84,19 +78,14 @@
             default-size-class="p-4"
             @click="$bus.$emit('showLoginModal')"
           >
-            <log-in-icon
-              size="1.5x"
-              class="inline mr-1"
-            />
+            <log-in-icon size="1.5x" class="inline mr-1"/>
             <span class="align-middle">Log in</span>
           </t-button><!--
        --><router-link
             :to="{ name: 'auth.register' }"
-            class="inline-block p-4 text-primary">
-            <user-plus-icon
-              size="1.5x"
-              class="inline mr-1"
-            />
+            class="inline-block p-4 text-primary"
+          >
+            <user-plus-icon size="1.5x" class="inline mr-1"/>
             <span class="align-middle">Register</span>
           </router-link>
         </template>

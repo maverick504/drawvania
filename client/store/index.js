@@ -6,6 +6,10 @@ export const getters = {
 
   loggedInUser(state) {
     return state.auth.user
+  },
+
+  skills(state) {
+    return state.skills
   }
 }
 
@@ -14,6 +18,10 @@ export const getters = {
 export const mutations = {
   UPDATE_USER (state, { user }) {
     state.auth.user = user
+  },
+
+  UPDATE_SKILLS (state, { skills }) {
+    state.skills = skills
   }
 }
 
@@ -21,5 +29,9 @@ export const mutations = {
 export const actions = {
   updateUser ({ commit }, payload) {
     commit('UPDATE_USER', payload)
+  },
+
+  updateSkills ({ commit }, payload) {
+    commit('UPDATE_SKILLS', payload)
   }
 }

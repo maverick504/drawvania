@@ -1,9 +1,8 @@
 <template>
   <feed-layout>
-    <div class="fixed bg-white p-4 font-bold text-lg border-b z-20" style="margin: 0 1px; width: 560px; top: 57px;">
+    <template slot="context-header">
       {{ `#${$route.params.slug}` }}
-    </div>
-    <div style="height: 59px;"/>
+    </template>
     <div class="p-4">
       <post-infinite-scroll :endpoint="`explore/hashtags/${$route.params.slug}`"/>
     </div>

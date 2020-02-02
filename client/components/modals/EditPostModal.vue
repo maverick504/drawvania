@@ -4,7 +4,7 @@
     v-model="show"
     header="Edit post"
     footer-class="bg-gray-100 p-4 text-right"
-    width="540"
+    width="480"
     @before-close="beforeClose"
   >
 
@@ -18,9 +18,15 @@
 
       <error-alert :form="form" class="mt-4"/>
 
+      <div class="form-group">
+        <div class="relative bg-gray-900 text-center -mx-4">
+          <img :src="post.media[0].variations['1280w'].url" alt="Preview" class="w-full h-auto">
+        </div>
+      </div>
+
       <div v-if="post.parentPost" class="mt-4 mb-4">
         <div class="flex items-center text-sm">
-          <div class="flex-initial pr-2">
+          <div class="flex-initial flex-shrink-0 pr-2">
             <img :src="post.parentPost.media[0].variations['50x50f'].url" width="50" height="50" class="w-10 h-10 rounded">
           </div>
           <div class="flex-grow">
@@ -29,13 +35,23 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="bg-gray-900 py-4 text-center -mx-4">
-          <div class="relative w-full h-auto mx-auto" style="max-width: 400px;">
-            <img :src="post.media[0].variations['1280w'].url" alt="Preview" class="w-full h-auto shadow-lg">
+      <template  v-if="post.completedChallengeRelationship">
+        <div class="mt-4 mb-4">
+          <div class="flex items-center">
+            <div class="flex-initial flex-shrink-0 pr-2">
+              <img src="~/assets/img/challenge_icon.png" width="50" height="50" class="w-10 h-10 rounded">
+            </div>
+            <div class="flex-grow text-sm">
+              challenge overcome: <b>{{ post.completedChallengeRelationship.challenge.title }}</b>
+            </div>
           </div>
         </div>
-      </div>
+        <div class="mb-4">
+          <span v-for="skill in post.completedChallengeRelationship.challenge.skillPoints" :style="{ 'color': skill.color }">
+            {{ `+${skill.pivot.points} ${skill.name}` }}
+          </span>
+        </div>
+      </template>
 
       <t-input-group>
         <t-textarea
@@ -140,13 +156,12 @@ export default {
     this.$bus.$on('editPost', async (postId) => {
       this.form.clearErrors()
       this.post = null
-
       this.loading = true
-
       this.show = true
 
-      const response = await this.$axios.get(`posts/${postId}?with=author,media,parentPost.author,parentPost.media`)
+      const response = await this.$axios.get(`posts/${postId}?with=author,media,parentPost.author,parentPost.media,completedChallengeRelationship.challenge,completedChallengeRelationship.challenge.skillPoints`)
       this.post = response.data
+      console.log(this.post)
 
       this.form.description = this.post.description
       this.form.restriction = this.post.restriction

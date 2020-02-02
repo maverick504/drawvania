@@ -8,13 +8,7 @@ class FeedbackMessagesSchema extends Schema {
     this.create('feedback_messages', (table) => {
       table.bigIncrements()
       table.integer('author_id').unsigned().nullable()
-      table.enum('type', [
-        'suggestion',
-        'bug-report',
-        'feature-request',
-        'translation-error',
-        'other'
-      ]).nullable()
+      table.string('type').nullable()
       table.string('details', 500).nullable()
       table.string('origin_url', 2083).nullable()
       table.json('metadata').nullable() // Screen size, device type, etc.

@@ -21,7 +21,7 @@
         <t-select
           v-model="form.type"
           :options="[
-            { value: 'suggestion', text: 'Suggestion' },
+            { value: 'challenge-suggestion', text: 'Challenge suggestion' },
             { value: 'bug-report', text: 'Bug report' },
             { value: 'feature-request', text: 'Feature request' },
             { value: 'translation-error', text: 'Translation error' },

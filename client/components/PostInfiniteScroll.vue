@@ -4,16 +4,13 @@
       <slot name="empty-state"/>
     </template>
     <template v-else>
-      <post-item 
-        v-for="(post, index) in posts" 
-        :key="index" 
-        :post="post"/>
-      <div 
-        v-if="loading" 
-        class="py-4 text-center text-primary">
-        <div 
-          class="spinner" 
-          role="status">
+      <post-item
+        v-for="(post, index) in posts"
+        :key="post.id"
+        :post="post"
+      />
+      <div v-if="loading" class="py-4 text-center text-primary">
+        <div class="spinner" role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>
@@ -63,7 +60,7 @@ export default {
 
   methods: {
     onScroll (event) {
-      const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight
+      const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= (document.documentElement.offsetHeight - 128)
       if (bottomOfWindow && !this.loading && (this.page < this.lastPage)) {
         this.page++
         this.loadMore()

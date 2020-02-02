@@ -31,6 +31,18 @@ Route.group(() => {
   Route.get('posts/:id', 'Admin/PostController.show')
   Route.delete('posts/:id', 'Admin/PostController.destroy')
 
+  Route.get('challenges', 'Admin/ChallengeController.index')
+  Route.get('challenges/create', 'Admin/ChallengeController.create')
+  Route.post('challenges', 'Admin/ChallengeController.store')
+  Route.get('challenges/:id/edit', 'Admin/ChallengeController.edit')
+  Route.patch('challenges/:id', 'Admin/ChallengeController.update')
+  Route.get('challenges/:id/edit/skill-points', 'Admin/ChallengeController.editSkillPoints')
+  Route.post('challenges/:id/add-skill-points', 'Admin/ChallengeController.addSkillPoints')
+  Route.delete('challenge-skill-points/:id', 'Admin/ChallengeController.removeSkillPoints')
+  Route.get('challenges/:id/edit/references', 'Admin/ChallengeController.editReferences')
+  Route.post('challenges/:id/add-reference', 'Admin/ChallengeController.addReference')
+  Route.delete('challenge-references/:id', 'Admin/ChallengeController.removeReference')
+
   Route.get('feedback', 'Admin/FeedbackMessageController.index')
 
 }).prefix('admin').middleware(['auth:session', 'is:(administrator)'])
@@ -51,6 +63,8 @@ Route.group(() => {
   Route.patch('settings/profile', 'Api/SettingsController.updateProfile').middleware(['auth:jwt'])
   Route.patch('settings/avatar', 'Api/SettingsController.updateAvatar').middleware(['auth:jwt'])
   Route.patch('settings/password', 'Api/SettingsController.updatePassword').middleware(['auth:jwt'])
+
+  Route.get('stats', 'Api/StatsController.index').middleware(['auth:jwt'])
 
   Route.get('pull', 'Api/PullController.index').middleware(['auth:jwt'])
 
@@ -89,6 +103,15 @@ Route.group(() => {
   Route.get('featured-hashtags', 'Api/HashtagController.featured')
   Route.get('explore/hashtags/:slug', 'Api/PostController.hashtagIndex')
 
+  Route.get('skills', 'Api/SkillController.index')
+  Route.get('main-skills', 'Api/SkillController.main')
+
+  Route.get('challenges', 'Api/ChallengeController.index')
+  Route.get('challenges/:id', 'Api/ChallengeController.show')
+  Route.post('challenges/:id/mark-as-complete', 'Api/ChallengeController.markAsComplete').middleware(['auth:jwt'])
+
+  Route.get('completed-challenges/:id', 'Api/UserCompletedChallengeController.show')
+
   Route.post('feedback', 'Api/FeedbackMessageController.store').middleware(['auth:jwt'])
 
 }).prefix('api').middleware('throttle:30,60')
@@ -109,15 +132,15 @@ Route.get('/reset-password/:token', 'AuthenticationController.renderResetPasswor
 Route.group(() => {
 
   Route.post('/login', 'AuthenticationController.login')
-  Route.post('/forgot-password' , 'AuthenticationController.forgotPassword')
-  Route.post('/reset-password'  , 'AuthenticationController.resetPassword')
+  Route.post('/forgot-password', 'AuthenticationController.forgotPassword')
+  Route.post('/reset-password', 'AuthenticationController.resetPassword')
 
 }).prefix('auth')
 
 // NORMAL ROUTES
 
 Route.get('/', ({ response }) => response.redirect(Config.get('drawvania.subdomains.app')))
-// Route.on('/premium').render('premium.landing')
+// Route.get('/premium', 'PremiumController.index')
 
 // ERROR PAGES
 

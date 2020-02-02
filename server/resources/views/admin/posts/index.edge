@@ -1,7 +1,7 @@
 @layout('layouts.admin')
 
 @section('content')
-  <h1 class="h2">Posts</h1>
+  <h1 class="h2 mb-3">Posts</h1>
   <table class="table">
     <thead>
       <tr>
@@ -24,7 +24,7 @@
           <td>{{ post.author.username }}</td>
           <td>{{ post.created_at }}</td>
           <td>
-            <a href="/admin/posts/{{ post.id }}" class="btn btn-primary">view</a>
+            <a href="/admin/posts/{{ post.id }}" class="btn btn-sm btn-primary">view</a>
           </td>
         </tr>
       @endeach

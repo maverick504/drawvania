@@ -1,8 +1,8 @@
 @layout('layouts.admin')
 
 @section('content')
-  <h1 class="h2">{{ user.username }}</h1>
-  <div class="row no-gutters">
+  <h1 class="h2 mb-3">{{ user.username }}</h1>
+  <div class="row no-gutters mb-3">
     <div class="col-3">
       <b>username</b>
     </div>
@@ -40,7 +40,7 @@
       {{ user.total_followers }}
     </div>
   </div>
-  <div class="mt-2">
+  <div class="mb-3">
     @if(user.upgraded_premium_at === null)
       <form action="{{ '/admin/users/' + user.id + '/upgrade-to-premium?_method=PATCH' }}" method="POST">
         <button type="submit" class="btn btn-primary">Add Premium</button>

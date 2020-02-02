@@ -3,15 +3,15 @@
     <div class="container mx-auto bg-white border rounded overflow-hidden">
       <div class="flex">
         <div class="w-1/4 border-r">
-          <router-link 
-            :to="{ name: 'settings.profile' }" 
-            active-class="border-l-4 border-primary" 
+          <router-link
+            :to="{ name: 'settings.profile' }"
+            active-class="border-l-4 border-primary"
             class="block p-4 hover:bg-gray-100 hover:text-primary">
             Edit Profile
           </router-link>
-          <router-link 
-            :to="{ name: 'settings.password' }" 
-            active-class="border-l-4 border-primary" 
+          <router-link
+            :to="{ name: 'settings.password' }"
+            active-class="border-l-4 border-primary"
             class="block p-4 hover:bg-gray-100 hover:text-primary">
             Change Password
           </router-link>

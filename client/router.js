@@ -10,6 +10,11 @@ const routes = [
   { path: '/login', name: 'auth.login', component: page('auth/login.vue') },
   { path: '/register', name: 'auth.register', component: page('auth/register.vue') },
 
+  { path: '/stats', name: 'stats', component: page('stats.vue') },
+
+  { path: '/challenges', name: 'challenges.index', component: page('challenges/index.vue') },
+  { path: '/challenges/:id', name: 'challenges.show', component: page('challenges/show.vue') },
+
   { path: '/explore', name: 'feed.global', component: page('feeds/global.vue'), alias: '/' },
   { path: '/followings', name: 'feed.followings', component: page('feeds/followings.vue') },
 

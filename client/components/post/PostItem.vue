@@ -1,23 +1,17 @@
 <template>
-  <div class="bg-white rounded overflow-hidden shadow-lg mb-6">
+  <div class="bg-white rounded-lg overflow-hidden shadow-lg mb-4">
     <div class="flex text-sm px-4 my-4">
       <div class="flex-initial py-px pr-2">
         <router-link :to="{ name: 'users.show', params: { username: post.author.username } }">
-          <avatar
-            :user="post.author"
-            size="10"/>
+          <avatar :user="post.author" size="10"/>
         </router-link>
       </div>
       <div class="flex-grow">
         <div class="block">
-          <router-link
-            :to="{ name: 'users.show', params: { username: post.author.username } }"
-            class="font-bold leading-none mr-1">
+          <router-link :to="{ name: 'users.show', params: { username: post.author.username } }" class="font-bold leading-none mr-1">
             {{ post.author.username }}
           </router-link><!--
-       --><span
-v-if="post.author.upgraded_premium_at"
-class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-1">premium</span><!--
+       --><span v-if="post.author.upgraded_premium_at" class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full mr-1">premium</span><!--
        --><follow-button
             v-if="!isAuthenticated || loggedInUser.id !== post.author.id"
             :logged-in-user-is-follower.sync="post.author.logged_in_user_is_follower"
@@ -48,30 +42,19 @@ class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-
             <more-horizontal-icon size="1.8x"/>
           </template>
           <ul>
-            <li
-              v-for="(item, index) in dropdownItems"
-              :key="index">
+            <li v-for="(item, index) in dropdownItems" :key="index">
               <template v-if="item.to">
-                <router-link
-                  :to="item.to"
-                  :class="{ [`${item.extraClasses}`]: true }"
-                  class="block w-full text-left no-underline px-6 py-2"
-                  exact-active-class="text-primary">
+                <router-link :to="item.to" :class="{ [`${item.extraClasses}`]: true }" class="block w-full text-left no-underline px-6 py-2" exact-active-class="text-primary">
                   {{ item.text }}
                 </router-link>
               </template>
               <template v-else-if="item.onclick">
-                <button
-                  :class="{ [`${item.extraClasses}`]: true }"
-                  class="block w-full text-left no-underline px-6 py-2"
-                  @click="item.onclick">
+                <button :class="{ [`${item.extraClasses}`]: true }" class="block w-full text-left no-underline px-6 py-2" @click="item.onclick">
                   {{ item.text }}
                 </button>
               </template>
               <template v-else>
-                <div
-                  :class="{ [`${item.extraClasses}`]: true }"
-                  class="block no-underline px-6 py-2">
+                <div :class="{ [`${item.extraClasses}`]: true }" class="block no-underline px-6 py-2">
                   {{ item.text }}
                 </div>
               </template>
@@ -80,25 +63,33 @@ class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-
         </t-dropdown>
       </div>
     </div>
-    <div
-      v-if="post.parentPost"
-      class="flex items-center text-sm px-4 mb-4">
-      <div class="flex-initial pr-2">
-        <router-link :to="{ name: 'posts.show', params: { id: post.parentPost.id } }">
-          <img
-            :src="post.parentPost.media[0].variations['50x50f'].url"
-            class="w-10 h-10 rounded">
-        </router-link>
-      </div>
-      <div class="flex-grow">
-        <router-link :to="{ name: 'posts.show', params: { id: post.parentPost.id } }">
-          redraw to a post of <b>{{ post.parentPost.author.username }}</b>
-        </router-link>
-      </div>
-    </div>
     <post-item-image :post="post"/>
     <div class="p-4">
-      <p v-if="post.description" class="mb-4" v-html="descriptionHtml"></p>
+      <div v-if="post.parentPost" class="flex items-center text-sm mb-4">
+        <div class="flex-initial flex-shrink-0 pr-2">
+          <router-link :to="{ name: 'posts.show', params: { id: post.parentPost.id } }">
+            <img :src="post.parentPost.media[0].variations['50x50f'].url" class="w-10 h-10 rounded">
+          </router-link>
+        </div>
+        <div class="flex-grow text-sm">
+          <router-link :to="{ name: 'posts.show', params: { id: post.parentPost.id } }">
+            redraw to a post of: <b>{{ post.parentPost.author.username }}</b>
+          </router-link>
+        </div>
+      </div>
+      <div v-if="post.completedChallengeRelationship" class="flex items-center text-sm mb-4">
+        <div class="flex-initial flex-shrink-0 pr-2">
+          <router-link :to="{ name: 'challenges.show', params: { id: post.completedChallengeRelationship.challenge.id } }">
+            <img src="~/assets/img/challenge_icon.png" width="50" height="50" class="w-10 h-10 rounded">
+          </router-link>
+        </div>
+        <div class="flex-grow text-sm">
+          <router-link :to="{ name: 'challenges.show', params: { id: post.completedChallengeRelationship.challenge.id } }">
+            challenge overcome: <b>{{ post.completedChallengeRelationship.challenge.title }}</b>
+          </router-link>
+        </div>
+      </div>
+      <p v-if="post.description" v-html="descriptionHtml" class="mb-4"></p>
       <div class="block">
         <button
           v-if="post.total_likes > 0"
@@ -130,26 +121,15 @@ class="inline-block bg-gold font-normal text-sm text-white px-2 rounded-full ml-
           :unlike-endpoint="`/posts/${post.id}/unlike`"
           class="mr-4"
         /><!--
-     --><button
-class="inline-block mr-4"
-@click="commentButtonClicked">
-          <message-circle-icon
-size="2x"
-class="text-primary"/>
+     --><button class="inline-block mr-4" @click="commentButtonClicked">
+          <message-circle-icon size="2x" class="text-primary"/>
         </button><!--
-     --><button
-class="inline-block"
-@click="redrawButtonClicked">
-          <edit-3-icon
-size="2x"
-class="text-primary"/>
+     --><button class="inline-block" @click="redrawButtonClicked">
+          <edit-3-icon size="2x" class="text-primary"/>
         </button>
       </div>
     </div>
-    <comments-footer
-      v-if="showComments"
-      :post="post"
-    />
+    <comments-footer v-if="showComments" :post="post"/>
   </div>
 </template>
 
@@ -161,7 +141,7 @@ import FollowButton from '@/components/FollowButton.vue'
 import PostItemImage from '@/components/post/PostItemImage.vue'
 import LikeButton from '@/components/LikeButton.vue'
 import CommentsFooter from '@/components/post/comments/CommentsFooter.vue'
-import { MoreHorizontalIcon, MessageCircleIcon, ZapIcon, Edit3Icon } from 'vue-feather-icons'
+import { MoreHorizontalIcon, MessageCircleIcon, Edit3Icon } from 'vue-feather-icons'
 
 export default {
   components: {
@@ -172,7 +152,6 @@ export default {
     CommentsFooter,
     MoreHorizontalIcon,
     MessageCircleIcon,
-    ZapIcon,
     Edit3Icon
   },
 
@@ -263,7 +242,7 @@ export default {
         return
       }
 
-      this.$bus.$emit('createPost', this.post.id)
+      this.$bus.$emit('createPost', { parentPostId: this.post.id })
     },
 
     async askDelete () {
