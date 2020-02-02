@@ -6,9 +6,10 @@ class StatsController {
 
   async index ({ auth }) {
     const totalLikes = await Database.table('post_likes')
-    .where('user_id', '=', auth.user.id)
-    .whereNull('deleted_at')
-    .count()
+    .leftJoin('posts', 'posts.id', '=', 'post_likes.post_id')
+    .where('posts.author_id', '=', auth.user.id)
+    .whereNull('post_likes.deleted_at')
+    .count('post_likes.id')
 
     const dateToday = new Date()
 
@@ -27,8 +28,8 @@ class StatsController {
 
     return {
       counters: {
-        posts: auth.user.total_posts,
-        likes: totalLikes[0]['count(*)'],
+        createdPosts: auth.user.total_posts,
+        receivedLikes: totalLikes[0]['count(`post_likes`.`id`)'],
         followers: auth.user.total_followers,
         completedChallenges: auth.user.completed_challenges_count,
         receivedSkillPoints: auth.user.received_skill_points_count

@@ -6,11 +6,11 @@
     <div class="p-4">
       <div class="flex bg-white px-6 py-12 rounded-lg shadow-lg mb-4">
         <div class="w-1/2 text-center">
-          <div class="text-gray-900 font-bold text-2xl">{{ stats.counters.posts }}</div>
+          <div class="text-gray-900 font-bold text-2xl">{{ stats.counters.createdPosts }}</div>
           <div class="text-gray-600 text-lg">Posts</div>
         </div>
         <div class="w-1/2 text-center">
-          <div class="text-gray-900 font-bold text-2xl">{{ stats.counters.likes }}</div>
+          <div class="text-gray-900 font-bold text-2xl">{{ stats.counters.receivedLikes }}</div>
           <div class="text-gray-600 text-lg">Likes</div>
         </div>
         <div class="w-1/2 text-center">
