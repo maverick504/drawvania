@@ -5,7 +5,7 @@
     </template>
     <div class="p-4">
       <div class="bg-primary-100 border-l-4 border-primary-500 text-primary-700 p-4 mb-4">
-        Use any of the following hashtags to make it easier to people to find your tutorial.
+        Share some of what you know about drawing with other artists! Use any of the following hashtags to make it easier to people to find your tutorial.
       </div>
       <router-link
         v-for="hashtag in tutorialHashtags"
