@@ -70,9 +70,21 @@ module.exports = {
     'post',
     'posts',
     'c',
+    'challenge',
     'challenges',
     'notifications',
     'settings',
-    'draw'
+    'd',
+    'draw',
+    'drawing',
+    'drawings',
+    'i',
+    'illustration',
+    'illustrations',
+    't',
+    'tutorial',
+    'tutorials',
+    'channel',
+    'channels'
   ]
 }
