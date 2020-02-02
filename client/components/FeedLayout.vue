@@ -18,7 +18,7 @@
                     class="block px-4 py-2"
                     exact-active-class="border-l-4 border-primary"
                   >
-                    Stats
+                    <bar-chart-2-icon size="1.25x" class="inline align-text-bottom mr-1"/>Stats
                   </router-link>
                 </div>
                 <div class="mb-4">
@@ -28,7 +28,7 @@
                     class="block px-4 py-2"
                     exact-active-class="border-l-4 border-primary"
                   >
-                    Drawing challenges
+                    <edit-2-icon size="1.25x" class="inline align-text-bottom mr-1"/>Drawing challenges
                   </router-link>
                 </div>
                 <div class="mb-4">
@@ -38,7 +38,7 @@
                     class="block px-4 py-2"
                     exact-active-class="border-l-4 border-primary"
                   >
-                    Recent works
+                    <compass-icon size="1.25x" class="inline align-text-bottom mr-1"/>Recent works
                   </router-link>
                   <router-link
                     v-if="isAuthenticated"
@@ -46,7 +46,7 @@
                     class="block px-4 py-2"
                     exact-active-class="border-l-4 border-primary"
                   >
-                    Followings works
+                    <users-icon size="1.25x" class="inline align-text-bottom mr-1"/>Followings works
                   </router-link>
                 </div>
               </div>
@@ -111,12 +111,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import FeedbackModal from '@/components/modals/FeedbackModal.vue'
-import { XIcon, TwitterIcon } from 'vue-feather-icons'
+import { BarChart2Icon, Edit2Icon, CompassIcon, UsersIcon, TwitterIcon } from 'vue-feather-icons'
 
 export default {
   components: {
     FeedbackModal,
-    XIcon,
+    BarChart2Icon,
+    Edit2Icon,
+    CompassIcon,
+    UsersIcon,
     TwitterIcon
   },
 
