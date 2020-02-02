@@ -101,6 +101,7 @@ Route.group(() => {
   Route.post('comments/:id/unlike', 'Api/CommentController.unlike').middleware(['auth:jwt'])
 
   Route.get('featured-hashtags', 'Api/HashtagController.featured')
+  Route.get('tutorial-hashtags', 'Api/HashtagController.tutorial')
   Route.get('explore/hashtags/:slug', 'Api/PostController.hashtagIndex')
 
   Route.get('skills', 'Api/SkillController.index')

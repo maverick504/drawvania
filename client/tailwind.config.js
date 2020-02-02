@@ -19,6 +19,15 @@ module.exports = {
         'lighter': colors.indigo['300'],
         'default': colors.indigo['500'],
         'darker': colors.indigo['700'],
+        '100': colors.indigo['100'],
+        '200': colors.indigo['200'],
+        '300': colors.indigo['300'],
+        '400': colors.indigo['400'],
+        '500': colors.indigo['500'],
+        '600': colors.indigo['600'],
+        '700': colors.indigo['700'],
+        '800': colors.indigo['800'],
+        '900': colors.indigo['900']
       },
       green: {
         'lighter': colors.green['300'],

@@ -15,10 +15,12 @@ const routes = [
   { path: '/challenges', name: 'challenges.index', component: page('challenges/index.vue') },
   { path: '/challenges/:id', name: 'challenges.show', component: page('challenges/show.vue') },
 
+  { path: '/tutorials', name: 'tutorials', component: page('tutorials.vue') },
+
   { path: '/explore', name: 'feed.global', component: page('feeds/global.vue'), alias: '/' },
   { path: '/followings', name: 'feed.followings', component: page('feeds/followings.vue') },
 
-  { path: '/explore/hashtags/:slug', name: 'explore.hashtags', component: page('explore/tags.vue') },
+  { path: '/explore/hashtags/:slug', name: 'explore.hashtags', component: page('explore/hashtags.vue') },
 
   { path: '/posts/:id', name: 'posts.show', component: page('posts/show.vue') },
 

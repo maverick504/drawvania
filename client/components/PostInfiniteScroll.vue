@@ -70,19 +70,24 @@ export default {
     async loadMore () {
       this.loading = true
 
-      const response = await this.$axios.get(`${this.endpoint}?page=${this.page}`)
+      this.$axios.get(`${this.endpoint}?page=${this.page}`)
+      .then(response => {
+        this.posts = this.posts.concat(response.data.data)
+        this.lastPage = response.data.lastPage
 
-      this.posts = this.posts.concat(response.data.data)
-      this.lastPage = response.data.lastPage
+        setTimeout(() => {
+          mediumZoom('[data-zoomable]', {
+            margin: 0,
+            background: '#4444'
+          });
+        }, 100)
 
-      setTimeout(() => {
-        mediumZoom('[data-zoomable]', {
-          margin: 0,
-          background: '#4444'
-        });
-      }, 100)
-
-      this.loading = false
+        this.loading = false
+      })
+      .catch(error => {
+        this.loading = false
+        this.lastPage = 1
+      })
     }
   }
 }

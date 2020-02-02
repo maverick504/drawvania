@@ -30,6 +30,13 @@
                   >
                     <edit-2-icon size="1.25x" class="inline align-text-bottom mr-1"/>Drawing challenges
                   </router-link>
+                  <router-link
+                    :to="{ name: 'tutorials' }"
+                    class="block px-4 py-2"
+                    exact-active-class="border-l-4 border-primary"
+                  >
+                    <book-icon size="1.25x" class="inline align-text-bottom mr-1"/>Drawing tutorials
+                  </router-link>
                 </div>
                 <div class="mb-4">
                   <div class="mx-4 mb-2 text-sm text-gray-600 font-bold uppercase">Community</div>
@@ -111,13 +118,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import FeedbackModal from '@/components/modals/FeedbackModal.vue'
-import { BarChart2Icon, Edit2Icon, CompassIcon, UsersIcon, TwitterIcon } from 'vue-feather-icons'
+import { BarChart2Icon, Edit2Icon, BookIcon, CompassIcon, UsersIcon, TwitterIcon } from 'vue-feather-icons'
 
 export default {
   components: {
     FeedbackModal,
     BarChart2Icon,
     Edit2Icon,
+    BookIcon,
     CompassIcon,
     UsersIcon,
     TwitterIcon
